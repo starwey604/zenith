@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "scenario_id": "pickup_2026_to_measure",
+  "source_type": "design_assumption",
+  "rule_reference": "RoboMaster 2026 规则 V2.2.0，第 48–49 页，六个磁吸能量单元沿对称轴取出",
+  "frame": "W",
+  "length_unit": "m",
+  "angle_unit": "rad",
+  "flange_to_tool": null,
+  "energy_units": [
+    {
+      "slot_id": 1,
+      "world_grasp_tool": null,
+      "outward_symmetry_axis_world": null,
+      "approach_distance_m": null,
+      "extraction_distance_m": null,
+      "exit_edge_point_world_m": null,
+      "edge_safety_distance_m": null,
+      "max_axial_extraction_distance_m": null
+    },
+    {
+      "slot_id": 2,
+      "world_grasp_tool": null,
+      "outward_symmetry_axis_world": null,
+      "approach_distance_m": null,
+      "extraction_distance_m": null,
+      "exit_edge_point_world_m": null,
+      "edge_safety_distance_m": null,
+      "max_axial_extraction_distance_m": null
+    },
+    {
+      "slot_id": 3,
+      "world_grasp_tool": null,
+      "outward_symmetry_axis_world": null,
+      "approach_distance_m": null,
+      "extraction_distance_m": null,
+      "exit_edge_point_world_m": null,
+      "edge_safety_distance_m": null,
+      "max_axial_extraction_distance_m": null
+    },
+    {
+      "slot_id": 4,
+      "world_grasp_tool": null,
+      "outward_symmetry_axis_world": null,
+      "approach_distance_m": null,
+      "extraction_distance_m": null,
+      "exit_edge_point_world_m": null,
+      "edge_safety_distance_m": null,
+      "max_axial_extraction_distance_m": null
+    },
+    {
+      "slot_id": 5,
+      "world_grasp_tool": null,
+      "outward_symmetry_axis_world": null,
+      "approach_distance_m": null,
+      "extraction_distance_m": null,
+      "exit_edge_point_world_m": null,
+      "edge_safety_distance_m": null,
+      "max_axial_extraction_distance_m": null
+    },
+    {
+      "slot_id": 6,
+      "world_grasp_tool": null,
+      "outward_symmetry_axis_world": null,
+      "approach_distance_m": null,
+      "extraction_distance_m": null,
+      "exit_edge_point_world_m": null,
+      "edge_safety_distance_m": null,
+      "max_axial_extraction_distance_m": null
+    }
+  ],
+  "note": "本文件是待测任务字段模板，不是可直接运行的固定场景。需填写矿位、矿石本体、出口边沿和工具关系，再复制到完整场景 tasks.pickup_2026；测量完成后将来源改为 measured。",
+  "tool_to_unit": null,
+  "placement_angle_samples_rad": null,
+  "edge_pose_guard_m": null
+}

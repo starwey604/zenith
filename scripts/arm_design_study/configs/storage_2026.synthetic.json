@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "scenario_id": "storage_2026_tiers_1_to_3_synthetic_v1",
+  "source_type": "design_assumption",
+  "length_unit": "m",
+  "angle_unit": "rad",
+  "samples_per_phase": 16,
+  "station_world_pose": [[1, 0, 0, 0.25], [0, 1, 0, 0.0], [0, 0, 1, 0.0], [0, 0, 0, 1]],
+  "flange_to_tool": [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]],
+  "tool_to_unit": [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]],
+  "p_axis_offset_m": 0.20875,
+  "q_axis_offset_m": 0.22375,
+  "core_obstacles": [
+    {"name": "core_pedestal_synthetic", "center_m": [0.25, 0.20, 0.20], "half_extents_m": [0.10, 0.08, 0.20], "yaw_rad": 0.0, "blocks_chassis": true}
+  ],
+  "allowed_contacts": [],
+  "samples": [
+    {"sample_id": "tier1_center", "tier": 1, "xyz_m": [-0.05, 0.20, 0.60], "theta_rad": 0.0, "phi_rad": 1.5707963267948966, "alpha_rad": 0.0, "q_target_signed_rad": null},
+    {"sample_id": "tier1_low", "tier": 1, "xyz_m": [-0.09, 0.12, 0.53], "theta_rad": 0.0, "phi_rad": 1.5707963267948966, "alpha_rad": 0.0, "q_target_signed_rad": null},
+    {"sample_id": "tier2_center", "tier": 2, "xyz_m": [-0.05, 0.20, 0.60], "theta_rad": 0.0, "phi_rad": 1.5707963267948966, "alpha_rad": 0.0, "q_target_signed_rad": null},
+    {"sample_id": "tier2_tilted", "tier": 2, "xyz_m": [-0.08, 0.28, 0.65], "theta_rad": -0.60, "phi_rad": 1.10, "alpha_rad": 0.30, "q_target_signed_rad": null},
+    {"sample_id": "tier3_center_q_plus", "tier": 3, "xyz_m": [-0.05, 0.20, 0.60], "theta_rad": 0.0, "phi_rad": 1.5707963267948966, "alpha_rad": 0.0, "q_target_signed_rad": 0.52},
+    {"sample_id": "tier3_oblique_q_minus", "tier": 3, "xyz_m": [-0.10, 0.10, 0.55], "theta_rad": 0.50, "phi_rad": 1.20, "alpha_rad": -0.25, "q_target_signed_rad": -0.70}
+  ],
+  "notes": "仅一级、二级、三级单核心存矿几何样本；不生成四级双核心轨迹。位姿在 2026 规则给定的单核心数值范围内，但世界系安装位姿、RzRyRz 姿态约定、P/Q 轴偏置、抓手偏置、核心碰撞盒和具体样本均是 arm_opt 风格设计假设，不能视为赛场测量。确认、释放、接触阻力和时间要求未模拟。"
+}

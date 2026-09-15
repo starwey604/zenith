@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "scenario_id": "storage_2026_tiers_1_to_3_to_measure",
+  "source_type": "design_assumption",
+  "length_unit": "m",
+  "angle_unit": "rad",
+  "samples_per_phase": 16,
+  "station_world_pose": null,
+  "flange_to_tool": null,
+  "tool_to_unit": null,
+  "p_axis_offset_m": null,
+  "q_axis_offset_m": null,
+  "core_obstacles": [],
+  "allowed_contacts": [],
+  "samples": [
+    {"sample_id": "tier1_to_measure", "tier": 1, "xyz_m": null, "theta_rad": 0.0, "phi_rad": 1.5707963267948966, "alpha_rad": 0.0, "q_target_signed_rad": null},
+    {"sample_id": "tier2_to_measure", "tier": 2, "xyz_m": null, "theta_rad": null, "phi_rad": null, "alpha_rad": null, "q_target_signed_rad": null},
+    {"sample_id": "tier3_to_measure", "tier": 3, "xyz_m": null, "theta_rad": null, "phi_rad": null, "alpha_rad": null, "q_target_signed_rad": null,
+     "p_axis_origin_world": null, "p_axis_world": null, "q_axis_origin_world": null, "q_axis_world": null}
+  ],
+  "notes": "待测字段模板，不可直接运行。一级固定朝向；三级建议测量并填写四个 P/Q 轴字段。若不用实测轴，须给出明确来源的 P/Q 偏置假设。禁止四级样本。"
+}

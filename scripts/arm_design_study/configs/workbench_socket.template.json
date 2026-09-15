@@ -1,0 +1,9 @@
+{
+  "scenario_id": "workbench_2027_socket_to_measure",
+  "source_type": "measured",
+  "frame": "W",
+  "length_unit": "m",
+  "angle_unit": "rad",
+  "world_socket": null,
+  "note": "测量工作台原有支撑中的模块承口 T_W_D；4x4 齐次矩阵，不填假赛规位置"
+}

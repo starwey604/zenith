@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "mechanism": "straight_slot_bayonet",
+  "configuration_status": "incomplete_design_assumption",
+  "assembly_mode": "table_supported_flange_turn",
+  "frames": {
+    "socket_outward_axis": "+z",
+    "insertion_direction": "-z",
+    "turn_axis": "+z"
+  },
+  "guide": {
+    "lead_cone_half_angle_rad": null,
+    "lead_cone_depth_m": null,
+    "mouth_radius_m": null,
+    "key_start_angle_rad": null,
+    "key_width_m": null
+  },
+  "pins_and_slots": {
+    "pin_count": null,
+    "pin_circle_radius_m": null,
+    "pin_radius_m": null,
+    "straight_slot_width_m": null,
+    "straight_slot_length_m": null,
+    "stop_depth_m": null,
+    "turn_channel_width_m": null,
+    "turn_channel_axial_min_m": null,
+    "turn_channel_axial_max_m": null,
+    "lock_turn_angle_rad": null,
+    "turn_direction_sign": null,
+    "shoulder_overlap_m": null
+  },
+  "tolerances": {
+    "axis_lateral_error_m": null,
+    "axis_angle_error_rad": null,
+    "key_phase_error_rad": null,
+    "seat_depth_error_m": null,
+    "lock_angle_error_rad": null,
+    "collision_margin_m": null
+  },
+  "source_notes": {
+    "rule_reference": "RoboMaster 2027 规则变更前瞻第 7–10、16 页仅确认工作台拾取与模块安装，不规定本接口尺寸",
+    "interface_dimensions": "待设计、测量或由正式规则补充",
+    "workbench_support": "原有支撑是否能承受压入与旋转反力，待实测"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "scenario_id": "core_2026_to_measure",
+  "source_type": "measured",
+  "rule_reference": "RoboMaster 2026 规则 V2.2.0，第 79–89 页",
+  "frame": "W",
+  "length_unit": "m",
+  "angle_unit": "rad",
+  "pre_insert_world_tool": null,
+  "p_axis_origin_world": null,
+  "p_axis_world": null,
+  "q_axis_origin_world": null,
+  "q_axis_world": null,
+  "p_upward_turn_sign": null,
+  "q_target_signed_rad": null,
+  "flange_to_tool": null,
+  "note": "实际工具抓取位姿与 P/Q 轴需要测量；Q 轴应按步骤 5 时的实际位置定义。步骤中的 -X 100mm、+Z 100mm、P 90°来自规则"
+}
