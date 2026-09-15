@@ -2,3 +2,4 @@ numpy==2.5.3
 scipy==1.18.1
 mujoco==3.13.0
 pytest==9.1.1
+matplotlib==3.11.2

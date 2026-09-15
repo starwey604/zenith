@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "run_id": "six_axis_span2_span3_full_tasks_grid_v1",
+  "source_type": "design_assumption",
+  "robots": ["xarm6", "ur5e"],
+  "span_indices": [2, 3],
+  "sampling": {"mode": "grid"},
+  "span_factors": [0.8, 0.9, 1.0, 1.1, 1.2],
+  "parking_ids": ["rear_left", "rear_center"],
+  "max_workers": 2,
+  "reserve_available_memory_gib": 2.0,
+  "notes": "在两个本地六轴参考轴线方案上，独立缩放零位关节锚点跨度2和3；每个候选在两个合法固定泊位上运行同一套67项一至三级存矿、72项取矿出口和8项基础场景任务。尺寸与泊位仍为合成设计假设。"
+}

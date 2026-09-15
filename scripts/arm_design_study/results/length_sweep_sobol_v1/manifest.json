@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "run_id": "six_axis_span2_span3_full_tasks_sobol_20260916",
+  "input_key": "3b48f1f2ab2bc1680efc4c6b08ade760cb21bca8e371fb046731307fd8ea9d45",
+  "inputs": {
+    "spec_sha256": "13e617b5c3b6aed5857c7094c58061b29bd86f09616b4fa430bcabf4598210f5",
+    "base_scene_sha256": "21719ddf07ee3471eb5bcb6419de73417f1b787cd84c9c4e43f22817f045e22d",
+    "storage_task_sha256": "50d0f81549c9308bac33f972c793ef629d3ccbf736230a61559bc398bb8a6b25",
+    "source_sha256": "8071c8f8102da446c340ae04790c90e05c306d64887fa51719dbb64093a24902",
+    "model_sha256": {
+      "/home/ww/codings/GoodGoodArmDayDayUp_Release/assets/xarm6/mujoco/dual_xarm6_learning_selected_750_scene.xml": "333b18e36f2b49cf631daec27f5c2653e02463500ad4914f5828fa7ad56f6db5",
+      "/home/ww/codings/imitation_learning_lerobot/imitation_learning_lerobot/assets/universal_robots_ur5e/ur5e.xml": "5e37fdd65fc6cdb720193adabf1cc544f82403f135da0482e20989d55ffe7a25",
+      "/home/ww/codings/imitation_learning_lerobot/imitation_learning_lerobot/assets/universal_robots_ur5e/ur5e_classes.xml": "f0b1556955ff5bd33a965e01e60a845992a5a0c4f028bff286b4d66343f7042e"
+    }
+  },
+  "candidate_ids": [
+    "xarm6_s2_1p000_s3_1p000_rear_left",
+    "xarm6_s2_1p000_s3_1p000_rear_center",
+    "xarm6_s2_0p833_s3_1p184_rear_left",
+    "xarm6_s2_0p833_s3_1p184_rear_center",
+    "xarm6_s2_1p177_s3_0p981_rear_left",
+    "xarm6_s2_1p177_s3_0p981_rear_center",
+    "xarm6_s2_1p055_s3_1p024_rear_left",
+    "xarm6_s2_1p055_s3_1p024_rear_center",
+    "xarm6_s2_0p962_s3_0p821_rear_left",
+    "xarm6_s2_0p962_s3_0p821_rear_center",
+    "xarm6_s2_0p930_s3_1p105_rear_left",
+    "xarm6_s2_0p930_s3_1p105_rear_center",
+    "xarm6_s2_1p085_s3_0p808_rear_left",
+    "xarm6_s2_1p085_s3_0p808_rear_center",
+    "xarm6_s2_1p214_s3_1p203_rear_left",
+    "xarm6_s2_1p214_s3_1p203_rear_center",
+    "xarm6_s2_0p807_s3_0p906_rear_left",
+    "xarm6_s2_0p807_s3_0p906_rear_center",
+    "xarm6_s2_0p757_s3_1p032_rear_left",
+    "xarm6_s2_0p757_s3_1p032_rear_center",
+    "xarm6_s2_1p226_s3_0p861_rear_left",
+    "xarm6_s2_1p226_s3_0p861_rear_center",
+    "xarm6_s2_1p104_s3_1p130_rear_left",
+    "xarm6_s2_1p104_s3_1p130_rear_center",
+    "xarm6_s2_0p886_s3_0p958_rear_left",
+    "xarm6_s2_0p886_s3_0p958_rear_center",
+    "xarm6_s2_0p974_s3_1p241_rear_left",
+    "xarm6_s2_0p974_s3_1p241_rear_center",
+    "xarm6_s2_1p004_s3_0p912_rear_left",
+    "xarm6_s2_1p004_s3_0p912_rear_center",
+    "xarm6_s2_1p134_s3_1p080_rear_left",
+    "xarm6_s2_1p134_s3_1p080_rear_center",
+    "xarm6_s2_0p852_s3_0p752_rear_left",
+    "xarm6_s2_0p852_s3_0p752_rear_center",
+    "ur5e_s2_1p000_s3_1p000_rear_left",
+    "ur5e_s2_1p000_s3_1p000_rear_center",
+    "ur5e_s2_0p833_s3_1p184_rear_left",
+    "ur5e_s2_0p833_s3_1p184_rear_center",
+    "ur5e_s2_1p177_s3_0p981_rear_left",
+    "ur5e_s2_1p177_s3_0p981_rear_center",
+    "ur5e_s2_1p055_s3_1p024_rear_left",
+    "ur5e_s2_1p055_s3_1p024_rear_center",
+    "ur5e_s2_0p962_s3_0p821_rear_left",
+    "ur5e_s2_0p962_s3_0p821_rear_center",
+    "ur5e_s2_0p930_s3_1p105_rear_left",
+    "ur5e_s2_0p930_s3_1p105_rear_center",
+    "ur5e_s2_1p085_s3_0p808_rear_left",
+    "ur5e_s2_1p085_s3_0p808_rear_center",
+    "ur5e_s2_1p214_s3_1p203_rear_left",
+    "ur5e_s2_1p214_s3_1p203_rear_center",
+    "ur5e_s2_0p807_s3_0p906_rear_left",
+    "ur5e_s2_0p807_s3_0p906_rear_center",
+    "ur5e_s2_0p757_s3_1p032_rear_left",
+    "ur5e_s2_0p757_s3_1p032_rear_center",
+    "ur5e_s2_1p226_s3_0p861_rear_left",
+    "ur5e_s2_1p226_s3_0p861_rear_center",
+    "ur5e_s2_1p104_s3_1p130_rear_left",
+    "ur5e_s2_1p104_s3_1p130_rear_center",
+    "ur5e_s2_0p886_s3_0p958_rear_left",
+    "ur5e_s2_0p886_s3_0p958_rear_center",
+    "ur5e_s2_0p974_s3_1p241_rear_left",
+    "ur5e_s2_0p974_s3_1p241_rear_center",
+    "ur5e_s2_1p004_s3_0p912_rear_left",
+    "ur5e_s2_1p004_s3_0p912_rear_center",
+    "ur5e_s2_1p134_s3_1p080_rear_left",
+    "ur5e_s2_1p134_s3_1p080_rear_center",
+    "ur5e_s2_0p852_s3_0p752_rear_left",
+    "ur5e_s2_0p852_s3_0p752_rear_center"
+  ],
+  "candidate_count": 68,
+  "spec": {
+    "schema_version": 1,
+    "run_id": "six_axis_span2_span3_full_tasks_sobol_20260916",
+    "source_type": "design_assumption",
+    "robots": [
+      "xarm6",
+      "ur5e"
+    ],
+    "span_indices": [
+      2,
+      3
+    ],
+    "sampling": {
+      "mode": "sobol",
+      "factor_bounds": [
+        [
+          0.75,
+          1.25
+        ],
+        [
+          0.75,
+          1.25
+        ]
+      ],
+      "sample_count": 16,
+      "seed": 20260916
+    },
+    "parking_ids": [
+      "rear_left",
+      "rear_center"
+    ],
+    "max_workers": 2,
+    "reserve_available_memory_gib": 2.0,
+    "notes": "固定种子、分层覆盖臂长比率的准蒙特卡洛候选采样；额外包含原长1.0/1.0，全部候选仍跑同一套固定任务。"
+  }
+}

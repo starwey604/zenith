@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "run_id": "six_axis_span2_span3_full_tasks_sobol_20260916",
+  "source_type": "design_assumption",
+  "robots": ["xarm6", "ur5e"],
+  "span_indices": [2, 3],
+  "sampling": {
+    "mode": "sobol",
+    "factor_bounds": [[0.75, 1.25], [0.75, 1.25]],
+    "sample_count": 16,
+    "seed": 20260916
+  },
+  "parking_ids": ["rear_left", "rear_center"],
+  "max_workers": 2,
+  "reserve_available_memory_gib": 2.0,
+  "notes": "固定种子、分层覆盖臂长比率的准蒙特卡洛候选采样；额外包含原长1.0/1.0，全部候选仍跑同一套固定任务。"
+}
