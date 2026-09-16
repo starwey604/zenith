@@ -117,13 +117,19 @@ def box_sat_clearance(a: Box, b: Box) -> float:
 
 def robot_capsules(arm: SixR, mount: ChassisMount, q: np.ndarray,
                    radii_m: np.ndarray, tool_radius_m: float,
-                   tool_length_m: float) -> list[Capsule]:
+                   tool_length_m: float,
+                   tool_axis_in_flange: np.ndarray | None = None) -> list[Capsule]:
     """Each stretched anchor-to-anchor span becomes a stretched capsule."""
     radii = np.asarray(radii_m, dtype=float)
     if radii.shape != (7,) or not np.isfinite(radii).all() or np.any(radii <= 0):
         raise ValueError("seven positive capsule radii required")
     if tool_radius_m <= 0 or tool_length_m <= 0:
         raise ValueError("tool radius/length must be positive")
+    tool_axis = np.array([0.0, 0.0, -1.0]) if tool_axis_in_flange is None else np.asarray(
+        tool_axis_in_flange, dtype=float)
+    if (tool_axis.shape != (3,) or not np.isfinite(tool_axis).all()
+            or not np.isclose(np.linalg.norm(tool_axis), 1.0, atol=1e-7)):
+        raise ValueError("tool axis in flange must be a directed unit vector")
     arm_pose = mount.world_to_arm()
     anchors = arm.joint_anchors(q)
     flange = arm.fk(q)
@@ -133,7 +139,7 @@ def robot_capsules(arm: SixR, mount: ChassisMount, q: np.ndarray,
               for j in range(7) if np.linalg.norm(world[j + 1] - world[j]) > 1e-8]
     world_flange = arm_pose @ flange
     start = world_flange[:3, 3]
-    end = start - world_flange[:3, 2] * tool_length_m
+    end = start + world_flange[:3, :3] @ tool_axis * tool_length_m
     result.append(Capsule("tool", start, end, tool_radius_m, 7))
     return result
 

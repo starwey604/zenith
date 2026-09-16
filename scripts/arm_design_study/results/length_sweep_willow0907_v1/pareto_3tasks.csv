@@ -1,0 +1,2 @@
+candidate_id,robot,parking_id,storage_fraction,pickup_fraction,module_fraction,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm
+willow0907_q32_rear_right,willow0907,rear_right,0.1303703703703704,0.3333333333333333,1.0,346.34,422.78,135.48,81.74

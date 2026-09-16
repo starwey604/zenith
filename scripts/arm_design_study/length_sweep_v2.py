@@ -32,17 +32,35 @@ def validate_spec(spec: dict, scene: dict) -> None:
             or not set(parks) <= available_parks):
         raise ValueError("v2 parking IDs must be unique candidates in scene")
     sampling = spec.get("sampling", {})
-    bounds = sampling.get("factor_bounds")
+    factor_bounds = sampling.get("factor_bounds")
+    span_bounds = sampling.get("span_bounds_m")
     count = sampling.get("sample_count")
-    if (sampling.get("mode") != "sobol" or not isinstance(bounds, list) or len(bounds) != 2
-            or not 0.5 <= bounds[0] < bounds[1] <= 1.5
+    factor_bounds_valid = (isinstance(factor_bounds, list) and len(factor_bounds) == 2
+                           and all(isinstance(value, (int, float)) and not isinstance(value, bool)
+                                   for value in factor_bounds)
+                           and 0.25 <= factor_bounds[0] < factor_bounds[1] <= 4.0)
+    span_bounds_valid = (isinstance(span_bounds, dict)
+                         and set(span_bounds) == {str(index) for index in SPAN_KEYS}
+                         and all(isinstance(pair, list) and len(pair) == 2
+                                 and all(isinstance(value, (int, float)) and not isinstance(value, bool)
+                                         and 0 < value <= 2.0 for value in pair)
+                                 and pair[0] < pair[1] for pair in span_bounds.values()))
+    explicit = sampling.get("explicit_spans_m", [])
+    explicit_valid = (isinstance(explicit, list)
+                      and all(isinstance(item, dict)
+                              and set(item) == {str(index) for index in SPAN_KEYS}
+                              and all(isinstance(value, (int, float)) and not isinstance(value, bool)
+                                      and 0 < value <= 2.0 for value in item.values())
+                              for item in explicit))
+    if (sampling.get("mode") != "sobol" or factor_bounds_valid == span_bounds_valid
             or isinstance(count, bool) or not isinstance(count, int) or count < 2
             or count & (count - 1) or not isinstance(sampling.get("seed"), int)
-            or sampling["seed"] < 0 or sampling.get("include_baseline") is not True):
-        raise ValueError("v2 needs fixed-seed Sobol power-of-two count, bounds and baseline")
+            or sampling["seed"] < 0 or sampling.get("include_baseline") is not True
+            or not explicit_valid):
+        raise ValueError("v2 needs fixed-seed Sobol power-of-two count, one bounds mode, baseline and valid explicit spans")
     if (isinstance(spec.get("max_workers"), bool) or not isinstance(spec.get("max_workers"), int)
-            or not 1 <= spec["max_workers"] <= 2):
-        raise ValueError("v2 limits workers to one or two for the 12 GB laptop")
+            or not 1 <= spec["max_workers"] <= 3):
+        raise ValueError("v2 limits workers to one, two or three for the 12 GB laptop")
 
 
 def generate_candidates(spec: dict, scene: dict) -> list[dict]:
@@ -53,7 +71,9 @@ def generate_candidates(spec: dict, scene: dict) -> list[dict]:
     from .model_import import load_local
 
     parking = {p["parking_id"]: p for p in scene["parking"]["candidates"]}
-    lower, upper = spec["sampling"]["factor_bounds"]
+    sampling = spec["sampling"]
+    factor_bounds = sampling.get("factor_bounds")
+    span_bounds = sampling.get("span_bounds_m")
     count = spec["sampling"]["sample_count"]
     candidates = []
     for robot in spec["robots"]:
@@ -61,17 +81,33 @@ def generate_candidates(spec: dict, scene: dict) -> list[dict]:
         active = [i for i in SPAN_KEYS if reference[i] > 1e-8]
         if not active:
             raise ValueError(f"{robot} has no nonzero design span")
+        if span_bounds is not None and set(map(int, span_bounds)) != set(active):
+            raise ValueError(f"{robot} absolute span bounds must match its nonzero design spans")
         points = qmc.Sobol(d=len(active), scramble=True, seed=spec["sampling"]["seed"]).random_base2(
             m=count.bit_length() - 1)
-        factor_vectors = [tuple(1.0 for _ in active)] + [
-            tuple(float(lower + value * (upper - lower)) for value in point) for point in points]
-        for sample_index, factors in enumerate(factor_vectors):
+        samples: list[tuple[str, tuple[float, ...]]] = [("baseline", tuple(1.0 for _ in active))]
+        for explicit_index, values in enumerate(sampling.get("explicit_spans_m", []), start=1):
+            factors = tuple(float(values[str(index)] / reference[index]) for index in active)
+            samples.append((f"explicit_{explicit_index}", factors))
+        if span_bounds is None:
+            lower, upper = factor_bounds
+            sobol_factors = [tuple(float(lower + value * (upper - lower)) for value in point)
+                             for point in points]
+        else:
+            sobol_factors = [tuple(float((span_bounds[str(index)][0]
+                                          + value * (span_bounds[str(index)][1]
+                                                     - span_bounds[str(index)][0]))
+                                         / reference[index])
+                                   for index, value in zip(active, point)) for point in points]
+        samples.extend(("sobol", factors) for factors in sobol_factors)
+        for sample_index, (sampling_kind, factors) in enumerate(samples):
             scales = {str(i): factor for i, factor in zip(active, factors)}
             spans = {str(i): reference[i] * scales.get(str(i), 1.0) for i in SPAN_KEYS}
             for park_id in spec["parking_ids"]:
                 cid = f"{robot}_q{sample_index:02d}_{park_id}"
                 candidates.append({"candidate_id": cid, "robot": robot,
                                    "sample_index": sample_index,
+                                   "sampling_kind": sampling_kind,
                                    "active_span_indices": active,
                                    "anchor_span_scales": scales,
                                    "span_m": spans,
@@ -123,6 +159,7 @@ def summarize(candidate: dict, storage: dict, pickup: dict, benchmark: dict,
                          if row["slot_id"] == slot) for slot in range(1, 7)}
     return {"candidate_id": candidate["candidate_id"], "robot": candidate["robot"],
             "sample_index": candidate["sample_index"],
+            "sampling_kind": candidate["sampling_kind"],
             "parking_id": candidate["parking_id"],
             "active_span_indices": candidate["active_span_indices"],
             "anchor_span_scales": candidate["anchor_span_scales"],
@@ -222,7 +259,7 @@ def write_summaries(output_dir: Path, manifest: dict, complete: dict[str, dict],
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "summary.json").write_text(json.dumps(report, ensure_ascii=False, indent=2,
                                                   allow_nan=False) + "\n", encoding="utf-8")
-    fields = ("candidate_id", "robot", "sample_index", "parking_id",
+    fields = ("candidate_id", "robot", "sample_index", "sampling_kind", "parking_id",
               "span2_mm", "span3_mm", "span4_mm", "span5_mm",
               "factor2", "factor3", "factor4", "factor5",
               "tier1_complete", "tier2_complete", "tier3_complete",

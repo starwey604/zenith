@@ -148,7 +148,9 @@ def _screen_one(scene: dict, arm, mount: ChassisMount, parking_id: str,
         point = task["path"][index]
         caps = robot_capsules(arm, mount, q, radii,
                               float(scene["geometry"]["tool_radius_m"]),
-                              float(scene["geometry"]["tool_length_m"]))
+                              float(scene["geometry"]["tool_length_m"]),
+                              np.asarray(scene["geometry"].get(
+                                  "tool_axis_in_flange", [0.0, 0.0, -1.0]), dtype=float))
         carried = None
         if task["kind"] == "module" and point.phase in ("locked", "leave_table"):
             carried = Box("carried_module", _box_pose(point.world_module, module_local), module_half,

@@ -48,6 +48,17 @@ def test_stretched_arm_updates_capsule_span():
     assert np.isclose(stretched["link_2"].radius_m, nominal["link_2"].radius_m)
 
 
+def test_tool_capsule_can_follow_a_fixed_flange_adapter_direction():
+    arm = load_local("ur5e")
+    mount = ChassisMount(0.0, 0.0, 0.0, np.eye(4))
+    radii = np.full(7, 0.02)
+    default = robot_capsules(arm, mount, np.zeros(6), radii, 0.01, 0.04)[-1]
+    flipped = robot_capsules(arm, mount, np.zeros(6), radii, 0.01, 0.04,
+                             np.array([0.0, 0.0, 1.0]))[-1]
+    assert np.allclose(default.end - default.start, -(flipped.end - flipped.start))
+    assert np.isclose(np.linalg.norm(flipped.end - flipped.start), 0.04)
+
+
 def test_intended_tool_contact_is_local_exception():
     tool = Capsule("tool", np.array([0, 0, 1]), np.array([0, 0, 0]), 0.01, 7)
     chassis = Box("chassis", transform(translation=[2, 0, 0]), np.array([0.1, 0.1, 0.1]))

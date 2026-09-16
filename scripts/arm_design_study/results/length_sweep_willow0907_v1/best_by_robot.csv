@@ -1,0 +1,2 @@
+robot,candidate_id,parking_id,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm,tier1,tier2,tier3,pickup,module_basic,module_stress,module_min_clearance_mm,module_min_joint_margin_rad,robust_fraction
+willow0907,willow0907_q32_rear_right,rear_right,346.34,422.78,135.48,81.74,0/15,7/25,3/27,24/72,True,9/9,6.67,0.05915625200227814,0.1304
