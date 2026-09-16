@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "run_id": "rm_constrained_topology_stowage_chassis250_v1_20260916",
+  "input_key": "ebabf381f8323a267c7aba01a4fd42a2116151b1f9df038f236b4151cbca43d9",
+  "inputs": {
+    "config_sha256": "e246b5282ad410187d5d60300664bd900116c66572bcf5ad072cfd1f7ca0638e",
+    "source_studies": {
+      "topology_v1": {
+        "summary": "/home/ww/codings/zenith/scripts/arm_design_study/results/topology_sweep_v1/summary.json",
+        "summary_sha256": "b837bd495fa26aed680c851876fd6400cd2b67559379f01fb3bc81af2fc2dffc",
+        "scene": "/home/ww/codings/zenith/scripts/arm_design_study/configs/benchmark.topology_v1.chassis250.synthetic.json",
+        "scene_sha256": "3bb9e6267a93976114a62161f184989116b173ee3ee9e84ec859076b682f3c9c"
+      }
+    },
+    "rule_reference": "/home/ww/codings/zenith/references/RoboMaster 2026 机甲大师高校系列赛机器人制作规范手册V2.0.0（20260626）.pdf",
+    "rule_reference_sha256": "77010458d06616b2bafad4400aad384f72e1b7007269c58061384de8fd0fb41b",
+    "source_sha256": {
+      "__init__.py": "f9b46621c385682ed53ded226cd4fee941805d8b9bfdf091bfce6cd915e5df0c",
+      "bayonet.py": "372868e7f5a70338dc08b4659b6f24fa77a13ddbf17c8c098cbd64f94d510be1",
+      "bayonet_trajectory.py": "c325a895e6613de05a17be42b883f4ddf70e290e1d6336ca77f8e15a573ba7ae",
+      "benchmark.py": "9dc2437641ed38b6f741d8de735a49b3492d7cef9688e33a97d7c20eca5672a3",
+      "chassis.py": "c52ad7c78dcfc5758ede01cc2e1493f5e6b8bab6013b413df451abfed267d53a",
+      "cli.py": "4f5eb568778a92da0d01275d4995a7ce0546437ebf8003a66327ad57e73e2ad7",
+      "collision.py": "913359d5c87957b76c1219e07f1adf37a3f55a1c3bed4cda1f4d6d4e2217e701",
+      "frames.py": "6c6fce5503223b44823dda8ba297058f6c504fc5a46b5514988c5e5d84ce5958",
+      "length_design.py": "a59ed5e0c4c17863b836a2694fe869c0995b0f2ad62743ea5fe0e9eabb3dded5",
+      "length_sweep.py": "dfd6589e1839b4cd618bcbe9bef93737f11aa4b1cdb26b204327a18de7d7100c",
+      "length_sweep_plots.py": "d1efc23aaf40cb8efd64984a230e8c547f062a5ebbcce9f43dc17b49e1f32b76",
+      "length_sweep_v2.py": "4e2937a531015008ef0fa1fc8bfaa93eead841e9a39ad5dee3dfe344bd520adf",
+      "length_sweep_v2_plots.py": "5c8b1adb9d94f2954853e6f429f1b9e6d648e1a9471f19eecb63eb7fde86abb3",
+      "model_import.py": "a4099dc434c5de894aa952bc29f93dbcc61ce3f5db235d7992c42fed4b4dc074",
+      "module_stress.py": "8c62f83ef270958a96c6a296553bdc57b9c4421b1f2575f559d96b8cadfc3932",
+      "parking.py": "ed9e0d7bd288f435fe730b09cc357c9481383a9e2f174353f5f54ab71ce17f9e",
+      "pickup_exit.py": "b420f09e4bd7089af7adb40d9d75c800c5dc5544ee559ae5e19dedd5d82746ab",
+      "pickup_recovery.py": "d5e099091769ac6208fafff9ffbc450d8629d3c2cdf4c324e6d54509ccbe71e1",
+      "publish_length_sweep.py": "daa5c5cdd7884461598a71c94ca6ed7d527af711d1e7527e1e89096b8babdddd",
+      "publish_length_sweep_v2.py": "6c3c0acb1577c774def82e1aff557c9d9aea3b2a4f31c48539358f9602bf8873",
+      "publish_stowage.py": "358a74575b493d21e21dbf62d118a562ec91d0f9c2039af06e7ec0d37bc64ebf",
+      "sixr.py": "f99e0ada817c99d0b06bed82beb481415e908d91eb678caa3cb4517d312f3db6",
+      "storage_2026.py": "c3b23bfa3982f3c0a2c355028094deda771a7f716ea3e090e3703913562ffe10",
+      "storage_stress.py": "550b5ebe9fc0d4c0689a551e50c58bdc85d1f039d5f9ec9167482e177b040b6a",
+      "stowage.py": "2e83565cb35bdc7ac12126ea3f83c9a9f35511c37bcc9f63f3f133ec308b7024",
+      "stowage_plots.py": "9bc1ae8d7a689e0f2532b5a5789eb17015d7a7a38d84fada487aa2fa4f535cd1",
+      "stowage_sweep.py": "df2dbdb6718d4b0bc160866ef0aea555a2dcd2d4fba9d0abb65dd3491ec38311",
+      "task_2026.py": "60cdb26b743e90e588f74971073cdfee604bb7ce2a4fdc7d2c48fb9a114f5aa9",
+      "topology_design.py": "5f79282eab20b7642c5a727bb49623b23092603ac531581715c95507e1066f8e"
+    },
+    "model_sha256": {}
+  },
+  "spec": {
+    "schema_version": 1,
+    "run_id": "rm_constrained_topology_stowage_chassis250_v1_20260916",
+    "source_type": "design_assumption",
+    "rule_reference_file": "../../../references/RoboMaster 2026 机甲大师高校系列赛机器人制作规范手册V2.0.0（20260626）.pdf",
+    "studies": [
+      {
+        "study_id": "topology_v1",
+        "summary_file": "../results/topology_sweep_v1/summary.json",
+        "scene_file": "benchmark.topology_v1.chassis250.synthetic.json",
+        "include_task_results": true
+      }
+    ],
+    "rule_limit_m": [
+      0.6,
+      0.6,
+      0.6
+    ],
+    "minimum_clearance_m": 0.0,
+    "search": {
+      "sobol_sample_count": 1024,
+      "local_start_count": 6,
+      "local_max_iterations": 140,
+      "seed": 20260916
+    },
+    "max_workers": 3,
+    "reserve_available_memory_gib": 2.0,
+    "notes": "五个受约束6R模板及其长度扰动在360×360×250 mm底盘上的最小收纳包络；采用粗胶囊碰撞体，未包含电机实体和线缆。"
+  },
+  "candidate_count": 15,
+  "candidate_ids": [
+    "rm2p_offset_wrist_q00",
+    "rm2p_offset_wrist_q01",
+    "rm2p_offset_wrist_q02",
+    "rm2p_spherical_wrist_q00",
+    "rm2p_spherical_wrist_q01",
+    "rm2p_spherical_wrist_q02",
+    "rm3p_spherical_wrist_q00",
+    "rm3p_spherical_wrist_q01",
+    "rm3p_spherical_wrist_q02",
+    "rm_offset_shoulder_q00",
+    "rm_offset_shoulder_q01",
+    "rm_offset_shoulder_q02",
+    "rm_spherical_shoulder_q00",
+    "rm_spherical_shoulder_q01",
+    "rm_spherical_shoulder_q02"
+  ]
+}

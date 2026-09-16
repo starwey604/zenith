@@ -1,0 +1,2623 @@
+{
+  "schema_version": 2,
+  "run_id": "rm_constrained_topology_v1_20260916",
+  "input_key": "e94e335bba82c8f3d59f5f3bfe9b7780a4eccee80263ef2a0ae34ff5952ecaee",
+  "inputs": {
+    "spec_sha256": "7db6c0c75b8547a169b8c1ee1d15c0f81f4f6d6eeb30df13a4b07f28ef1a6c1f",
+    "base_scene_sha256": "3bb9e6267a93976114a62161f184989116b173ee3ee9e84ec859076b682f3c9c",
+    "storage_task_sha256": "50d0f81549c9308bac33f972c793ef629d3ccbf736230a61559bc398bb8a6b25",
+    "module_stress_sha256": "f4a838ab2fc1abb2d9db1aab33e9b8a79051ebc79bd811ba51fb18e8570ba1e5",
+    "source_sha256": "0bf753546f69744fa9bc4f0156a63f1256186f742625cd9beb1f6d72bcf069ca",
+    "model_sha256": {}
+  },
+  "spec": {
+    "schema_version": 2,
+    "run_id": "rm_constrained_topology_v1_20260916",
+    "source_type": "design_assumption",
+    "robots": [
+      "rm2p_offset_wrist",
+      "rm2p_spherical_wrist",
+      "rm3p_spherical_wrist",
+      "rm_spherical_shoulder",
+      "rm_offset_shoulder"
+    ],
+    "span_indices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "sampling": {
+      "mode": "sobol",
+      "factor_bounds": [
+        0.85,
+        1.15
+      ],
+      "sample_count": 2,
+      "seed": 20260916,
+      "include_baseline": true
+    },
+    "parking_ids": [
+      "rear_left",
+      "rear_center",
+      "rear_right",
+      "mid_left"
+    ],
+    "max_workers": 3,
+    "reserve_available_memory_gib": 2.0,
+    "notes": "每个统一尺度合成6R模板包含基线和2个固定种子Sobol长度扰动；自动保持零长度轴心段；四个泊位运行相同完整合成任务。该轮用于验证构型搜索管线，不是自动穷举或最终强度结论。"
+  },
+  "candidate_count": 60,
+  "complete_candidate_count": 60,
+  "errors": {},
+  "rows": [
+    {
+      "candidate_id": "rm2p_offset_wrist_q00_rear_left",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.06
+      },
+      "tier1_complete": 4,
+      "tier2_complete": 14,
+      "tier3_complete": 1,
+      "storage_balanced_fraction": 0.28790123456790123,
+      "pickup_complete": 32,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 7,
+        "3": 6,
+        "4": 6,
+        "5": 5,
+        "6": 2
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 2,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.00013933267745838002,
+      "module_stress_min_joint_margin_rad": 0.0901970204220559,
+      "elapsed_s": 58.76486689600097
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q00_rear_center",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.06
+      },
+      "tier1_complete": 7,
+      "tier2_complete": 19,
+      "tier3_complete": 5,
+      "storage_balanced_fraction": 0.4706172839506173,
+      "pickup_complete": 36,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 6,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.47225105489724006,
+      "elapsed_s": 70.98832477399992
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q00_rear_right",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.06
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 19,
+      "tier3_complete": 6,
+      "storage_balanced_fraction": 0.5274074074074074,
+      "pickup_complete": 37,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 7,
+        "4": 6,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 6,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.20520091513465277,
+      "elapsed_s": 56.15154007000092
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q00_mid_left",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.06
+      },
+      "tier1_complete": 8,
+      "tier2_complete": 20,
+      "tier3_complete": 5,
+      "storage_balanced_fraction": 0.5061728395061729,
+      "pickup_complete": 36,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 6,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.0004548275611447397,
+      "module_stress_min_joint_margin_rad": 0.12418329915325588,
+      "elapsed_s": 89.81971001599959
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q01_rear_left",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "5": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0636686912253499
+      },
+      "tier1_complete": 5,
+      "tier2_complete": 15,
+      "tier3_complete": 2,
+      "storage_balanced_fraction": 0.3358024691358024,
+      "pickup_complete": 36,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 6,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.0009786593276979033,
+      "module_stress_min_joint_margin_rad": 0.2107072159023522,
+      "elapsed_s": 62.101498182000796
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q01_rear_center",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "5": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0636686912253499
+      },
+      "tier1_complete": 8,
+      "tier2_complete": 18,
+      "tier3_complete": 6,
+      "storage_balanced_fraction": 0.4918518518518518,
+      "pickup_complete": 36,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 6,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.5335116762157,
+      "elapsed_s": 73.20810275099939
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q01_rear_right",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "5": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0636686912253499
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 19,
+      "tier3_complete": 6,
+      "storage_balanced_fraction": 0.5274074074074074,
+      "pickup_complete": 34,
+      "pickup_by_slot": {
+        "1": 5,
+        "2": 5,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.20400283960675125,
+      "elapsed_s": 82.3661273130001
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q01_mid_left",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "5": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0636686912253499
+      },
+      "tier1_complete": 8,
+      "tier2_complete": 20,
+      "tier3_complete": 5,
+      "storage_balanced_fraction": 0.5061728395061729,
+      "pickup_complete": 36,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 6,
+      "module_complete": true,
+      "module_stress_complete": 5,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.0013757193923300756,
+      "module_stress_min_joint_margin_rad": 0.20005844884413548,
+      "elapsed_s": 70.66124408399992
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q02_rear_left",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "5": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.3155400831662118,
+        "3": 0.3379636947400868,
+        "4": 0.0,
+        "5": 0.05955587086267769
+      },
+      "tier1_complete": 2,
+      "tier2_complete": 8,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.1511111111111111,
+      "pickup_complete": 25,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 6,
+        "3": 6,
+        "4": 5,
+        "5": 0,
+        "6": 1
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 0,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.00040706431108195745,
+      "module_stress_min_joint_margin_rad": 0.0016613941234702168,
+      "elapsed_s": 70.79048392799996
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q02_rear_center",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "5": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.3155400831662118,
+        "3": 0.3379636947400868,
+        "4": 0.0,
+        "5": 0.05955587086267769
+      },
+      "tier1_complete": 7,
+      "tier2_complete": 17,
+      "tier3_complete": 4,
+      "storage_balanced_fraction": 0.43160493827160495,
+      "pickup_complete": 41,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 8,
+        "3": 7,
+        "4": 7,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 6,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.31471685914848413,
+      "elapsed_s": 78.22895847600012
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q02_rear_right",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "5": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.3155400831662118,
+        "3": 0.3379636947400868,
+        "4": 0.0,
+        "5": 0.05955587086267769
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 19,
+      "tier3_complete": 5,
+      "storage_balanced_fraction": 0.5150617283950617,
+      "pickup_complete": 38,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 7,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 6,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.20572721381297465,
+      "elapsed_s": 65.9182041109998
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q02_mid_left",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "5": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.3155400831662118,
+        "3": 0.3379636947400868,
+        "4": 0.0,
+        "5": 0.05955587086267769
+      },
+      "tier1_complete": 7,
+      "tier2_complete": 18,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.4325925925925926,
+      "pickup_complete": 38,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 7,
+        "3": 7,
+        "4": 7,
+        "5": 6,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.002522815168359685,
+      "module_stress_min_joint_margin_rad": 0.12930646319421246,
+      "elapsed_s": 74.67716916599966
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q00_rear_left",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 1,
+      "tier2_complete": 5,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.08888888888888889,
+      "pickup_complete": 23,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 5,
+        "4": 4,
+        "5": 1,
+        "6": 1
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 1,
+      "module_complete": true,
+      "module_stress_complete": 7,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.012745243110391602,
+      "elapsed_s": 80.355260155
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q00_rear_center",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 5,
+      "tier2_complete": 14,
+      "tier3_complete": 2,
+      "storage_balanced_fraction": 0.32246913580246916,
+      "pickup_complete": 38,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 7,
+        "3": 7,
+        "4": 6,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.2772890287612033,
+      "elapsed_s": 66.83789683299983
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q00_rear_right",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 15,
+      "tier3_complete": 4,
+      "storage_balanced_fraction": 0.4493827160493827,
+      "pickup_complete": 37,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 7,
+        "4": 7,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.22070472629022952,
+      "elapsed_s": 65.42333218400017
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q00_mid_left",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 6,
+      "tier2_complete": 15,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.3703703703703704,
+      "pickup_complete": 34,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": true,
+      "module_stress_complete": 7,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.1330660540609685,
+      "elapsed_s": 64.44729797499895
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q01_rear_left",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 1,
+      "tier2_complete": 7,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.11555555555555556,
+      "pickup_complete": 30,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 5,
+        "6": 1
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 1,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.01178851829817873,
+      "elapsed_s": 79.8817368960008
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q01_rear_center",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 6,
+      "tier2_complete": 17,
+      "tier3_complete": 4,
+      "storage_balanced_fraction": 0.40938271604938276,
+      "pickup_complete": 35,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.40307881883119534,
+      "elapsed_s": 64.8756512459986
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q01_rear_right",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 16,
+      "tier3_complete": 5,
+      "storage_balanced_fraction": 0.4750617283950617,
+      "pickup_complete": 37,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 7,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.22069628495130322,
+      "elapsed_s": 67.17689086000064
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q01_mid_left",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 6,
+      "tier2_complete": 16,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.3837037037037037,
+      "pickup_complete": 36,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 6,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.1811828919419387,
+      "elapsed_s": 84.2504749439995
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q02_rear_left",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 3,
+      "tier2_complete": 7,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.16,
+      "pickup_complete": 28,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 6,
+        "3": 6,
+        "4": 5,
+        "5": 3,
+        "6": 1
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 1,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.012306684643589083,
+      "elapsed_s": 63.62671147199944
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q02_rear_center",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 7,
+      "tier2_complete": 17,
+      "tier3_complete": 4,
+      "storage_balanced_fraction": 0.43160493827160495,
+      "pickup_complete": 39,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 7,
+        "3": 7,
+        "4": 7,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.3001504944047917,
+      "elapsed_s": 66.99506102300074
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q02_rear_right",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 19,
+      "tier3_complete": 5,
+      "storage_balanced_fraction": 0.5150617283950617,
+      "pickup_complete": 37,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 6,
+        "3": 6,
+        "4": 7,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.22115332536038923,
+      "elapsed_s": 61.63415135399919
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q02_mid_left",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 7,
+      "tier2_complete": 18,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.4325925925925926,
+      "pickup_complete": 37,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 7,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 7,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.38877305165601284,
+      "elapsed_s": 68.54289178399995
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q00_rear_left",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 1,
+      "tier2_complete": 5,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.08888888888888889,
+      "pickup_complete": 30,
+      "pickup_by_slot": {
+        "1": 10,
+        "2": 7,
+        "3": 7,
+        "4": 4,
+        "5": 1,
+        "6": 1
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 1,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 2.220446049250313e-15,
+      "elapsed_s": 88.02266079800029
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q00_rear_center",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 8,
+      "tier2_complete": 14,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.4014814814814815,
+      "pickup_complete": 59,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 11,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.2772890286881253,
+      "elapsed_s": 59.49854537600004
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q00_rear_right",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 12,
+      "tier2_complete": 18,
+      "tier3_complete": 6,
+      "storage_balanced_fraction": 0.5807407407407408,
+      "pickup_complete": 59,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 11,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.22069628494949867,
+      "elapsed_s": 65.61156856000161
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q00_mid_left",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 8,
+      "tier2_complete": 15,
+      "tier3_complete": 2,
+      "storage_balanced_fraction": 0.40246913580246907,
+      "pickup_complete": 54,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 8,
+        "5": 6,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 4,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.379473632181647,
+      "elapsed_s": 71.56007600799967
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q01_rear_left",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 1,
+      "tier2_complete": 7,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.11555555555555556,
+      "pickup_complete": 39,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 9,
+        "3": 7,
+        "4": 6,
+        "5": 4,
+        "6": 1
+      },
+      "pickup_all_angle_slots": 1,
+      "pickup_min_slot_complete": 1,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.01178860336109011,
+      "elapsed_s": 74.63388026100074
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q01_rear_center",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 17,
+      "tier3_complete": 5,
+      "storage_balanced_fraction": 0.48839506172839503,
+      "pickup_complete": 59,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 11,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.4030788188333079,
+      "elapsed_s": 68.21984534500007
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q01_rear_right",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 12,
+      "tier2_complete": 19,
+      "tier3_complete": 7,
+      "storage_balanced_fraction": 0.6064197530864198,
+      "pickup_complete": 59,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 11,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.2206962849485039,
+      "elapsed_s": 60.463369827999486
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q01_mid_left",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 16,
+      "tier3_complete": 2,
+      "storage_balanced_fraction": 0.43802469135802474,
+      "pickup_complete": 59,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 11,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.5155106796064719,
+      "elapsed_s": 70.25883792400055
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q02_rear_left",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 3,
+      "tier2_complete": 7,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.16,
+      "pickup_complete": 37,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 8,
+        "3": 8,
+        "4": 5,
+        "5": 3,
+        "6": 1
+      },
+      "pickup_all_angle_slots": 1,
+      "pickup_min_slot_complete": 1,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.012306685023302677,
+      "elapsed_s": 78.02652935900005
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q02_rear_center",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 11,
+      "tier2_complete": 17,
+      "tier3_complete": 6,
+      "storage_balanced_fraction": 0.5451851851851851,
+      "pickup_complete": 59,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 11,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.30015049427547247,
+      "elapsed_s": 67.06241066899929
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q02_rear_right",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 12,
+      "tier2_complete": 23,
+      "tier3_complete": 9,
+      "storage_balanced_fraction": 0.6844444444444444,
+      "pickup_complete": 59,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 11,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.22069628494919757,
+      "elapsed_s": 59.26552390100005
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q02_mid_left",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "tier1_complete": 9,
+      "tier2_complete": 18,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.477037037037037,
+      "pickup_complete": 58,
+      "pickup_by_slot": {
+        "1": 12,
+        "2": 12,
+        "3": 12,
+        "4": 10,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 3,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 9,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.3887730508298872,
+      "elapsed_s": 71.26815070699922
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q00_rear_left",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.29,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 7,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.09333333333333334,
+      "pickup_complete": 27,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 4,
+        "4": 4,
+        "5": 4,
+        "6": 3
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.4355242739036993,
+      "elapsed_s": 77.44899595800052
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q00_rear_center",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.29,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 15,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.23703703703703702,
+      "pickup_complete": 35,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 4.199339922326267e-05,
+      "module_stress_min_joint_margin_rad": 0.3040975419502958,
+      "elapsed_s": 78.83411538899963
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q00_rear_right",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.29,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 7,
+      "tier3_complete": 1,
+      "storage_balanced_fraction": 0.10567901234567902,
+      "pickup_complete": 31,
+      "pickup_by_slot": {
+        "1": 4,
+        "2": 4,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": false,
+      "module_stress_complete": 2,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.00444333283464049,
+      "elapsed_s": 73.08837174099972
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q00_mid_left",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.29,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 14,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.18666666666666668,
+      "pickup_complete": 21,
+      "pickup_by_slot": {
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 4,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": false,
+      "module_stress_complete": 0,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.0480321799211085,
+      "module_stress_min_joint_margin_rad": 0.9272750539328017,
+      "elapsed_s": 88.2271979039997
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q01_rear_left",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 0.8997183128260076,
+        "4": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.2609183107195422,
+        "4": 0.4331684175906702,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 8,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.10666666666666667,
+      "pickup_complete": 32,
+      "pickup_by_slot": {
+        "1": 7,
+        "2": 7,
+        "3": 5,
+        "4": 5,
+        "5": 5,
+        "6": 3
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.0966972219918012,
+      "elapsed_s": 73.03144141400116
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q01_rear_center",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 0.8997183128260076,
+        "4": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.2609183107195422,
+        "4": 0.4331684175906702,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 13,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.2103703703703704,
+      "pickup_complete": 39,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 7,
+        "3": 7,
+        "4": 7,
+        "5": 7,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": true,
+      "module_stress_complete": 8,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00013880611338708965,
+      "module_stress_min_joint_margin_rad": 0.4334932522756132,
+      "elapsed_s": 66.5940251789998
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q01_rear_right",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 0.8997183128260076,
+        "4": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.2609183107195422,
+        "4": 0.4331684175906702,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 7,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.09333333333333334,
+      "pickup_complete": 35,
+      "pickup_by_slot": {
+        "1": 5,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 5,
+      "module_complete": false,
+      "module_stress_complete": 2,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 9.15267861500979e-13,
+      "elapsed_s": 75.49824171399996
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q01_mid_left",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 0.8997183128260076,
+        "4": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.2609183107195422,
+        "4": 0.4331684175906702,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 16,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.21333333333333335,
+      "pickup_complete": 22,
+      "pickup_by_slot": {
+        "1": 3,
+        "2": 3,
+        "3": 4,
+        "4": 4,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": false,
+      "module_stress_complete": 1,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.9131337215461287,
+      "elapsed_s": 88.5711685719998
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q02_rear_left",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.1063851996324956,
+        "4": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.3208517078934237,
+        "4": 0.38559467646293344,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 8,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.10666666666666667,
+      "pickup_complete": 25,
+      "pickup_by_slot": {
+        "1": 5,
+        "2": 4,
+        "3": 4,
+        "4": 4,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": false,
+      "module_stress_complete": 3,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.6974595305607911,
+      "elapsed_s": 82.73195986000064
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q02_rear_center",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.1063851996324956,
+        "4": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.3208517078934237,
+        "4": 0.38559467646293344,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 15,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.23703703703703702,
+      "pickup_complete": 29,
+      "pickup_by_slot": {
+        "1": 4,
+        "2": 5,
+        "3": 6,
+        "4": 6,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": true,
+      "module_stress_complete": 5,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00196138474488719,
+      "module_stress_min_joint_margin_rad": 0.32247478789590867,
+      "elapsed_s": 79.62455628099997
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q02_rear_right",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.1063851996324956,
+        "4": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.3208517078934237,
+        "4": 0.38559467646293344,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 7,
+      "tier3_complete": 1,
+      "storage_balanced_fraction": 0.10567901234567902,
+      "pickup_complete": 27,
+      "pickup_by_slot": {
+        "1": 3,
+        "2": 3,
+        "3": 6,
+        "4": 6,
+        "5": 5,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": false,
+      "module_stress_complete": 2,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.0013732735178804134,
+      "elapsed_s": 69.78275660300096
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q02_mid_left",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.1063851996324956,
+        "4": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.3208517078934237,
+        "4": 0.38559467646293344,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 16,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.21333333333333335,
+      "pickup_complete": 20,
+      "pickup_by_slot": {
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": false,
+      "module_stress_complete": 0,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.04942230134596527,
+      "module_stress_min_joint_margin_rad": 0.9467257695593465,
+      "elapsed_s": 77.03408018000118
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q00_rear_left",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.06,
+        "3": 0.29614185789921693,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 7,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.09333333333333334,
+      "pickup_complete": 24,
+      "pickup_by_slot": {
+        "1": 4,
+        "2": 4,
+        "3": 4,
+        "4": 4,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": true,
+      "module_stress_complete": 6,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.3655286727792486,
+      "elapsed_s": 77.8348918369993
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q00_rear_center",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.06,
+        "3": 0.29614185789921693,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 16,
+      "tier3_complete": 4,
+      "storage_balanced_fraction": 0.26271604938271603,
+      "pickup_complete": 29,
+      "pickup_by_slot": {
+        "1": 6,
+        "2": 5,
+        "3": 5,
+        "4": 5,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": true,
+      "module_stress_complete": 7,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.004917980673163028,
+      "module_stress_min_joint_margin_rad": 0.5242026148768555,
+      "elapsed_s": 83.1761427170004
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q00_rear_right",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.06,
+        "3": 0.29614185789921693,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 10,
+      "tier3_complete": 1,
+      "storage_balanced_fraction": 0.145679012345679,
+      "pickup_complete": 27,
+      "pickup_by_slot": {
+        "1": 2,
+        "2": 4,
+        "3": 5,
+        "4": 5,
+        "5": 6,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 2,
+      "module_complete": false,
+      "module_stress_complete": 0,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.01932577436319087,
+      "module_stress_min_joint_margin_rad": 0.005103952028522762,
+      "elapsed_s": 66.90052332599953
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q00_mid_left",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.06,
+        "3": 0.29614185789921693,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 14,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.18666666666666668,
+      "pickup_complete": 22,
+      "pickup_by_slot": {
+        "1": 3,
+        "2": 3,
+        "3": 4,
+        "4": 4,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": false,
+      "module_stress_complete": 0,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.005695266085640416,
+      "module_stress_min_joint_margin_rad": 0.6536273799810877,
+      "elapsed_s": 83.26837707699997
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q01_rear_left",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "4": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.05398309876956045,
+        "3": 0.32892128197067927,
+        "4": 0.4138464929647744,
+        "5": 0.0
+      },
+      "tier1_complete": 1,
+      "tier2_complete": 12,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.1822222222222222,
+      "pickup_complete": 24,
+      "pickup_by_slot": {
+        "1": 4,
+        "2": 4,
+        "3": 4,
+        "4": 4,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": false,
+      "module_stress_complete": 1,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.0027400089599690924,
+      "module_stress_min_joint_margin_rad": 0.7210375306127113,
+      "elapsed_s": 77.54800432500087
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q01_rear_center",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "4": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.05398309876956045,
+        "3": 0.32892128197067927,
+        "4": 0.4138464929647744,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 11,
+      "tier3_complete": 3,
+      "storage_balanced_fraction": 0.1837037037037037,
+      "pickup_complete": 26,
+      "pickup_by_slot": {
+        "1": 5,
+        "2": 4,
+        "3": 4,
+        "4": 5,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": false,
+      "module_stress_complete": 2,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.013189508227913815,
+      "module_stress_min_joint_margin_rad": 0.0779507107151014,
+      "elapsed_s": 80.1940294699998
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q01_rear_right",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "4": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.05398309876956045,
+        "3": 0.32892128197067927,
+        "4": 0.4138464929647744,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 6,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.08,
+      "pickup_complete": 20,
+      "pickup_by_slot": {
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": false,
+      "module_stress_complete": 0,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.028487984853144604,
+      "module_stress_min_joint_margin_rad": 0.08925151775844897,
+      "elapsed_s": 67.80263799900058
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q01_mid_left",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "4": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.05398309876956045,
+        "3": 0.32892128197067927,
+        "4": 0.4138464929647744,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 15,
+      "tier3_complete": 1,
+      "storage_balanced_fraction": 0.2123456790123457,
+      "pickup_complete": 20,
+      "pickup_by_slot": {
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": false,
+      "module_stress_complete": 0,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.003149101904749124,
+      "module_stress_min_joint_margin_rad": 1.0238715505822709,
+      "elapsed_s": 89.11706283700005
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q02_rear_left",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_left",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "4": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.06528415513783692,
+        "3": 0.25662870887900796,
+        "4": 0.387113160607405,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 3,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.04,
+      "pickup_complete": 25,
+      "pickup_by_slot": {
+        "1": 5,
+        "2": 4,
+        "3": 5,
+        "4": 6,
+        "5": 4,
+        "6": 1
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 1,
+      "module_complete": true,
+      "module_stress_complete": 4,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.030611662037996812,
+      "elapsed_s": 84.88467181700071
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q02_rear_center",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_center",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "4": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.06528415513783692,
+        "3": 0.25662870887900796,
+        "4": 0.387113160607405,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 10,
+      "tier3_complete": 1,
+      "storage_balanced_fraction": 0.145679012345679,
+      "pickup_complete": 28,
+      "pickup_by_slot": {
+        "1": 5,
+        "2": 5,
+        "3": 5,
+        "4": 4,
+        "5": 4,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": true,
+      "module_stress_complete": 7,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.00015126097024890234,
+      "module_stress_min_joint_margin_rad": 0.5129294668168514,
+      "elapsed_s": 71.03768673000013
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q02_rear_right",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "rear_right",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "4": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.06528415513783692,
+        "3": 0.25662870887900796,
+        "4": 0.387113160607405,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 8,
+      "tier3_complete": 1,
+      "storage_balanced_fraction": 0.11901234567901235,
+      "pickup_complete": 25,
+      "pickup_by_slot": {
+        "1": 4,
+        "2": 4,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 5
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 3,
+      "module_complete": false,
+      "module_stress_complete": 0,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": -0.024260849947284155,
+      "module_stress_min_joint_margin_rad": 0.050394098093120565,
+      "elapsed_s": 68.71507897399897
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q02_mid_left",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "parking_id": "mid_left",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "4": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.06528415513783692,
+        "3": 0.25662870887900796,
+        "4": 0.387113160607405,
+        "5": 0.0
+      },
+      "tier1_complete": 0,
+      "tier2_complete": 13,
+      "tier3_complete": 0,
+      "storage_balanced_fraction": 0.17333333333333334,
+      "pickup_complete": 24,
+      "pickup_by_slot": {
+        "1": 4,
+        "2": 4,
+        "3": 4,
+        "4": 4,
+        "5": 4,
+        "6": 4
+      },
+      "pickup_all_angle_slots": 0,
+      "pickup_min_slot_complete": 4,
+      "module_complete": false,
+      "module_stress_complete": 1,
+      "module_stress_total": 9,
+      "module_stress_min_clearance_m": 0.00666666666666671,
+      "module_stress_min_joint_margin_rad": 0.5616265486105054,
+      "elapsed_s": 81.55010836699876
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+robot,candidate_id,parking_id,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm,tier1,tier2,tier3,pickup,module_basic,module_stress,module_min_clearance_mm,module_min_joint_margin_rad,robust_fraction
+rm2p_offset_wrist,rm2p_offset_wrist_q02_rear_right,rear_right,315.54,337.96,0.0,59.56,9/15,19/25,5/27,38/72,True,9/9,6.67,0.20572721381297465,0.5151
+rm2p_spherical_wrist,rm2p_spherical_wrist_q02_rear_right,rear_right,320.85,385.59,0.0,0.0,9/15,19/25,5/27,37/72,True,9/9,6.67,0.22115332536038923,0.5139
+rm3p_spherical_wrist,rm3p_spherical_wrist_q02_rear_right,rear_right,320.85,385.59,0.0,0.0,12/15,23/25,9/27,59/72,True,9/9,6.67,0.22069628494919757,0.6844
+rm_spherical_shoulder,rm_spherical_shoulder_q00_rear_center,rear_center,0.0,290.0,390.0,0.0,0/15,15/25,3/27,35/72,True,8/9,0.04,0.3040975419502958,0.237
+rm_offset_shoulder,rm_offset_shoulder_q00_rear_center,rear_center,60.0,296.14,390.0,0.0,0/15,16/25,4/27,29/72,True,7/9,-4.92,0.5242026148768555,0.2627

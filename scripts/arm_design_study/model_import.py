@@ -9,6 +9,7 @@ from scipy.spatial.transform import Rotation
 
 from .frames import inverse, transform
 from .sixr import SixR
+from .topology_design import GENERATED_ARM_NAMES, load_generated_arm
 
 
 WORKSPACE = Path(__file__).resolve().parents[3]
@@ -42,11 +43,11 @@ URDF_SPECS = {
 
 def model_reference_paths(names: list[str]) -> tuple[Path, ...]:
     """XML files whose joint axes and limits drive the requested reference arms."""
-    unknown = set(names) - set(MODEL_SPECS) - set(URDF_SPECS)
+    unknown = set(names) - set(MODEL_SPECS) - set(URDF_SPECS) - set(GENERATED_ARM_NAMES)
     if unknown:
         raise ValueError(f"unknown local robots: {sorted(unknown)}")
     paths = {MODEL_SPECS[name][0] if name in MODEL_SPECS else URDF_SPECS[name][0]
-             for name in names}
+             for name in names if name not in GENERATED_ARM_NAMES}
     if "ur5e" in names:
         paths.add(UR5E_CLASSES)
     return tuple(sorted(paths))
@@ -112,6 +113,8 @@ def _load_urdf(name: str) -> SixR:
 
 def load_local(name: str) -> SixR:
     """Import one existing six-joint MJCF or URDF reference; it is not certified CAD."""
+    if name in GENERATED_ARM_NAMES:
+        return load_generated_arm(name)
     if name in URDF_SPECS:
         return _load_urdf(name)
     if name not in MODEL_SPECS:

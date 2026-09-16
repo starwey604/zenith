@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "run_id": "rm_constrained_topology_v1_20260916",
+  "source_type": "design_assumption",
+  "robots": [
+    "rm2p_offset_wrist",
+    "rm2p_spherical_wrist",
+    "rm3p_spherical_wrist",
+    "rm_spherical_shoulder",
+    "rm_offset_shoulder"
+  ],
+  "span_indices": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "sampling": {
+    "mode": "sobol",
+    "factor_bounds": [
+      0.85,
+      1.15
+    ],
+    "sample_count": 2,
+    "seed": 20260916,
+    "include_baseline": true
+  },
+  "parking_ids": [
+    "rear_left",
+    "rear_center",
+    "rear_right",
+    "mid_left"
+  ],
+  "max_workers": 3,
+  "reserve_available_memory_gib": 2.0,
+  "notes": "每个统一尺度合成6R模板包含基线和2个固定种子Sobol长度扰动；自动保持零长度轴心段；四个泊位运行相同完整合成任务。该轮用于验证构型搜索管线，不是自动穷举或最终强度结论。"
+}

@@ -1,0 +1,2169 @@
+{
+  "schema_version": 1,
+  "run_id": "rm_constrained_topology_stowage_chassis250_v1_20260916",
+  "input_key": "ebabf381f8323a267c7aba01a4fd42a2116151b1f9df038f236b4151cbca43d9",
+  "inputs": {
+    "config_sha256": "e246b5282ad410187d5d60300664bd900116c66572bcf5ad072cfd1f7ca0638e",
+    "source_studies": {
+      "topology_v1": {
+        "summary": "/home/ww/codings/zenith/scripts/arm_design_study/results/topology_sweep_v1/summary.json",
+        "summary_sha256": "b837bd495fa26aed680c851876fd6400cd2b67559379f01fb3bc81af2fc2dffc",
+        "scene": "/home/ww/codings/zenith/scripts/arm_design_study/configs/benchmark.topology_v1.chassis250.synthetic.json",
+        "scene_sha256": "3bb9e6267a93976114a62161f184989116b173ee3ee9e84ec859076b682f3c9c"
+      }
+    },
+    "rule_reference": "/home/ww/codings/zenith/references/RoboMaster 2026 机甲大师高校系列赛机器人制作规范手册V2.0.0（20260626）.pdf",
+    "rule_reference_sha256": "77010458d06616b2bafad4400aad384f72e1b7007269c58061384de8fd0fb41b",
+    "source_sha256": {
+      "__init__.py": "f9b46621c385682ed53ded226cd4fee941805d8b9bfdf091bfce6cd915e5df0c",
+      "bayonet.py": "372868e7f5a70338dc08b4659b6f24fa77a13ddbf17c8c098cbd64f94d510be1",
+      "bayonet_trajectory.py": "c325a895e6613de05a17be42b883f4ddf70e290e1d6336ca77f8e15a573ba7ae",
+      "benchmark.py": "9dc2437641ed38b6f741d8de735a49b3492d7cef9688e33a97d7c20eca5672a3",
+      "chassis.py": "c52ad7c78dcfc5758ede01cc2e1493f5e6b8bab6013b413df451abfed267d53a",
+      "cli.py": "4f5eb568778a92da0d01275d4995a7ce0546437ebf8003a66327ad57e73e2ad7",
+      "collision.py": "913359d5c87957b76c1219e07f1adf37a3f55a1c3bed4cda1f4d6d4e2217e701",
+      "frames.py": "6c6fce5503223b44823dda8ba297058f6c504fc5a46b5514988c5e5d84ce5958",
+      "length_design.py": "a59ed5e0c4c17863b836a2694fe869c0995b0f2ad62743ea5fe0e9eabb3dded5",
+      "length_sweep.py": "dfd6589e1839b4cd618bcbe9bef93737f11aa4b1cdb26b204327a18de7d7100c",
+      "length_sweep_plots.py": "d1efc23aaf40cb8efd64984a230e8c547f062a5ebbcce9f43dc17b49e1f32b76",
+      "length_sweep_v2.py": "4e2937a531015008ef0fa1fc8bfaa93eead841e9a39ad5dee3dfe344bd520adf",
+      "length_sweep_v2_plots.py": "5c8b1adb9d94f2954853e6f429f1b9e6d648e1a9471f19eecb63eb7fde86abb3",
+      "model_import.py": "a4099dc434c5de894aa952bc29f93dbcc61ce3f5db235d7992c42fed4b4dc074",
+      "module_stress.py": "8c62f83ef270958a96c6a296553bdc57b9c4421b1f2575f559d96b8cadfc3932",
+      "parking.py": "ed9e0d7bd288f435fe730b09cc357c9481383a9e2f174353f5f54ab71ce17f9e",
+      "pickup_exit.py": "b420f09e4bd7089af7adb40d9d75c800c5dc5544ee559ae5e19dedd5d82746ab",
+      "pickup_recovery.py": "d5e099091769ac6208fafff9ffbc450d8629d3c2cdf4c324e6d54509ccbe71e1",
+      "publish_length_sweep.py": "daa5c5cdd7884461598a71c94ca6ed7d527af711d1e7527e1e89096b8babdddd",
+      "publish_length_sweep_v2.py": "6c3c0acb1577c774def82e1aff557c9d9aea3b2a4f31c48539358f9602bf8873",
+      "publish_stowage.py": "358a74575b493d21e21dbf62d118a562ec91d0f9c2039af06e7ec0d37bc64ebf",
+      "sixr.py": "f99e0ada817c99d0b06bed82beb481415e908d91eb678caa3cb4517d312f3db6",
+      "storage_2026.py": "c3b23bfa3982f3c0a2c355028094deda771a7f716ea3e090e3703913562ffe10",
+      "storage_stress.py": "550b5ebe9fc0d4c0689a551e50c58bdc85d1f039d5f9ec9167482e177b040b6a",
+      "stowage.py": "2e83565cb35bdc7ac12126ea3f83c9a9f35511c37bcc9f63f3f133ec308b7024",
+      "stowage_plots.py": "9bc1ae8d7a689e0f2532b5a5789eb17015d7a7a38d84fada487aa2fa4f535cd1",
+      "stowage_sweep.py": "df2dbdb6718d4b0bc160866ef0aea555a2dcd2d4fba9d0abb65dd3491ec38311",
+      "task_2026.py": "60cdb26b743e90e588f74971073cdfee604bb7ce2a4fdc7d2c48fb9a114f5aa9",
+      "topology_design.py": "5f79282eab20b7642c5a727bb49623b23092603ac531581715c95507e1066f8e"
+    },
+    "model_sha256": {}
+  },
+  "spec": {
+    "schema_version": 1,
+    "run_id": "rm_constrained_topology_stowage_chassis250_v1_20260916",
+    "source_type": "design_assumption",
+    "rule_reference_file": "../../../references/RoboMaster 2026 机甲大师高校系列赛机器人制作规范手册V2.0.0（20260626）.pdf",
+    "studies": [
+      {
+        "study_id": "topology_v1",
+        "summary_file": "../results/topology_sweep_v1/summary.json",
+        "scene_file": "benchmark.topology_v1.chassis250.synthetic.json",
+        "include_task_results": true
+      }
+    ],
+    "rule_limit_m": [
+      0.6,
+      0.6,
+      0.6
+    ],
+    "minimum_clearance_m": 0.0,
+    "search": {
+      "sobol_sample_count": 1024,
+      "local_start_count": 6,
+      "local_max_iterations": 140,
+      "seed": 20260916
+    },
+    "max_workers": 3,
+    "reserve_available_memory_gib": 2.0,
+    "notes": "五个受约束6R模板及其长度扰动在360×360×250 mm底盘上的最小收纳包络；采用粗胶囊碰撞体，未包含电机实体和线缆。"
+  },
+  "candidate_count": 15,
+  "complete_candidate_count": 15,
+  "errors": {},
+  "rows": [
+    {
+      "candidate_id": "rm2p_offset_wrist_q00",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.06
+      },
+      "q_rad": [
+        0.6200892026193161,
+        0.14742237409617226,
+        -0.16280765794238147,
+        -1.5524122479690898,
+        0.4832981987760894,
+        1.658074847629174
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.4614497206400651,
+        0.3946932979485084,
+        0.49059782148879943
+      ],
+      "lower_m": [
+        -0.2814497206400651,
+        -0.2146932979485084,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.18,
+        0.49059782148879943
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.4614140130098741,
+        0.37015858768619925,
+        0.29559782148879943
+      ],
+      "arm_only_lower_m": [
+        -0.2814497206400651,
+        -0.2146932979485084,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.179964292369809,
+        0.15546528973769083,
+        0.49059782148879943
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "link_2"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_3"
+        ]
+      },
+      "rule_margin_m": [
+        0.13855027935993486,
+        0.2053067020514916,
+        0.10940217851120054
+      ],
+      "worst_axis_ratio": 0.8176630358146657,
+      "envelope_volume_m3": 0.08935312681023261,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 1.9165326270442762e-10,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8251449293706511,
+      "evaluations": 7654,
+      "initial_valid_count": 467,
+      "task_best": {
+        "candidate_id": "rm2p_offset_wrist_q00_rear_right",
+        "parking_id": "rear_right",
+        "tier1_complete": 9,
+        "tier2_complete": 19,
+        "tier3_complete": 6,
+        "storage_balanced_fraction": 0.5274074074074074,
+        "pickup_complete": 37,
+        "pickup_min_slot_complete": 6,
+        "module_complete": true,
+        "module_stress_complete": 9,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 6.107002725999337
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q01",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "5": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0636686912253499
+      },
+      "q_rad": [
+        0.9050207903172948,
+        0.16727506566512518,
+        -0.1811403973525216,
+        1.6583453795410048,
+        -1.5573428881161233,
+        -1.658324336593167
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.3869117428380171,
+        0.4306273575584322,
+        0.4914477048061146
+      ],
+      "lower_m": [
+        -0.2069117428380171,
+        -0.2503319709965697,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.18029538656186248,
+        0.4914477048061146
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.3652749090182921,
+        0.4306273575584322,
+        0.2964477048061146
+      ],
+      "arm_only_lower_m": [
+        -0.2069117428380171,
+        -0.2503319709965697,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.15836316618027502,
+        0.18029538656186248,
+        0.4914477048061146
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "link_2"
+        ],
+        "y_upper": [
+          "link_3"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_3"
+        ]
+      },
+      "rule_margin_m": [
+        0.21308825716198287,
+        0.1693726424415678,
+        0.10855229519388537
+      ],
+      "worst_axis_ratio": 0.819079508010191,
+      "envelope_volume_m3": 0.08188245191890596,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 5.530623875538154e-10,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8263516569279831,
+      "evaluations": 9201,
+      "initial_valid_count": 442,
+      "task_best": {
+        "candidate_id": "rm2p_offset_wrist_q01_mid_left",
+        "parking_id": "mid_left",
+        "tier1_complete": 8,
+        "tier2_complete": 20,
+        "tier3_complete": 5,
+        "storage_balanced_fraction": 0.5061728395061729,
+        "pickup_complete": 36,
+        "pickup_min_slot_complete": 6,
+        "module_complete": true,
+        "module_stress_complete": 5,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 7.952432808000594
+    },
+    {
+      "candidate_id": "rm2p_offset_wrist_q02",
+      "robot": "rm2p_offset_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        2,
+        3,
+        5
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "5": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.3155400831662118,
+        "3": 0.3379636947400868,
+        "4": 0.0,
+        "5": 0.05955587086267769
+      },
+      "q_rad": [
+        -1.0023022708727285,
+        0.058521663397550494,
+        1.533004856295884,
+        -3.0065245053106953,
+        1.4561145059764384,
+        -0.4870094135768852
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.39758447911844,
+        0.4934544161086333,
+        0.4806879305839216
+      ],
+      "lower_m": [
+        -0.21758447911844003,
+        -0.18,
+        -0.014232538550918335
+      ],
+      "upper_m": [
+        0.18,
+        0.3134544161086333,
+        0.4664553920330033
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.27258447911844,
+        0.3684544161086333,
+        0.4806879305839216
+      ],
+      "arm_only_lower_m": [
+        -0.21758447911844003,
+        -0.055,
+        -0.014232538550918335
+      ],
+      "arm_only_upper_m": [
+        0.055,
+        0.3134544161086333,
+        0.4664553920330033
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "chassis"
+        ],
+        "y_upper": [
+          "link_2"
+        ],
+        "z_lower": [
+          "link_6"
+        ],
+        "z_upper": [
+          "link_2"
+        ]
+      },
+      "rule_margin_m": [
+        0.20241552088155995,
+        0.1065455838913667,
+        0.11931206941607836
+      ],
+      "worst_axis_ratio": 0.8224240268477222,
+      "envelope_volume_m3": 0.09430607713404394,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 0.0016237142195755436,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.830044731435561,
+      "evaluations": 5947,
+      "initial_valid_count": 464,
+      "task_best": {
+        "candidate_id": "rm2p_offset_wrist_q02_rear_right",
+        "parking_id": "rear_right",
+        "tier1_complete": 9,
+        "tier2_complete": 19,
+        "tier3_complete": 5,
+        "storage_balanced_fraction": 0.5150617283950617,
+        "pickup_complete": 38,
+        "pickup_min_slot_complete": 6,
+        "module_complete": true,
+        "module_stress_complete": 9,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 9.333448168999894
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q00",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "q_rad": [
+        1.0926149132263951,
+        0.1474308842983228,
+        -0.16281610663950893,
+        -0.7416178501876483,
+        0.44854048288547455,
+        0.0023438601183260153
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.36000026914384353,
+        0.4826785201179718,
+        0.49060023869178443
+      ],
+      "lower_m": [
+        -0.18000026914384354,
+        -0.3026785201179718,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.18,
+        0.49060023869178443
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.3348827681551714,
+        0.47277314414794847,
+        0.2956002386917844
+      ],
+      "arm_only_lower_m": [
+        -0.18000026914384354,
+        -0.3026785201179718,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.15488249901132783,
+        0.1700946240299767,
+        0.49060023869178443
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "link_2"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_2",
+          "link_3"
+        ]
+      },
+      "rule_margin_m": [
+        0.23999973085615645,
+        0.11732147988202818,
+        0.10939976130821555
+      ],
+      "worst_axis_ratio": 0.8176670644863074,
+      "envelope_volume_m3": 0.08524885471911224,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 2.4179592390954907e-06,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8250741701971608,
+      "evaluations": 5993,
+      "initial_valid_count": 467,
+      "task_best": {
+        "candidate_id": "rm2p_spherical_wrist_q00_rear_right",
+        "parking_id": "rear_right",
+        "tier1_complete": 9,
+        "tier2_complete": 15,
+        "tier3_complete": 4,
+        "storage_balanced_fraction": 0.4493827160493827,
+        "pickup_complete": 37,
+        "pickup_min_slot_complete": 5,
+        "module_complete": true,
+        "module_stress_complete": 9,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 3.982409935999385
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q01",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "q_rad": [
+        -0.6684716534636937,
+        0.16725341870090363,
+        -0.18114045431565617,
+        2.2248968617396896,
+        -1.7728240147937817,
+        -2.0532101964953653
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.4299047283299339,
+        0.38745725807399445,
+        0.491451536092729
+      ],
+      "lower_m": [
+        -0.2499035294248631,
+        -0.18,
+        0.0
+      ],
+      "upper_m": [
+        0.18000119890507082,
+        0.20745725807399445,
+        0.491451536092729
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.4299047283299339,
+        0.38071851450626365,
+        0.296451536092729
+      ],
+      "arm_only_lower_m": [
+        -0.2499035294248631,
+        -0.1732612564322692,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.18000119890507082,
+        0.20745725807399445,
+        0.491451536092729
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "link_3"
+        ],
+        "y_lower": [
+          "chassis"
+        ],
+        "y_upper": [
+          "link_2"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_3"
+        ]
+      },
+      "rule_margin_m": [
+        0.17009527167006605,
+        0.21254274192600553,
+        0.10854846390727096
+      ],
+      "worst_axis_ratio": 0.8190858934878817,
+      "envelope_volume_m3": 0.0818609385052235,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 1.1471561200959712e-10,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8263570797239743,
+      "evaluations": 6876,
+      "initial_valid_count": 461,
+      "task_best": {
+        "candidate_id": "rm2p_spherical_wrist_q01_rear_right",
+        "parking_id": "rear_right",
+        "tier1_complete": 9,
+        "tier2_complete": 16,
+        "tier3_complete": 5,
+        "storage_balanced_fraction": 0.4750617283950617,
+        "pickup_complete": 37,
+        "pickup_min_slot_complete": 5,
+        "module_complete": true,
+        "module_stress_complete": 9,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 5.0911120460004895
+    },
+    {
+      "candidate_id": "rm2p_spherical_wrist_q02",
+      "robot": "rm2p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "q_rad": [
+        0.9983295795960125,
+        0.14642032618015988,
+        -0.1608210604620714,
+        0.7416409975346316,
+        0.00020765547155110475,
+        -1.6583222321940219
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.3999478706052288,
+        0.49481159855945506,
+        0.4948115277106245
+      ],
+      "lower_m": [
+        -0.2199478706052288,
+        -0.31481159855945506,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.18,
+        0.4948115277106245
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.3927987866886875,
+        0.4643292960950422,
+        0.29981152771062447
+      ],
+      "arm_only_lower_m": [
+        -0.2199478706052288,
+        -0.31481159855945506,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.17285091608345873,
+        0.14951769753558714,
+        0.4948115277106245
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "link_2"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_2"
+        ]
+      },
+      "rule_margin_m": [
+        0.20005212939477118,
+        0.10518840144054492,
+        0.1051884722893755
+      ],
+      "worst_axis_ratio": 0.8246859975990918,
+      "envelope_volume_m3": 0.09792262992291995,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 0.004372390816484981,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8324058364706213,
+      "evaluations": 5835,
+      "initial_valid_count": 486,
+      "task_best": {
+        "candidate_id": "rm2p_spherical_wrist_q02_rear_right",
+        "parking_id": "rear_right",
+        "tier1_complete": 9,
+        "tier2_complete": 19,
+        "tier3_complete": 5,
+        "storage_balanced_fraction": 0.5150617283950617,
+        "pickup_complete": 37,
+        "pickup_min_slot_complete": 5,
+        "module_complete": true,
+        "module_stress_complete": 9,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 5.739570925001317
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q00",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0
+      },
+      "span_m": {
+        "2": 0.29,
+        "3": 0.39,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "q_rad": [
+        1.0926112449899814,
+        0.14741163707659447,
+        -0.16280786866961883,
+        0.7411905204731113,
+        -1.0025942665205472,
+        -0.7416410115670085
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.3600015806484319,
+        0.48267876382615593,
+        0.4905990106409775
+      ],
+      "lower_m": [
+        -0.1800015806484319,
+        -0.30267876382615594,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.18,
+        0.4905990106409775
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.32712791667771557,
+        0.43621326769745195,
+        0.2955990106409775
+      ],
+      "arm_only_lower_m": [
+        -0.1800015806484319,
+        -0.30267876382615594,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.14712633602928366,
+        0.13353450387129598,
+        0.4905990106409775
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "link_2"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_3"
+        ]
+      },
+      "rule_margin_m": [
+        0.23999841935156807,
+        0.11732123617384405,
+        0.10940098935902248
+      ],
+      "worst_axis_ratio": 0.8176650177349625,
+      "envelope_volume_m3": 0.08524899493686167,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 5.207005222829242e-08,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8250721252633823,
+      "evaluations": 8740,
+      "initial_valid_count": 476,
+      "task_best": {
+        "candidate_id": "rm3p_spherical_wrist_q00_rear_right",
+        "parking_id": "rear_right",
+        "tier1_complete": 12,
+        "tier2_complete": 18,
+        "tier3_complete": 6,
+        "storage_balanced_fraction": 0.5807407407407408,
+        "pickup_complete": 59,
+        "pickup_min_slot_complete": 5,
+        "module_complete": true,
+        "module_stress_complete": 9,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 9.951289128999633
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q01",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.2609183107195422,
+        "3": 0.4331684175906702,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "q_rad": [
+        0.6666231576248376,
+        0.16729882025114884,
+        -0.1811506903200289,
+        1.2028056839920775,
+        0.35903899652173377,
+        -0.7416178501876481
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.43040053542079726,
+        0.38708254845643714,
+        0.49144798570123954
+      ],
+      "lower_m": [
+        -0.2501963902988181,
+        -0.20708254845643714,
+        0.0
+      ],
+      "upper_m": [
+        0.18020414512197916,
+        0.18,
+        0.49144798570123954
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.43040053542079726,
+        0.3801672915424461,
+        0.29644798570123954
+      ],
+      "arm_only_lower_m": [
+        -0.2501963902988181,
+        -0.20708254845643714,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.18020414512197916,
+        0.173084743086009,
+        0.49144798570123954
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "link_3"
+        ],
+        "y_lower": [
+          "link_2"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_2",
+          "link_3"
+        ]
+      },
+      "rule_margin_m": [
+        0.16959946457920272,
+        0.21291745154356284,
+        0.10855201429876044
+      ],
+      "worst_axis_ratio": 0.8190799761687326,
+      "envelope_volume_m3": 0.08187549788687443,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 2.6515621385780896e-06,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8263518154441686,
+      "evaluations": 6793,
+      "initial_valid_count": 453,
+      "task_best": {
+        "candidate_id": "rm3p_spherical_wrist_q01_rear_right",
+        "parking_id": "rear_right",
+        "tier1_complete": 12,
+        "tier2_complete": 19,
+        "tier3_complete": 7,
+        "storage_balanced_fraction": 0.6064197530864198,
+        "pickup_complete": 59,
+        "pickup_min_slot_complete": 5,
+        "module_complete": true,
+        "module_stress_complete": 9,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 5.1193887119989085
+    },
+    {
+      "candidate_id": "rm3p_spherical_wrist_q02",
+      "robot": "rm3p_spherical_wrist",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        2,
+        3
+      ],
+      "anchor_span_scales": {
+        "2": 1.1063851996324956,
+        "3": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.3208517078934237,
+        "3": 0.38559467646293344,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "q_rad": [
+        0.944401340462536,
+        0.1314836904662704,
+        -0.1470446992810658,
+        -0.7416178501876377,
+        1.3455987973846755,
+        0.741640997534579
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.4144687256855522,
+        0.48569311561757955,
+        0.4900653178197007
+      ],
+      "lower_m": [
+        -0.23446872568555222,
+        -0.30569311561757956,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.18,
+        0.4900653178197007
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.3160190230482525,
+        0.4419091402678268,
+        0.2950653178197007
+      ],
+      "arm_only_lower_m": [
+        -0.23446872568555222,
+        -0.30569311561757956,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.08155029736270031,
+        0.13621602465024726,
+        0.4900653178197007
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_2"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "link_2"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_2",
+          "link_3"
+        ]
+      },
+      "rule_margin_m": [
+        0.18553127431444777,
+        0.11430688438242043,
+        0.10993468218029928
+      ],
+      "worst_axis_ratio": 0.8167755296995012,
+      "envelope_volume_m3": 0.09865240606309489,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 3.6526388722118996e-06,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8244990139168502,
+      "evaluations": 6891,
+      "initial_valid_count": 485,
+      "task_best": {
+        "candidate_id": "rm3p_spherical_wrist_q02_rear_right",
+        "parking_id": "rear_right",
+        "tier1_complete": 12,
+        "tier2_complete": 23,
+        "tier3_complete": 9,
+        "storage_balanced_fraction": 0.6844444444444444,
+        "pickup_complete": 59,
+        "pickup_min_slot_complete": 5,
+        "module_complete": true,
+        "module_stress_complete": 9,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 5.001983094000025
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q00",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.06,
+        "3": 0.29614185789921693,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "q_rad": [
+        -1.7823039928010147,
+        -0.527851986978203,
+        -1.1041290041059257,
+        0.27386718238742347,
+        0.32291774582117805,
+        2.2929010293542182
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.38988690109085444,
+        0.49444826504637146,
+        0.49983345828410275
+      ],
+      "lower_m": [
+        -0.20988690109085445,
+        -0.18,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.31444826504637147,
+        0.49983345828410275
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.26488690109085444,
+        0.488319009304615,
+        0.30483345828410274
+      ],
+      "arm_only_lower_m": [
+        -0.20988690109085445,
+        -0.17387074425824353,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.055,
+        0.31444826504637147,
+        0.49983345828410275
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_6"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "chassis"
+        ],
+        "y_upper": [
+          "link_3"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_2"
+        ]
+      },
+      "rule_margin_m": [
+        0.21011309890914553,
+        0.10555173495362852,
+        0.10016654171589723
+      ],
+      "worst_axis_ratio": 0.833055763806838,
+      "envelope_volume_m3": 0.0963573451752436,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 0.0036116082253973003,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8407455894980675,
+      "evaluations": 2620,
+      "initial_valid_count": 299,
+      "task_best": {
+        "candidate_id": "rm_offset_shoulder_q00_rear_center",
+        "parking_id": "rear_center",
+        "tier1_complete": 0,
+        "tier2_complete": 16,
+        "tier3_complete": 4,
+        "storage_balanced_fraction": 0.26271604938271603,
+        "pickup_complete": 29,
+        "pickup_min_slot_complete": 4,
+        "module_complete": true,
+        "module_stress_complete": 7,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 2.455650871999751
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q01",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 0.8997183128260076,
+        "3": 1.1106882502324877,
+        "4": 1.0611448537558317
+      },
+      "span_m": {
+        "2": 0.05398309876956045,
+        "3": 0.32892128197067927,
+        "4": 0.4138464929647744,
+        "5": 0.0
+      },
+      "q_rad": [
+        0.7809262920060553,
+        -0.191668396163732,
+        2.1501492055132987,
+        -0.6938962070594008,
+        -1.0020182359963656,
+        -0.5826918280249358
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.4980824199702184,
+        0.4171086632080678,
+        0.500994548231036
+      ],
+      "lower_m": [
+        -0.3180824199702184,
+        -0.23710866320806778,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.18,
+        0.500994548231036
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.48736967542927934,
+        0.2921086632080678,
+        0.30599454823103595
+      ],
+      "arm_only_lower_m": [
+        -0.3180824199702184,
+        -0.23710866320806778,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.16928725545906095,
+        0.055,
+        0.500994548231036
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_3"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "link_3"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_2"
+        ]
+      },
+      "rule_margin_m": [
+        0.10191758002978157,
+        0.1828913367919322,
+        0.09900545176896403
+      ],
+      "worst_axis_ratio": 0.8349909137183933,
+      "envelope_volume_m3": 0.10408386804347622,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 0.006506665369278089,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.8428586116706673,
+      "evaluations": 2809,
+      "initial_valid_count": 236,
+      "task_best": {
+        "candidate_id": "rm_offset_shoulder_q01_mid_left",
+        "parking_id": "mid_left",
+        "tier1_complete": 0,
+        "tier2_complete": 15,
+        "tier3_complete": 1,
+        "storage_balanced_fraction": 0.2123456790123457,
+        "pickup_complete": 20,
+        "pickup_min_slot_complete": 3,
+        "module_complete": false,
+        "module_stress_complete": 0,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 3.4162827860000107
+    },
+    {
+      "candidate_id": "rm_offset_shoulder_q02",
+      "robot": "rm_offset_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        2,
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "2": 1.0880692522972821,
+        "3": 0.8665735762566328,
+        "4": 0.9925978477112949
+      },
+      "span_m": {
+        "2": 0.06528415513783692,
+        "3": 0.25662870887900796,
+        "4": 0.387113160607405,
+        "5": 0.0
+      },
+      "q_rad": [
+        -0.7822302421997369,
+        -0.7903199491647137,
+        -2.0764377091350408,
+        -0.6024596629663904,
+        1.557365539387872,
+        -0.2566523258065718
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.4250916924090421,
+        0.36,
+        0.49393510684568404
+      ],
+      "lower_m": [
+        -0.24509169240904213,
+        -0.18,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.18,
+        0.49393510684568404
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.42502549310146664,
+        0.2663899843720315,
+        0.29893510684568403
+      ],
+      "arm_only_lower_m": [
+        -0.24509169240904213,
+        -0.0867079670490308,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.17993380069242454,
+        0.17968201732300068,
+        0.49393510684568404
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_3"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "chassis"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_2"
+        ]
+      },
+      "rule_margin_m": [
+        0.17490830759095788,
+        0.24,
+        0.10606489315431594
+      ],
+      "worst_axis_ratio": 0.82322517807614,
+      "envelope_volume_m3": 0.07558837578333823,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 8.528052378165007e-08,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.830330882516444,
+      "evaluations": 4135,
+      "initial_valid_count": 343,
+      "task_best": {
+        "candidate_id": "rm_offset_shoulder_q02_rear_center",
+        "parking_id": "rear_center",
+        "tier1_complete": 0,
+        "tier2_complete": 10,
+        "tier3_complete": 1,
+        "storage_balanced_fraction": 0.145679012345679,
+        "pickup_complete": 28,
+        "pickup_min_slot_complete": 4,
+        "module_complete": true,
+        "module_stress_complete": 7,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 3.6578743519985437
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q00",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 0,
+      "sampling_kind": "baseline",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.0,
+        "4": 1.0
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.29,
+        "4": 0.39,
+        "5": 0.0
+      },
+      "q_rad": [
+        2.204771317442162,
+        -0.42368801024378167,
+        1.5347959678683387,
+        -0.6041393527682192,
+        -1.8379150968107005,
+        -1.6583222321940216
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.37859604857667284,
+        0.4412348343502165,
+        0.455
+      ],
+      "lower_m": [
+        -0.18,
+        -0.25498767098208563,
+        0.0
+      ],
+      "upper_m": [
+        0.19859604857667282,
+        0.18624716336813082,
+        0.455
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.25359604857667284,
+        0.4412348343502165,
+        0.26
+      ],
+      "arm_only_lower_m": [
+        -0.055,
+        -0.25498767098208563,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.19859604857667282,
+        0.18624716336813082,
+        0.455
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "chassis"
+        ],
+        "x_upper": [
+          "link_4"
+        ],
+        "y_lower": [
+          "link_3"
+        ],
+        "y_upper": [
+          "link_4"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_0"
+        ]
+      },
+      "rule_margin_m": [
+        0.22140395142332714,
+        0.1587651656497835,
+        0.14499999999999996
+      ],
+      "worst_axis_ratio": 0.7583333333333334,
+      "envelope_volume_m3": 0.07600764297461551,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 0.000965830095819957,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.7654157271273717,
+      "evaluations": 3558,
+      "initial_valid_count": 535,
+      "task_best": {
+        "candidate_id": "rm_spherical_shoulder_q00_rear_center",
+        "parking_id": "rear_center",
+        "tier1_complete": 0,
+        "tier2_complete": 15,
+        "tier3_complete": 3,
+        "storage_balanced_fraction": 0.23703703703703702,
+        "pickup_complete": 35,
+        "pickup_min_slot_complete": 5,
+        "module_complete": true,
+        "module_stress_complete": 8,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 4.793835815999046
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q01",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 1,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 0.8997183128260076,
+        "4": 1.1106882502324877
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.2609183107195422,
+        "4": 0.4331684175906702,
+        "5": 0.0
+      },
+      "q_rad": [
+        0.559378594588856,
+        0.049837131825296886,
+        1.1702018337305928,
+        0.40958135463866047,
+        -1.1536246094384692,
+        2.4318284305213687
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.442875870816861,
+        0.42044415818826975,
+        0.455
+      ],
+      "lower_m": [
+        -0.262875870816861,
+        -0.18028689585832705,
+        0.0
+      ],
+      "upper_m": [
+        0.18,
+        0.2401572623299427,
+        0.455
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.4428388824592846,
+        0.42044415818826975,
+        0.26
+      ],
+      "arm_only_lower_m": [
+        -0.262875870816861,
+        -0.18028689585832705,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.1799630116424236,
+        0.2401572623299427,
+        0.455
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "link_3"
+        ],
+        "x_upper": [
+          "chassis"
+        ],
+        "y_lower": [
+          "link_3"
+        ],
+        "y_upper": [
+          "link_4"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_0"
+        ]
+      },
+      "rule_margin_m": [
+        0.157124129183139,
+        0.17955584181173023,
+        0.14499999999999996
+      ],
+      "worst_axis_ratio": 0.7583333333333334,
+      "envelope_volume_m3": 0.08472308057280888,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 3.2870500177965833e-06,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.7656573334944731,
+      "evaluations": 5687,
+      "initial_valid_count": 526,
+      "task_best": {
+        "candidate_id": "rm_spherical_shoulder_q01_rear_center",
+        "parking_id": "rear_center",
+        "tier1_complete": 0,
+        "tier2_complete": 13,
+        "tier3_complete": 3,
+        "storage_balanced_fraction": 0.2103703703703704,
+        "pickup_complete": 39,
+        "pickup_min_slot_complete": 5,
+        "module_complete": true,
+        "module_stress_complete": 8,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 3.9931499719987187
+    },
+    {
+      "candidate_id": "rm_spherical_shoulder_q02",
+      "robot": "rm_spherical_shoulder",
+      "sample_index": 2,
+      "sampling_kind": "sobol",
+      "active_span_indices": [
+        3,
+        4
+      ],
+      "anchor_span_scales": {
+        "3": 1.1063851996324956,
+        "4": 0.9887042986229062
+      },
+      "span_m": {
+        "2": 0.0,
+        "3": 0.3208517078934237,
+        "4": 0.38559467646293344,
+        "5": 0.0
+      },
+      "q_rad": [
+        2.2205461803920774,
+        -0.42293310328440614,
+        -2.1363482247391525,
+        -0.2507242800292312,
+        0.4485404828854746,
+        0.7416409975346313
+      ],
+      "search_joint_limits_rad": [
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -2.35,
+          2.35
+        ],
+        [
+          -2.7,
+          2.7
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ],
+        [
+          -1.9,
+          1.9
+        ],
+        [
+          -3.141592653589793,
+          3.141592653589793
+        ]
+      ],
+      "dimensions_m": [
+        0.39900786303645086,
+        0.4549633956800664,
+        0.455
+      ],
+      "lower_m": [
+        -0.18,
+        -0.2749633956800664,
+        0.0
+      ],
+      "upper_m": [
+        0.21900786303645084,
+        0.18,
+        0.455
+      ],
+      "rule_limit_m": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "arm_only_dimensions_m": [
+        0.3955164531081981,
+        0.4253736656519645,
+        0.26
+      ],
+      "arm_only_lower_m": [
+        -0.17650859007174727,
+        -0.2749633956800664,
+        0.195
+      ],
+      "arm_only_upper_m": [
+        0.21900786303645084,
+        0.1504102699718981,
+        0.455
+      ],
+      "bound_sources": {
+        "x_lower": [
+          "chassis"
+        ],
+        "x_upper": [
+          "link_3"
+        ],
+        "y_lower": [
+          "link_3"
+        ],
+        "y_upper": [
+          "chassis"
+        ],
+        "z_lower": [
+          "chassis"
+        ],
+        "z_upper": [
+          "link_0"
+        ]
+      },
+      "rule_margin_m": [
+        0.20099213696354912,
+        0.1450366043199336,
+        0.14499999999999996
+      ],
+      "worst_axis_ratio": 0.7583333333333334,
+      "envelope_volume_m3": 0.0825979573829003,
+      "minimum_clearance_m": 0.0,
+      "clearance_m": 3.3131000451228076e-06,
+      "collision": null,
+      "collision_free": true,
+      "rule_pass": true,
+      "objective": 0.7656053958817585,
+      "evaluations": 4063,
+      "initial_valid_count": 546,
+      "task_best": {
+        "candidate_id": "rm_spherical_shoulder_q02_rear_center",
+        "parking_id": "rear_center",
+        "tier1_complete": 0,
+        "tier2_complete": 15,
+        "tier3_complete": 3,
+        "storage_balanced_fraction": 0.23703703703703702,
+        "pickup_complete": 29,
+        "pickup_min_slot_complete": 4,
+        "module_complete": true,
+        "module_stress_complete": 5,
+        "module_stress_total": 9
+      },
+      "elapsed_s": 2.659587713000292
+    }
+  ]
+}

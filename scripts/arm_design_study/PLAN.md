@@ -2,6 +2,8 @@
 
 本目录暂定名 `arm_design_study`。目标是在同一组 RoboMaster 任务、尺寸和负载约束下，比较六轴串联臂的关节安装构型、连杆尺寸、臂座安装位姿与底盘可用运动空间。输出候选设计的可行性边界和 Pareto 排名，不声称仅凭仿真证明全局最优。
 
+[受约束六轴构型穷举方案](CONSTRAINED_TOPOLOGY_SEARCH.md)记录离散轴线语法、等价化、完整逆解图、连续尺寸优化和 Monte Carlo 鲁棒性验证计划。第一版五模板试运行结果见[完整任务结果](results/topology_sweep_v1/README.md)和[收纳结果](results/topology_stowage_v1/README.md)。
+
 [模块拾取与末端锁定概念网页](mechanism_concepts.html)展示机身接口、工作台支撑及末端局部机构的相对运动；可直接在浏览器打开，无需安装依赖。
 
 已选定的模块接口为**直槽 + 旋入卡口**：导向锥和键槽先约束姿态，压到轴向止挡后绕对接轴旋转，卡口肩面承担锁后的拉脱载荷。[第一阶段运动学与几何建模工作区说明](STEP1_KINEMATIC_MODEL.md)给出代码模块、接口坐标系、轨迹状态机和验收条件；这一阶段暂不接入 GoodArm 动力学。

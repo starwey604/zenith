@@ -1,0 +1,2 @@
+candidate_id,robot,parking_id,storage_fraction,pickup_fraction,module_fraction,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm
+rm3p_spherical_wrist_q02_rear_right,rm3p_spherical_wrist,rear_right,0.6844444444444444,0.8194444444444444,1.0,320.85,385.59,0.0,0.0

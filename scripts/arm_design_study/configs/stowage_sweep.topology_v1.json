@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "rm_constrained_topology_stowage_chassis250_v1_20260916",
+  "source_type": "design_assumption",
+  "rule_reference_file": "../../../references/RoboMaster 2026 机甲大师高校系列赛机器人制作规范手册V2.0.0（20260626）.pdf",
+  "studies": [
+    {
+      "study_id": "topology_v1",
+      "summary_file": "../results/topology_sweep_v1/summary.json",
+      "scene_file": "benchmark.topology_v1.chassis250.synthetic.json",
+      "include_task_results": true
+    }
+  ],
+  "rule_limit_m": [
+    0.6,
+    0.6,
+    0.6
+  ],
+  "minimum_clearance_m": 0.0,
+  "search": {
+    "sobol_sample_count": 1024,
+    "local_start_count": 6,
+    "local_max_iterations": 140,
+    "seed": 20260916
+  },
+  "max_workers": 3,
+  "reserve_available_memory_gib": 2.0,
+  "notes": "五个受约束6R模板及其长度扰动在360×360×250 mm底盘上的最小收纳包络；采用粗胶囊碰撞体，未包含电机实体和线缆。"
+}
