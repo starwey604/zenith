@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "six_axis_minimum_stowage_v1_20260916",
+  "source_type": "design_assumption",
+  "rule_reference_file": "../../../references/RoboMaster 2026 机甲大师高校系列赛机器人制作规范手册V2.0.0（20260626）.pdf",
+  "studies": [
+    {
+      "study_id": "seven_reference_arms",
+      "summary_file": "../results/length_sweep_v2/summary.json",
+      "scene_file": "benchmark.six_axis_v2.synthetic.json"
+    },
+    {
+      "study_id": "willow0907",
+      "summary_file": "../results/length_sweep_willow0907_v1/summary.json",
+      "scene_file": "benchmark.willow0907.synthetic.json"
+    }
+  ],
+  "rule_limit_m": [0.6, 0.6, 0.6],
+  "minimum_clearance_m": 0.0,
+  "search": {
+    "sobol_sample_count": 1024,
+    "local_start_count": 6,
+    "local_max_iterations": 140,
+    "seed": 20260916
+  },
+  "max_workers": 3,
+  "reserve_available_memory_gib": 2.0,
+  "notes": "按机器人本体X/Y/Z轴计算底盘、机械臂胶囊体和末端工具的联合AABB；搜索一种无自碰及无底盘碰撞的六关节收纳姿态。600 mm来自RoboMaster 2026制作规范工程机器人最大收纳尺寸。裁判系统、线缆及精确外壳CAD尚未建模。"
+}

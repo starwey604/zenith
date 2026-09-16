@@ -1,0 +1,9 @@
+robot,candidate_id,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm,size_x_mm,size_y_mm,size_z_mm,worst_axis_ratio,rule_pass,arm_size_x_mm,arm_size_y_mm,arm_size_z_mm,clearance_mm,task_best_candidate,task_robust_fraction
+lite6,lite6_q00,200.2,243.67,0.0,62.5,360.0,360.0,783.5,1.30583,False,310.07,200.98,323.5,0.413,lite6_q00_rear_right,-1.0
+piper,piper_q16,244.32,220.5,0.0,86.82,360.0,420.67,668.0,1.11333,False,212.24,285.67,397.05,0.0,piper_q16_mid_left,-1.0
+unitree_z1,unitree_z1_q09,272.08,227.93,67.33,45.19,360.0,462.27,690.75,1.15125,False,204.46,332.27,386.58,0.045,unitree_z1_q09_rear_right,0.18123
+ur10e,ur10e_q16,533.71,432.28,117.25,115.72,697.97,418.68,756.0,1.26,False,592.97,418.65,755.98,55.683,ur10e_q16_rear_left,-1.0
+ur5e,ur5e_q09,345.72,396.52,122.16,91.86,360.0,505.04,723.0,1.205,False,337.16,385.04,667.86,0.001,ur5e_q09_rear_right,-1.0
+widowx250,widowx250_q16,216.59,132.49,65.14,62.68,366.77,387.79,645.65,1.07608,False,221.77,242.79,239.75,5.896,widowx250_q16_rear_right,-1.0
+willow0907,willow0907_q09,250.97,315.68,133.67,61.06,446.45,360.0,698.15,1.16358,False,311.45,203.66,517.45,0.186,willow0907_q09_rear_right,0.03901
+xarm6,xarm6_q08,262.68,301.65,0.0,71.25,360.0,398.93,822.0,1.37,False,259.32,389.84,377.0,2.805,xarm6_q08_rear_right,0.79407
