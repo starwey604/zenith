@@ -79,7 +79,9 @@ def collect_candidates(config_path: Path, spec: dict) -> tuple[list[dict], dict[
                                "sampling_kind": first.get("sampling_kind"),
                                "active_span_indices": first["active_span_indices"],
                                "anchor_span_scales": first["anchor_span_scales"],
-                               "span_m": first["span_m"], "task_best": _task_best(rows)})
+                               "span_m": first["span_m"],
+                               "task_best": (_task_best(rows) if study.get("include_task_results", True)
+                                             else None)})
     if len({c["candidate_id"] for c in candidates}) != len(candidates):
         raise ValueError("stowage candidate IDs collide")
     return candidates, scenes, inputs

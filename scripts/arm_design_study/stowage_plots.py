@@ -17,6 +17,10 @@ plt.rcParams["font.family"] = "Noto Sans CJK SC"
 plt.rcParams["axes.unicode_minus"] = False
 
 
+def _task_robust(task: dict | None) -> float | None:
+    return None if task is None else robust_fraction(task)
+
+
 def render(summary_path: Path, output_dir: Path) -> dict:
     report = json.loads(summary_path.read_text(encoding="utf-8"))
     if (report["complete_candidate_count"] != report["candidate_count"] or report["errors"]):
@@ -39,6 +43,7 @@ def render(summary_path: Path, output_dir: Path) -> dict:
         writer.writeheader()
         for robot in robots:
             row, task = best[robot], best[robot]["task_best"]
+            task_score = _task_robust(task)
             writer.writerow({"robot": robot, "candidate_id": row["candidate_id"],
                              **{f"J{i}_J{i + 1}_mm": round(row["span_m"][str(i)] * 1000, 2)
                                 for i in range(2, 6)},
@@ -49,8 +54,8 @@ def render(summary_path: Path, output_dir: Path) -> dict:
                              **{f"arm_size_{axis}_mm": round(row["arm_only_dimensions_m"][i] * 1000, 2)
                                 for i, axis in enumerate("xyz")},
                              "clearance_mm": None if row["clearance_m"] is None else round(row["clearance_m"] * 1000, 3),
-                             "task_best_candidate": task["candidate_id"],
-                             "task_robust_fraction": round(robust_fraction(task), 5)})
+                             "task_best_candidate": None if task is None else task["candidate_id"],
+                             "task_robust_fraction": None if task_score is None else round(task_score, 5)})
 
     x = np.arange(len(robots))
     width = 0.23
@@ -69,26 +74,31 @@ def render(summary_path: Path, output_dir: Path) -> dict:
     fig.savefig(dimensions_plot, dpi=180)
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(10.8, 7.2), constrained_layout=True)
-    colors = plt.colormaps["tab10"](np.arange(len(robots)))
-    for index, robot in enumerate(robots):
-        group = [row for row in rows if row["robot"] == robot and row["collision_free"]]
-        ax.scatter([row["worst_axis_ratio"] * 600 for row in group],
-                   [max(0.0, robust_fraction(row["task_best"])) * 100 for row in group],
-                   s=38, alpha=0.63, color=colors[index], label=robot)
-        row = best[robot]
-        ax.scatter([row["worst_axis_ratio"] * 600],
-                   [max(0.0, robust_fraction(row["task_best"])) * 100],
-                   s=145, facecolors="none", edgecolors="black", linewidths=1.4)
-    ax.axvline(600, color="#c83e4d", linewidth=1.8, linestyle="--")
-    ax.set(xlabel="最紧张方向的收纳尺寸 / mm（越左越好）",
-           ylabel="同臂长最佳泊位的三任务稳健通过率 / %（越上越好）",
-           title="收纳与任务能力权衡；黑圈为每种构型最易收纳的臂长")
-    ax.grid(alpha=0.22)
-    ax.legend(ncol=2, fontsize=9)
-    tradeoff_plot = output_dir / "stowage_task_tradeoff.png"
-    fig.savefig(tradeoff_plot, dpi=180)
-    plt.close(fig)
+    plots = [str(dimensions_plot)]
+    if any(row["task_best"] is not None for row in rows):
+        fig, ax = plt.subplots(figsize=(10.8, 7.2), constrained_layout=True)
+        colors = plt.colormaps["tab10"](np.arange(len(robots)))
+        for index, robot in enumerate(robots):
+            group = [row for row in rows if row["robot"] == robot and row["collision_free"]
+                     and row["task_best"] is not None]
+            ax.scatter([row["worst_axis_ratio"] * 600 for row in group],
+                       [max(0.0, _task_robust(row["task_best"])) * 100 for row in group],
+                       s=38, alpha=0.63, color=colors[index], label=robot)
+            row = best[robot]
+            if row["task_best"] is not None:
+                ax.scatter([row["worst_axis_ratio"] * 600],
+                           [max(0.0, _task_robust(row["task_best"])) * 100],
+                           s=145, facecolors="none", edgecolors="black", linewidths=1.4)
+        ax.axvline(600, color="#c83e4d", linewidth=1.8, linestyle="--")
+        ax.set(xlabel="最紧张方向的收纳尺寸 / mm（越左越好）",
+               ylabel="同臂长最佳泊位的三任务稳健通过率 / %（越上越好）",
+               title="收纳与任务能力权衡；黑圈为每种构型最易收纳的臂长")
+        ax.grid(alpha=0.22)
+        ax.legend(ncol=2, fontsize=9)
+        tradeoff_plot = output_dir / "stowage_task_tradeoff.png"
+        fig.savefig(tradeoff_plot, dpi=180)
+        plt.close(fig)
+        plots.append(str(tradeoff_plot))
 
     fig, ax = plt.subplots(figsize=(11.5, 6.2), constrained_layout=True)
     base_values = [baseline[r]["worst_axis_ratio"] * 600 for r in robots]
@@ -104,7 +114,8 @@ def render(summary_path: Path, output_dir: Path) -> dict:
     comparison_plot = output_dir / "baseline_vs_best.png"
     fig.savefig(comparison_plot, dpi=180)
     plt.close(fig)
+    plots.append(str(comparison_plot))
     return {"best_by_robot": {key: value["candidate_id"] for key, value in best.items()},
             "rule_pass_count": sum(row["rule_pass"] for row in rows),
-            "plots": [str(dimensions_plot), str(tradeoff_plot), str(comparison_plot)],
+            "plots": plots,
             "table": str(table_path)}

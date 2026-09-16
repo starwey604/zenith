@@ -44,3 +44,13 @@ def test_manifest_deduplicates_field_parking_from_stowage_geometry():
         "xarm6", "ur5e", "lite6", "unitree_z1", "ur10e", "widowx250", "piper", "willow0907"}
     config = json.loads((ROOT / "configs/stowage_sweep.v1.json").read_text(encoding="utf-8"))
     assert config["max_workers"] == 3
+
+
+def test_chassis250_stowage_reuses_geometry_samples_without_stale_task_scores():
+    config_path = ROOT / "configs/stowage_sweep.chassis250.v1.json"
+    value, candidates, scenes = manifest(config_path)
+    assert value["candidate_count"] == 153
+    assert all(candidate["task_best"] is None for candidate in candidates)
+    for scene in scenes.values():
+        assert scene["chassis"]["half_extents_m"] == [0.18, 0.18, 0.125]
+        assert scene["chassis"]["arm_mount_translation_m"] == [0.0, 0.0, 0.25]

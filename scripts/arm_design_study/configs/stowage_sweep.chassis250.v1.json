@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "run_id": "six_axis_minimum_stowage_chassis250_v1_20260916",
+  "source_type": "design_assumption",
+  "rule_reference_file": "../../../references/RoboMaster 2026 机甲大师高校系列赛机器人制作规范手册V2.0.0（20260626）.pdf",
+  "studies": [
+    {
+      "study_id": "seven_reference_arms",
+      "summary_file": "../results/length_sweep_v2/summary.json",
+      "scene_file": "benchmark.six_axis_v3.chassis250.synthetic.json",
+      "include_task_results": false
+    },
+    {
+      "study_id": "willow0907",
+      "summary_file": "../results/length_sweep_willow0907_v1/summary.json",
+      "scene_file": "benchmark.willow0907.chassis250.synthetic.json",
+      "include_task_results": false
+    }
+  ],
+  "rule_limit_m": [
+    0.6,
+    0.6,
+    0.6
+  ],
+  "minimum_clearance_m": 0.0,
+  "search": {
+    "sobol_sample_count": 1024,
+    "local_start_count": 6,
+    "local_max_iterations": 140,
+    "seed": 20260916
+  },
+  "max_workers": 3,
+  "reserve_available_memory_gib": 2.0,
+  "notes": "底盘为360×360×250 mm，臂座位于Z=250 mm顶面。本轮仅从旧任务结果中提取相同的构型/臂长样本，不沿用旧底盘任务成绩；任务将在后续独立重跑。其余收纳搜索和600 mm规则判据与v1相同。"
+}
