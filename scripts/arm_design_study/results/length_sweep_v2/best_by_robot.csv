@@ -1,0 +1,8 @@
+robot,candidate_id,parking_id,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm,tier1,tier2,tier3,pickup,module_basic,module_stress,module_min_clearance_mm,module_min_joint_margin_rad,robust_fraction
+xarm6,xarm6_q01_rear_center,rear_center,288.02,410.83,0.0,63.17,15/15,25/25,22/27,65/72,True,9/9,6.67,0.36650111737722835,0.9028
+ur5e,ur5e_q08_rear_right,rear_right,353.87,361.42,152.05,75.89,15/15,24/25,21/27,51/72,False,0/9,-1.2,0.7807728647307455,-1.0
+lite6,lite6_q07_rear_right,rear_right,239.94,295.59,0.0,52.95,9/15,14/25,3/27,45/72,True,8/9,6.67,0.00666685468543271,0.4237
+unitree_z1,unitree_z1_q11_rear_right,rear_right,366.34,259.45,53.77,39.41,13/15,18/25,1/27,27/72,True,5/9,6.67,0.014079568181722735,0.375
+ur10e,ur10e_q16_rear_left,rear_left,533.71,432.28,117.25,115.72,7/15,13/25,5/27,53/72,False,0/9,-13.72,5.896591682486019e-06,-1.0
+widowx250,widowx250_q07_rear_right,rear_right,297.69,216.25,75.0,80.83,11/15,21/25,6/27,43/72,True,9/9,6.67,0.47179878026463395,0.5972
+piper,piper_q07_mid_left,mid_left,341.61,305.35,0.0,77.1,14/15,2/25,0/27,21/72,False,0/9,,,-1.0

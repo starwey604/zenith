@@ -14,7 +14,7 @@ from .chassis import ChassisMount
 from .collision import Box
 from .frames import axis_turn, transform
 from .length_design import scale_anchor_spans
-from .model_import import load_local, XARM_XML, UR5E_XML, UR5E_CLASSES
+from .model_import import load_local, model_reference_paths
 
 
 def rotated_grasp(world_grasp_tool: np.ndarray, outward_axis: np.ndarray,
@@ -190,7 +190,7 @@ def screen_pickup_exit(config_path: Path, robot_filter: str | None = None,
                                                                        if row["slot_id"] == slot)
                                                                         for slot in range(1, 7))})
     references = {str(path): hashlib.sha256(path.read_bytes()).hexdigest()
-                  for path in (XARM_XML, UR5E_XML, UR5E_CLASSES)}
+                  for path in model_reference_paths(robots)}
     return {"scenario_id": scene["scenario_id"], "source_type": scene["source_type"],
             "scene_sha256": hashlib.sha256(raw).hexdigest(),
             "reference_model_sha256": references,

@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "run_id": "six_axis_four_span_multi_pose_full_tasks_v2_20260916",
+  "source_type": "design_assumption",
+  "robots": ["xarm6", "ur5e", "lite6", "unitree_z1", "ur10e", "widowx250", "piper"],
+  "span_indices": [2, 3, 4, 5],
+  "sampling": {
+    "mode": "sobol",
+    "factor_bounds": [0.75, 1.25],
+    "sample_count": 16,
+    "seed": 20260916,
+    "include_baseline": true
+  },
+  "parking_ids": ["rear_left", "rear_center", "rear_right", "mid_left"],
+  "max_workers": 2,
+  "reserve_available_memory_gib": 2.0,
+  "notes": "逐模型自动跳过零长度锚点跨度；其余2/3/4/5跨度按固定种子Sobol缩放，另含原型，四个固定合法泊位运行相同67存矿、72取矿、8基础、9多位姿装配任务。"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "scenario_id": "module_2027_bayonet_multi_pose_synthetic_v1",
+  "source_type": "design_assumption",
+  "notes": "九个固定合成承口位姿；只改变工作台模块承口平移与绕世界Z轴的朝向，所有候选运行同一套九条接近、压入、旋入、锁定、离台路径。偏移不是赛规公差。",
+  "cases": [
+    {"case_id": "nominal", "delta_xyz_m": [0, 0, 0], "yaw_delta_rad": 0},
+    {"case_id": "x_minus_30mm", "delta_xyz_m": [-0.03, 0, 0], "yaw_delta_rad": 0},
+    {"case_id": "x_plus_30mm", "delta_xyz_m": [0.03, 0, 0], "yaw_delta_rad": 0},
+    {"case_id": "y_minus_30mm", "delta_xyz_m": [0, -0.03, 0], "yaw_delta_rad": 0},
+    {"case_id": "y_plus_30mm", "delta_xyz_m": [0, 0.03, 0], "yaw_delta_rad": 0},
+    {"case_id": "diagonal_left_front", "delta_xyz_m": [-0.02, 0.02, 0], "yaw_delta_rad": 0},
+    {"case_id": "diagonal_right_rear", "delta_xyz_m": [0.02, -0.02, 0], "yaw_delta_rad": 0},
+    {"case_id": "yaw_minus_15deg", "delta_xyz_m": [0, 0, 0], "yaw_delta_rad": -0.2617993877991494},
+    {"case_id": "yaw_plus_15deg", "delta_xyz_m": [0, 0, 0], "yaw_delta_rad": 0.2617993877991494}
+  ]
+}

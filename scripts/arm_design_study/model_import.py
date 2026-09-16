@@ -14,6 +14,32 @@ WORKSPACE = Path(__file__).resolve().parents[3]
 XARM_XML = WORKSPACE / "GoodGoodArmDayDayUp_Release/assets/xarm6/mujoco/dual_xarm6_learning_selected_750_scene.xml"
 UR5E_XML = WORKSPACE / "imitation_learning_lerobot/imitation_learning_lerobot/assets/universal_robots_ur5e/ur5e.xml"
 UR5E_CLASSES = UR5E_XML.with_name("ur5e_classes.xml")
+MENAGERIE = Path(__file__).resolve().parent / "models/menagerie"
+MODEL_SPECS = {
+    "xarm6": (XARM_XML, "left_base", "left_link6", tuple(f"left_joint_{i}" for i in range(1, 7))),
+    "ur5e": (UR5E_XML, "ur5e_base", "flange", ("shoulder_pan_joint", "shoulder_lift_joint",
+               "elbow_joint", "wrist_1_joint", "wrist_2_joint", "wrist_3_joint")),
+    "lite6": (MENAGERIE / "ufactory_lite6/lite6.xml", "link_base", "link6",
+              tuple(f"joint{i}" for i in range(1, 7))),
+    "unitree_z1": (MENAGERIE / "unitree_z1/z1.xml", "link00", "link06",
+                   tuple(f"joint{i}" for i in range(1, 7))),
+    "ur10e": (MENAGERIE / "universal_robots_ur10e/ur10e.xml", "base", "wrist_3_link",
+              ("shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
+               "wrist_1_joint", "wrist_2_joint", "wrist_3_joint")),
+    "widowx250": (MENAGERIE / "trossen_wx250s/wx250s.xml", "wx250s/base_link",
+                   "wx250s/gripper_link", ("waist", "shoulder", "elbow", "forearm_roll",
+                                            "wrist_angle", "wrist_rotate")),
+    "piper": (MENAGERIE / "agilex_piper/piper.xml", "base_link", "link6",
+              tuple(f"joint{i}" for i in range(1, 7))),
+}
+
+
+def model_reference_paths(names: list[str]) -> tuple[Path, ...]:
+    """XML files whose joint axes and limits drive the requested reference arms."""
+    paths = {MODEL_SPECS[name][0] for name in names}
+    if "ur5e" in names:
+        paths.add(UR5E_CLASSES)
+    return tuple(sorted(paths))
 
 
 def _ur5e_authored_limits() -> tuple[np.ndarray, np.ndarray]:
@@ -30,16 +56,10 @@ def _ur5e_authored_limits() -> tuple[np.ndarray, np.ndarray]:
 
 
 def load_local(name: str) -> SixR:
-    """Both reference files are existing local assets, not certified vendor CAD."""
-    if name == "xarm6":
-        xml, base, flange = XARM_XML, "left_base", "left_link6"
-        joints = [f"left_joint_{i}" for i in range(1, 7)]
-    elif name == "ur5e":
-        xml, base, flange = UR5E_XML, "ur5e_base", "flange"
-        joints = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
-                  "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
-    else:
+    """Import one existing six-joint MJCF reference; it is not certified CAD."""
+    if name not in MODEL_SPECS:
         raise ValueError(f"unknown local robot: {name}")
+    xml, base, flange, joints = MODEL_SPECS[name]
     if not xml.exists():
         raise FileNotFoundError(f"reference model missing: {xml}")
     model = mujoco.MjModel.from_xml_path(str(xml))
@@ -74,13 +94,7 @@ def load_local(name: str) -> SixR:
 def compare_mjcf_fk(name: str, q: np.ndarray) -> tuple[float, float]:
     """Return POE/MJCF flange position and rotation mismatch at q."""
     arm = load_local(name)
-    if name == "xarm6":
-        xml, base, flange = XARM_XML, "left_base", "left_link6"
-        joints = [f"left_joint_{i}" for i in range(1, 7)]
-    else:
-        xml, base, flange = UR5E_XML, "ur5e_base", "flange"
-        joints = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
-                  "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
+    xml, base, flange, joints = MODEL_SPECS[name]
     model = mujoco.MjModel.from_xml_path(str(xml))
     data = mujoco.MjData(model)
     for joint, angle in zip(joints, q):

@@ -14,7 +14,7 @@ from .chassis import ChassisMount
 from .collision import Box, chassis_box, collision_scan, robot_capsules
 from .frames import inverse, transform, yaw_pose
 from .length_design import scale_anchor_spans
-from .model_import import load_local, XARM_XML, UR5E_XML, UR5E_CLASSES
+from .model_import import load_local, model_reference_paths
 from .parking import parking_legality
 from .task_2026 import core_assembly_path, energy_unit_pickup_path, follow_task_ik
 
@@ -279,7 +279,7 @@ def screen_scene(config_path: Path) -> dict:
                                                    for task_id, row in by_task.items()}})
     summaries.sort(key=lambda entry: (-entry["geometric_complete_count"], entry["robot"],
                                       entry["length_variant_id"], entry["parking_id"]))
-    reference_paths = (XARM_XML, UR5E_XML, UR5E_CLASSES)
+    reference_paths = model_reference_paths(scene["robots"])
     references = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in reference_paths}
     return {"scenario_id": scene["scenario_id"], "source_type": scene["source_type"],
             "scene_sha256": hashlib.sha256(raw).hexdigest(),

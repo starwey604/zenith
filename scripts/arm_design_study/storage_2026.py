@@ -16,7 +16,7 @@ from .chassis import ChassisMount
 from .collision import Box
 from .frames import transform
 from .length_design import scale_anchor_spans
-from .model_import import load_local, XARM_XML, UR5E_XML, UR5E_CLASSES
+from .model_import import load_local, model_reference_paths
 from .task_2026 import TaskWaypoint, core_assembly_path
 
 
@@ -249,7 +249,7 @@ def screen_storage_scene(scene_path: Path, task_path: Path,
                                       -entry["complete_count"], entry["robot"],
                                       entry["length_variant_id"], entry["parking_id"]))
     references = {str(path): hashlib.sha256(path.read_bytes()).hexdigest()
-                  for path in (XARM_XML, UR5E_XML, UR5E_CLASSES, ARM_OPT_TRAJECTORY, RULE_2026)}
+                  for path in (*model_reference_paths(robots), ARM_OPT_TRAJECTORY, RULE_2026)}
     return {"scenario_id": scene["scenario_id"], "scene_source_type": scene["source_type"],
             "task_scenario_id": task["scenario_id"], "task_source_type": task["source_type"],
             "scene_sha256": hashlib.sha256(scene_raw).hexdigest(),
