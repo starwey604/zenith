@@ -41,7 +41,9 @@ MOUNT_HOLE_D = 2.6
 
 PLATE_T = 1.6
 GAP = 8.5                 # PCB top -> plate bottom (= 40-pin mated height)
-M25_CLEAR_D = 2.7
+M25_CLEAR_D = 2.7         # 4x board mount screws (board holes are Dia2.6)
+M2_CLEAR_D = 2.2          # CAM1 adapter screws
+M2_SPACER_OD = 4.0
 
 # Plate footprint: cut away the left edge so the Ethernet stays reachable.
 PLATE_X_MIN = 18.4        # right edge of the HR911130A jack
@@ -62,8 +64,8 @@ CAM1_H = 0.77
 ADAPTER_L, ADAPTER_W, ADAPTER_T = 10.0, 10.0, 1.6
 ADAPTER_CX, ADAPTER_CY = 39.45, 51.0
 ADAPTER_Z0 = CAM1_H              # sits on top of the socket
-ADAPTER_HOLE_SPAN = 3.5          # the two M2.5 holes, along board y
-ADAPTER_HOLE_D = 2.7
+ADAPTER_HOLE_SPAN = 3.5          # the two M2 holes, along board y
+ADAPTER_HOLE_D = M2_CLEAR_D
 
 NOTCH = [(16.0, 56.0), (17.0, 55.0), (17.0, 52.5), (18.5, 51.0),
          (20.0, 52.5), (20.0, 55.0), (21.0, 56.0), (21.0, 57.5), (16.0, 57.5)]
@@ -132,10 +134,10 @@ def build_adapter():
 
 
 def build_adapter_spacers():
-    """M2.5 nylon spacers between the plate underside and the adapter board."""
+    """M2 nylon spacers between the plate underside and the adapter board."""
     z0 = ADAPTER_Z0 + ADAPTER_T
     return [cyl(ADAPTER_CX, ADAPTER_CY + sy * ADAPTER_HOLE_SPAN, z0,
-                M25_CLEAR_D + 1.8, GAP - z0) for sy in (-1, 1)]
+                M2_SPACER_OD, GAP - z0) for sy in (-1, 1)]
 
 
 def build_standoffs():
@@ -175,9 +177,10 @@ def build(doc_name="lbc3_hat"):
     hdr = Part.makeBox(HDR_COLS * HDR_PITCH + 2 * HDR_BODY_PAD, 5.08, 2.5,
                        Vector(HDR_X0 - HDR_PITCH / 2 - HDR_BODY_PAD, HDR_ROWS_Y[0] - 1.27, 0))
     show(hdr, "REF_header40_male", COL_HDR, doc)
+    # 18x18x4 fan sits on the TOP (component) side of the plate
     fan = Part.makeBox(FAN_U, FAN_U, FAN_THK,
-                       Vector(FAN_CX - FAN_U / 2, FAN_CY - FAN_U / 2, GAP - FAN_THK))
-    show(fan, "REF_fan15", COL_FAN, doc)
+                       Vector(FAN_CX - FAN_U / 2, FAN_CY - FAN_U / 2, GAP + PLATE_T))
+    show(fan, "REF_fan18", COL_FAN, doc)
 
     show(build_plate(), "TOP_plate", COL_PLATE, doc, 40)
     show(build_adapter(), "B2B_adapter", COL_ADAPTER, doc)
