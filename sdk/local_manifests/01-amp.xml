@@ -5,7 +5,7 @@
   <remote name="starwey" fetch="https://github.com/starwey604/" />
 
   <project name="rk3576-rtos" path="rtos" remote="starwey"
-           revision="13735c5066130cd0cc48e59d8e7d5cc66bcad0e6" />
+           revision="7c397f41751feb29b0b388dfda3d2c2225f1f87c" />
   <project name="rk3576-hal" path="hal" remote="starwey"
            revision="277de3fd4b0e640654ee73bb3308be2ef01e3aad" />
 </manifest>
