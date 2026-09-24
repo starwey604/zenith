@@ -42,6 +42,34 @@
 - BSP 的 `drivers/` 目录是空的（仅 Kconfig/SConscript），驱动都在 `common/drivers/`，
   由 `common/drivers/SConscript` 的 `Glob("*.c")` 收集 → `drv_canfd.c` 会参与编译（`RT_USING_CAN` 打开后生效）。
 
+## 1.5 40pin 硬件映射（已核实：官方手册 + 板级 dts）
+
+LubanCat-3 的 40pin CAN 是 **SoC 原生信号、板上无收发器**（官方明确要求外接收发器模块），
+mux 与官方 overlay（`can0-m2` / `can1-m3`）一致：
+
+| 信号 | 40pin 物理脚 | SoC 球 | IO 域 |
+|---|---|---|---|
+| CAN0_TX_M2 | 11 | GPIO4_A4 | VCCIO4 |
+| CAN0_RX_M2 | 7  | GPIO4_A6 | VCCIO4 |
+| CAN1_TX_M3 | 40 | GPIO3_A2 | VCCIO4 |
+| CAN1_RX_M3 | 38 | GPIO3_A3 | VCCIO4 |
+| UART5_TX_M0（M0 console TX） | 18 | GPIO3_D5 | VCCIO5 |
+| UART5_RX_M0（M0 console RX） | 16 | GPIO3_D4 | VCCIO5 |
+
+候选方案：给 40pin 做一块转接小板，引出 M0 调试串口（3.3V）+ 两路 CAN-FD 收发器（5 Mbps）。
+
+### 风险 / 注意
+- **UART5 m0 与板载 RS485-2 同 mux**：官方 RS485 文档明确 `RS485-2 = UART5-M0`（流控 GPIO0_PC5）。
+  在带 RS485 收发器的底板/整机上，40pin 16/18 与 RS485 收发器共网，收发器 RO 会顶到 RX 线
+  （双驱动）。需确认本板是否有该收发器；有则 depopulate/断开，或 M0 console 改用
+  UART3 m0（pin3/5，注意 CAM3/CAM4 I2C 3.3V 上拉与 MIPI-CSI 插件会抢）或 UART10 m1（pin8/10，被板载 RS232/UART 占用）。
+- **IO 域电压**：CAN 属 VCCIO4、UART5 属 VCCIO5，确认两域为 3.3V（40pin 按 3.3V 设计）。
+- **CAN 时钟**：官方规定 ≤3 Mbps 用 100 MHz，**>3 Mbps（含 5 Mbps）用 200 MHz**。
+  M0 `drv_canfd.c` 的 `ROCKCHIP_CAN_CLK_RATE=200000000` 正好匹配 5 Mbps，故 M0 侧设 CLK_CAN=200 MHz。
+- **收发器选型**：必须 CAN-FD ≥5 Mbps 且 3.3V 逻辑；经典 1 Mbps（TJA1050/SN65HVD230/MCP2551 等）不可用。
+  推荐 TI TCAN334/TCAN332（3.3V）、或带 VIO 的 TCAN1042/1044、TJA1044/1049、MCP2542FD/2558FD。
+- **终端/保护**：每路 120Ω 跳线（FD 建议分裂终端）；CANH/CANL TVS + 共模电感；STB/EN 不悬空；TXD 上拉。
+
 ## 2. 方案
 
 ### 阶段 1：M0 单机 CAN-FD（先不接 Linux）
@@ -80,11 +108,11 @@
 ## 3. 待核实 / 风险
 1. **M0 CAN 中断路由**：`CAN0_IRQn` 在 M0 的 NVIC/向量上是否真实可达（RK3576 bus_mcu 外设中断转发）。
    先实测中断计数；不行再考虑轮询或查 GRF 路由寄存器。
-2. **LubanCat-3 上 CAN 的物理出口**：overlay 用了 can0m2 / can1m3，但需确认接的是 40-pin 还是端子，
-   以及板载收发器是否有 `standby/EN` 脚需要拉高（Linux overlay 未提供 gpio → 疑似默认为使能）。
-3. **时钟频率一致性**：Linux overlay 用 100 MHz，M0 `drv_canfd.c` 硬编码 `200000000`。
-   二者决定 bitrate 分频，必须统一（否则波特率错）。
-4. CAN-FD 数据段波特率、采样点，以及 RT-Thread CAN framework 对 FD 的支持程度。
+2. ~~CAN 物理出口~~ 已核实：40pin pin7/11（CAN0）、pin38/40（CAN1），板上无收发器，必须外接。
+   待确认的是**转接板是否与板载 RS485-2（UART5-M0，pin16/18）冲突**（见 1.5）。
+3. ~~时钟一致性~~ 已核实：5 Mbps 用 CLK_CAN=200 MHz（官方 >3 Mbps 规则），与 M0 驱动常量一致。
+4. CAN-FD 数据段波特率、采样点，以及 RT-Thread CAN framework 对 FD 的支持程度；
+   5 Mbps 数据段需启用 TDC（HAL `HAL_CANFD_Config` 支持 TDC 参数）。
 
 ## 4. 落地清单
 - `rk3576-rtos`（fork）
