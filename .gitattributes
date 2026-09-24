@@ -6,3 +6,4 @@ scripts/arm_design_study/models/menagerie/**/*.obj filter=lfs diff=lfs merge=lfs
 scripts/arm_design_study/models/menagerie/**/*.stl filter=lfs diff=lfs merge=lfs -text
 scripts/arm_design_study/models/menagerie/**/*.png filter=lfs diff=lfs merge=lfs -text
 scripts/arm_design_study/models/willow_0907/**/*.urdf filter=lfs diff=lfs merge=lfs -text
+mechanical/**/*.FCStd filter=lfs diff=lfs merge=lfs -text
