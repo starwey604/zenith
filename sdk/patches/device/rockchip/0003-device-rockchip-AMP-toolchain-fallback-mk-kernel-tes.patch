@@ -1,0 +1,92 @@
+From dc6da9732f0cb8b9ea3003226739b835fc838bb6 Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Thu, 24 Sep 2026 17:10:33 +0800
+Subject: [PATCH] device/rockchip: AMP toolchain fallback, mk-kernel test fix,
+ use lubancat-3 dts
+
+- mk-amp.sh: if the SDK has no prebuilt bare-metal toolchain, fall back to the host public Arm GNU toolchain (arm-none-eabi-); fixes 'No prebuilt GCC toolchain for AMP'.
+
+- mk-kernel.sh: quote $RK_ROOTFS_SYSTEM in [ ] tests (avoid 'unary operator expected').
+
+- AMP defconfig: switch RK_KERNEL_DTS_NAME to rk3576-lubancat-3-mcu.
+---
+ .../LubanCat_rk3576_buildroot_amp_mcu_defconfig |  2 +-
+ common/scripts/mk-amp.sh                        | 17 +++++++++++++++--
+ common/scripts/mk-kernel.sh                     |  6 +++---
+ 3 files changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+index 5d3ccf5..3196c31 100644
+--- a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
++++ b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+@@ -15,7 +15,7 @@ RK_AMP_MCU_RTT_TARGET="rk3576-mcu"
+ RK_AMP_FIT_ITS="amp_mcu_rtt.its"
+ RK_KERNEL_PREFERRED="6.1"
+ RK_KERNEL_CFG="lubancat_linux_rk3576_defconfig"
+-RK_KERNEL_DTS_NAME="rk3576-lubancat-generic-mcu"
++RK_KERNEL_DTS_NAME="rk3576-lubancat-3-mcu"
+ RK_KERNEL_EXTBOOT=y
+ # RK_RECOVERY is not set
+ RK_EXTRA_PARTITION_1_BUILTIN=y
+diff --git a/common/scripts/mk-amp.sh b/common/scripts/mk-amp.sh
+index 55d5e2e..b8b6c57 100755
+--- a/common/scripts/mk-amp.sh
++++ b/common/scripts/mk-amp.sh
+@@ -233,8 +233,21 @@ build_hook()
+ 
+ 	"$RK_SCRIPTS_DIR/check-amp.sh"
+ 
+-	export CROSS_COMPILE=$(get_toolchain AMP "$RK_AMP_ARCH" "" none)
+-	[ "$CROSS_COMPILE" ] || exit 1
++	export CROSS_COMPILE=$(get_toolchain AMP "$RK_AMP_ARCH" "" none 2>/dev/null || true)
++	if [ -z "$CROSS_COMPILE" ]; then
++		# No prebuilt bare-metal toolchain in the SDK: fall back to the host's
++		# public Arm GNU toolchain (e.g. Ubuntu `apt install gcc-arm-none-eabi`).
++		case "$RK_AMP_ARCH" in
++			arm|arm32) CROSS_COMPILE=arm-none-eabi- ;;
++			arm64)     CROSS_COMPILE=aarch64-none-elf- ;;
++		esac
++		command -v "${CROSS_COMPILE}gcc" >/dev/null 2>&1 || {
++			error "No AMP toolchain: install gcc-arm-none-eabi (need ${CROSS_COMPILE}gcc)"
++			exit 1
++		}
++		notice "Using host AMP toolchain: ${CROSS_COMPILE}gcc"
++		export CROSS_COMPILE
++	fi
+ 
+ 	if [ -f "$RK_CHIP_DIR/$RK_AMP_CFG" ]; then
+ 		set -a
+diff --git a/common/scripts/mk-kernel.sh b/common/scripts/mk-kernel.sh
+index c5807bb..0ed6779 100755
+--- a/common/scripts/mk-kernel.sh
++++ b/common/scripts/mk-kernel.sh
+@@ -85,7 +85,7 @@ do_build_extboot()
+ 	cp ${RK_SDK_DIR}/${RK_KERNEL_DTS_DIR}/uEnv/$UENV_DIR/*.txt $EXTBOOT_DIR/uEnv
+ 	sed -i "s/^uname_r=.*/uname_r=${KERNEL_VER}/" $EXTBOOT_DIR/uEnv/uEnv*.txt
+ 	sed -i "/^uname_r=.*/a initrd=initrd-${KERNEL_MAIN_VER}" $EXTBOOT_DIR/uEnv/uEnv*.txt
+-	if [ $RK_ROOTFS_SYSTEM == "buildroot" ]; then
++	if [ "$RK_ROOTFS_SYSTEM" == "buildroot" ]; then
+ 		sed -i '/^cmdline=/s/console=tty1 *//g' $EXTBOOT_DIR/uEnv/uEnv*.txt
+ 	fi
+ 
+@@ -105,7 +105,7 @@ do_build_extboot()
+ 	cp ${RK_SDK_DIR}/kernel/logo_kernel.bmp $EXTBOOT_DIR/
+ 	cp ${RK_SDK_DIR}/kernel/logo_boot.bmp $EXTBOOT_DIR/logo.bmp
+ 
+-	if [ $RK_ROOTFS_SYSTEM == "ubuntu" ] || [ $RK_ROOTFS_SYSTEM == "debian" ]; then
++	if [ "$RK_ROOTFS_SYSTEM" == "ubuntu" ] || [ "$RK_ROOTFS_SYSTEM" == "debian" ]; then
+ 		cp ${RK_SDK_DIR}/linux-headers-"$KERNEL_VER"_"$KERNEL_VER"-*.deb $EXTBOOT_DIR/kerneldeb
+ 		cp ${RK_SDK_DIR}/linux-image-"$KERNEL_VER"_"$KERNEL_VER"-*.deb $EXTBOOT_DIR/kerneldeb
+ 	fi
+@@ -159,7 +159,7 @@ do_build()
+ 		kernel*)
+ 		if [ "$RK_KERNEL_EXTBOOT" = "y" ]; then
+ 			notice "build kerneldeb and extboot"
+-			if [ $RK_ROOTFS_SYSTEM == "ubuntu" ] || [ $RK_ROOTFS_SYSTEM == "debian" ]; then
++			if [ "$RK_ROOTFS_SYSTEM" == "ubuntu" ] || [ "$RK_ROOTFS_SYSTEM" == "debian" ]; then
+ 				[ $KERNELDEB_NO_BUILD == "y" ] || do_build_kerneldeb
+ 			fi
+ 			do_build_extboot
+-- 
+2.55.0
+
