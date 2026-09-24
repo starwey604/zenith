@@ -15,7 +15,8 @@ buildroot_version = "2024.02-rkr5 (Rockchip fork)"
 
 # The kernel is maintained as a personal fork, not as a patch series.
 [kernel]
-upstream = "https://github.com/LubanCat/kernel.git"
+origin = "https://github.com/starwey604/kernel"      # personal fork = source of truth
+upstream = "https://github.com/LubanCat/kernel.git"  # vendor, for future merges
 branch = "lbc-develop-6.1-rt36"
 commit = "3d027a80ff4023e4ee6dba24db140a2eab2c1f28"
-note = "Fork upstream, switch remote to the personal repo, and pin `commit` for reproducible builds. The vendor manifest still pins the older 95cee116 on lbc-develop-6.1."
+note = "Consumed by the SDK via the kernel-6.1 symlink. Pin `commit` for reproducible builds. The vendor manifest still pins the older 95cee116 on lbc-develop-6.1."

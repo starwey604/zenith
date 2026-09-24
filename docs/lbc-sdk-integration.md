@@ -34,11 +34,16 @@ SDK 由 `repo` 管理，改动会散布在多个独立 git 仓库（`buildroot`�
 
 ## 内核策略
 
-kernel 不做 patch series，而是 fork `https://github.com/LubanCat/kernel.git`，
-把 remote 换成本人仓库，在 `lbc-develop-6.1-rt36`（PREEMPT_RT）基础上长期维护。
+kernel 不做 patch series，而是维护个人 fork：
+
+- fork（source of truth）：`https://github.com/starwey604/kernel`（remote `origin`）
+- 厂商上游（用于日后合并）：`https://github.com/LubanCat/kernel.git`（remote `upstream`）
+- 分支：`lbc-develop-6.1-rt36`（PREEMPT_RT）
+
 构建通过 SDK 根的 `kernel-6.1` 符号链接消费该 fork，因此在 `baseline.toml` 里钉住 commit
 以保证可复现。注意厂商 manifest 仍固定较旧的 `95cee116`（`lbc-develop-6.1`），
 如需 `repo sync` 完全复现，可加 `.repo/local_manifests/` 覆盖 `kernel-6.1` 的 revision。
+`.version` 是 kbuild 生成的被跟踪文件，构建后变脏属正常，`git checkout -- .version` 即可还原。
 
 ## 当前补丁栈
 
