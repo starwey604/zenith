@@ -74,13 +74,20 @@ def export_top_plate():
     plate = _ns["build_plate"]()
     plate.translate(Vector(0, 0, -_ns["GAP"]))
     feat(doc, "PLATE_OUTLINE", horizontal_face(plate, +1))
-    # 40P footprint call-out (female header footprint on the plate)
-    x0 = HDR_X0 - HDR_PITCH / 2 - HDR_BODY_PAD
-    x1 = x0 + HDR_COLS * HDR_PITCH + 2 * HDR_BODY_PAD
+    # 40P footprint call-out: body outline + all 40 pad centres + pin1 marker.
+    # Board silkscreen: pin 1 is at the RIGHT end (x max), pin 40 at the LEFT.
+    x0 = HDR_X0 - HDR_BODY_PAD
+    x1 = HDR_X0 + (HDR_COLS - 1) * HDR_PITCH + HDR_BODY_PAD
     y0, y1 = HDR_ROWS_Y[0] - 1.27, HDR_ROWS_Y[1] + 1.27
     feat(doc, "ANNO_40P_BODY", rect(x0, y0, x1, y1))
-    feat(doc, "ANNO_40P_PIN1", circle(HDR_X0, HDR_ROWS_Y[0], 1.6))
-    text(doc, "ANNO_40P_TEXT", "40P 2x20 2.54mm (pin1)", x0, y1 + 1.5, 2.0)
+    for i in range(HDR_COLS):
+        px = HDR_X0 + i * HDR_PITCH
+        for j, py in enumerate(HDR_ROWS_Y):
+            feat(doc, "ANNO_40P_PAD_%02d_%d" % (i, j), circle(px, py, 1.7))
+    px1 = HDR_X0 + (HDR_COLS - 1) * HDR_PITCH
+    feat(doc, "ANNO_40P_PIN1_BOX", rect(px1 - 1.6, y0, px1 + 1.6, y1))
+    text(doc, "ANNO_40P_TEXT",
+         "40P 2x20 2.54  pin1=RIGHT  pin40=LEFT", x0 - 1.0, y1 + 2.0, 2.5)
     doc.recompute()
     out = os.path.join(HERE, "dxf", "lbc3_top_plate.dxf")
     importDXF.export(doc.Objects, out)
