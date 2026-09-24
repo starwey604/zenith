@@ -1,0 +1,3 @@
+# repo-path|baseline-commit|lbc-branch
+buildroot|4c038732919b526ea263fd2316feac97dc082213|lbc/buildroot
+device/rockchip|1f1392c6e7f43d4654b24d2fcfefed5811e61a7a|lbc/device-rockchip

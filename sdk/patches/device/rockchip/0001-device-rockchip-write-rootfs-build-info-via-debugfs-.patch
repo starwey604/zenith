@@ -1,0 +1,47 @@
+From e2c5242cd969f782e9c92b6e438c2b865e50ebff Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Thu, 24 Sep 2026 14:07:45 +0800
+Subject: [PATCH] device/rockchip: write rootfs build info via debugfs instead
+ of mount
+
+With RK_KERNEL_EXTBOOT=y, mk-updateimg.sh loop-mounted rootfs.img to write /etc/build-release. That needs CAP_SYS_ADMIN and a loop device and fails inside an unprivileged container (distrobox: mount failed: Operation not permitted). Write the file with debugfs for ext* filesystems instead, and only fall back to mount otherwise, so build info still works without privileged mode.
+---
+ common/scripts/mk-updateimg.sh | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/common/scripts/mk-updateimg.sh b/common/scripts/mk-updateimg.sh
+index 6565370..ce8b343 100755
+--- a/common/scripts/mk-updateimg.sh
++++ b/common/scripts/mk-updateimg.sh
+@@ -91,12 +91,22 @@ do_build_updateimg()
+ 	ln -rsf "$RK_FIRMWARE_DIR"/* .
+ 
+ 	if [ "$RK_KERNEL_EXTBOOT" = "y" ]; then
+-		mkdir -p mount-tmp
+-		echo mount and write build info
+-		sudo mount rootfs.img mount-tmp/
+-		sudo sh -c "echo ' * $RK_PACKAGE_NAME' > mount-tmp/etc/build-release"
+-		sudo sync 
+-		sudo umount mount-tmp/
++		echo write build info
++		BUILD_RELEASE_TMP="$(mktemp)"
++		echo " * $RK_PACKAGE_NAME" > "$BUILD_RELEASE_TMP"
++		# Prefer debugfs: no privileged mount needed, works inside containers.
++		if dumpe2fs -h rootfs.img >/dev/null 2>&1; then
++			debugfs -w -R "rm /etc/build-release" rootfs.img >/dev/null 2>&1 || true
++			debugfs -w -R "write $BUILD_RELEASE_TMP /etc/build-release" rootfs.img \
++				|| warning "Failed to write build info into rootfs.img"
++		elif mkdir -p mount-tmp && sudo mount rootfs.img mount-tmp/ 2>/dev/null; then
++			sudo sh -c "echo ' * $RK_PACKAGE_NAME' > mount-tmp/etc/build-release"
++			sudo sync
++			sudo umount mount-tmp/
++		else
++			warning "Skip writing build info (rootfs is not ext* and mount is unavailable)\n"
++		fi
++		rm -f "$BUILD_RELEASE_TMP"
+ 		rm -rf mount-tmp/
+ 	fi
+ 
+-- 
+2.55.0
+

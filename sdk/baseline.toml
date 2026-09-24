@@ -1,0 +1,21 @@
+[sdk]
+release = "LubanCat_Linux_Generic_Full_SDK_20260903"
+manifest = "sdk/manifest.lock.xml"
+chip = "rk3576"
+board = "LubanCat-3"
+build_container = "ubuntu:22.04 (Distrobox: aura-sdk)"
+kernel_version = "6.1.99 (LubanCat lbc-develop-6.1-rt36)"
+buildroot_version = "2024.02-rkr5 (Rockchip fork)"
+
+# Pinned commits of SDK sub-repos this project patches (see series.tsv).
+[projects]
+"buildroot" = "4c038732919b526ea263fd2316feac97dc082213"
+"device/rockchip" = "1f1392c6e7f43d4654b24d2fcfefed5811e61a7a"
+"u-boot" = "ce67cf027de25347c5c790c3087f6e663f4f3d56"
+
+# The kernel is maintained as a personal fork, not as a patch series.
+[kernel]
+upstream = "https://github.com/LubanCat/kernel.git"
+branch = "lbc-develop-6.1-rt36"
+commit = "3d027a80ff4023e4ee6dba24db140a2eab2c1f28"
+note = "Fork upstream, switch remote to the personal repo, and pin `commit` for reproducible builds. The vendor manifest still pins the older 95cee116 on lbc-develop-6.1."

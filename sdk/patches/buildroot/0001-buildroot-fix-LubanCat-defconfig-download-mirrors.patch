@@ -1,0 +1,89 @@
+From ad92be956b0fe4251408b9bf30dee24e8780d14a Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Thu, 24 Sep 2026 14:07:45 +0800
+Subject: [PATCH] buildroot: fix LubanCat defconfig download mirrors
+
+The LubanCat defconfigs overrode BR2_PRIMARY_SITE to the LZU mirror, which is incomplete (gcc-12.4.0.tar.xz and others return 404), and fell back to the USTC GNU mirror, which rejects buildroot's wget user agent with HTTP 403. Restore the official sources.buildroot.net as the primary site and use the TUNA GNU mirror (wget-friendly).
+
+Affects: rockchip_rk3576/3562/3566/3568/3588_lubancat_defconfig
+---
+ configs/rockchip_rk3562_lubancat_defconfig | 3 ++-
+ configs/rockchip_rk3566_lubancat_defconfig | 3 ++-
+ configs/rockchip_rk3568_lubancat_defconfig | 3 ++-
+ configs/rockchip_rk3576_lubancat_defconfig | 3 ++-
+ configs/rockchip_rk3588_lubancat_defconfig | 3 ++-
+ 5 files changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/configs/rockchip_rk3562_lubancat_defconfig b/configs/rockchip_rk3562_lubancat_defconfig
+index dd06b2f0..53bbfb7e 100644
+--- a/configs/rockchip_rk3562_lubancat_defconfig
++++ b/configs/rockchip_rk3562_lubancat_defconfig
+@@ -25,7 +25,8 @@
+ BR2_PACKAGE_LBC_FIRMWARE=y
+ BR2_PACKAGE_OPENSSH=y
+ BR2_PACKAGE_VIM=y
+-BR2_PRIMARY_SITE="https://mirror.lzu.edu.cn/buildroot"
++BR2_PRIMARY_SITE="https://sources.buildroot.net"
++BR2_GNU_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/gnu"
+ BR2_ROOTFS_OVERLAY="board/rockchip/common/base board/rockchip/rk3562/fs-overlay/ board/rockchip/common/lubancat/"
+ # BR2_TARGET_ROOTFS_CPIO is reset to default
+ # BR2_TARGET_ROOTFS_SQUASHFS is reset to default
+diff --git a/configs/rockchip_rk3566_lubancat_defconfig b/configs/rockchip_rk3566_lubancat_defconfig
+index 6c3c38a5..9dcd6870 100644
+--- a/configs/rockchip_rk3566_lubancat_defconfig
++++ b/configs/rockchip_rk3566_lubancat_defconfig
+@@ -26,7 +26,8 @@ BR2_PACKAGE_OPENSSH=y
+ # BR2_PACKAGE_RKSCRIPT_IODOMAIN_NOTICE is not set
+ BR2_PACKAGE_RKTOOLKIT=y
+ BR2_PACKAGE_VIM=y
+-BR2_PRIMARY_SITE="https://mirror.lzu.edu.cn/buildroot"
++BR2_PRIMARY_SITE="https://sources.buildroot.net"
++BR2_GNU_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/gnu"
+ BR2_ROOTFS_OVERLAY="board/rockchip/common/base board/rockchip/rk3588/fs-overlay/ board/rockchip/common/lubancat/"
+ # BR2_TARGET_ROOTFS_CPIO is reset to default
+ # BR2_TARGET_ROOTFS_SQUASHFS is reset to default
+diff --git a/configs/rockchip_rk3568_lubancat_defconfig b/configs/rockchip_rk3568_lubancat_defconfig
+index ae3bb067..72a2b3ca 100644
+--- a/configs/rockchip_rk3568_lubancat_defconfig
++++ b/configs/rockchip_rk3568_lubancat_defconfig
+@@ -28,7 +28,8 @@ BR2_PACKAGE_OPENSSH=y
+ # BR2_PACKAGE_RKSCRIPT_IODOMAIN_NOTICE is not set
+ BR2_PACKAGE_RKTOOLKIT=y
+ BR2_PACKAGE_VIM=y
+-BR2_PRIMARY_SITE="https://mirror.lzu.edu.cn/buildroot"
++BR2_PRIMARY_SITE="https://sources.buildroot.net"
++BR2_GNU_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/gnu"
+ BR2_ROOTFS_OVERLAY="board/rockchip/common/base board/rockchip/rk3588/fs-overlay/ board/rockchip/common/lubancat/"
+ # BR2_TARGET_ROOTFS_CPIO is reset to default
+ # BR2_TARGET_ROOTFS_SQUASHFS is reset to default
+diff --git a/configs/rockchip_rk3576_lubancat_defconfig b/configs/rockchip_rk3576_lubancat_defconfig
+index dc9a0a10..4aae3d4b 100644
+--- a/configs/rockchip_rk3576_lubancat_defconfig
++++ b/configs/rockchip_rk3576_lubancat_defconfig
+@@ -26,7 +26,8 @@
+ BR2_PACKAGE_LBC_FIRMWARE=y
+ BR2_PACKAGE_OPENSSH=y
+ BR2_PACKAGE_VIM=y
+-BR2_PRIMARY_SITE="https://mirror.lzu.edu.cn/buildroot"
++BR2_PRIMARY_SITE="https://sources.buildroot.net"
++BR2_GNU_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/gnu"
+ BR2_ROOTFS_OVERLAY="board/rockchip/common/base board/rockchip/rk3576/fs-overlay/ board/rockchip/common/lubancat/"
+ # BR2_TARGET_ROOTFS_CPIO is reset to default
+ # BR2_TARGET_ROOTFS_SQUASHFS is reset to default
+diff --git a/configs/rockchip_rk3588_lubancat_defconfig b/configs/rockchip_rk3588_lubancat_defconfig
+index e2044b66..ade12255 100644
+--- a/configs/rockchip_rk3588_lubancat_defconfig
++++ b/configs/rockchip_rk3588_lubancat_defconfig
+@@ -26,7 +26,8 @@
+ BR2_PACKAGE_LBC_FIRMWARE=y
+ BR2_PACKAGE_OPENSSH=y
+ BR2_PACKAGE_VIM=y
+-BR2_PRIMARY_SITE="https://mirror.lzu.edu.cn/buildroot"
++BR2_PRIMARY_SITE="https://sources.buildroot.net"
++BR2_GNU_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/gnu"
+ BR2_ROOTFS_OVERLAY="board/rockchip/common/base board/rockchip/rk3588/fs-overlay/ board/rockchip/common/lubancat/"
+ # BR2_TARGET_ROOTFS_CPIO is reset to default
+ # BR2_TARGET_ROOTFS_SQUASHFS is reset to default
+-- 
+2.55.0
+
