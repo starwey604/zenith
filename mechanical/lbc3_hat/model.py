@@ -1,21 +1,26 @@
 """Parametric mechanical model for the LubanCat-3 40-pin add-on ("top plate").
 
-Coordinate system (board frame, millimetres):
-  origin  = LBC3 PCB bottom-left corner, viewed from the TOP (unit is the DXF
-            board frame; x grows right, y grows "up" the board away from the
-            40-pin header edge)
-  z = 0   = LBC3 PCB TOP surface (components live above); the PCB occupies
-            z = -BOARD_T .. 0.
+Two coordinate frames are used:
 
-Ground truth for BOARD_L/W, corner radius, mount holes, the 40-pin header span
-and the SoC position comes from the vendor files:
-  * LubanCat3_DXF_BOT.dxf          (BG_OUTLINE + PIN_BOTTOM layers)
-  * LubanCat3_PCB尺寸图_.pdf        (R1.5X4, 85 x 56)
+* **board frame** (what you edit below), millimetres:
+    origin = LBC3 PCB bottom-left corner viewed from the TOP
+    x = along the long edge (0 .. 85), y = away from the 40-pin edge (0 .. 56)
+    z = height above the PCB top surface (PCB occupies z = -1.6 .. 0)
 
-Every value marked  # TBC  is a placeholder that still needs a measurement from
-the real board / schematic before manufacturing.
+* **STEP frame** (the vendor `Lubancat3_3D_Model.STEP`), millimetres:
+    the board plane is X-Z, the board normal is Y
+    PCB top surface is y = 0, bottom y = -1.6
+    mapping:  step = (board_x, board_z, -board_y)
 
-Run inside FreeCAD (GUI or freecadcmd):  exec(open(__file__).read())
+Ground truth from the vendor files (`LubanCat3(EBF410513V2R0_20260521)/`):
+  DXF结构图  -> outline 85x56, R1.5x4, 40-pin span x 28.52..76.78, rows y 1.78/4.32,
+                mount holes Dia2.6 at (23.5,3.5)(23.5,52.5)(81.5,3.5)(81.5,52.5)
+  3D模型     -> RK3576 centre board (58.5, 32.2); 40-pin pin tips at +8.54 above PCB
+                Ethernet HR911130A occupies board x -3.0 .. 18.4
+
+Values marked  # TBC  still need a decision.
+
+Run inside FreeCAD:  exec(open(__file__).read()); build()
 """
 
 import FreeCAD as App
@@ -23,56 +28,49 @@ import Part
 from FreeCAD import Vector
 
 # --------------------------------------------------------------------------
-# Parameters (mm) -- edit here, the model is regenerated from these.
+# Parameters (mm), board frame
 # --------------------------------------------------------------------------
-BOARD_L = 85.0          # board length  (X)  [vendor: 85]
-BOARD_W = 56.0          # board width   (Y)  [vendor: 56]
-BOARD_T = 1.6           # PCB thickness      [TBC: verify, 1.6 typical]
-CORNER_R = 1.5          # board corner fillet [vendor: R1.5X4]
+BOARD_L, BOARD_W, BOARD_T, CORNER_R = 85.0, 56.0, 1.6, 1.5
 
-# 40-pin male header on the LBC3 (from DXF PIN_BOTTOM grid)
-HDR_X0 = 28.52          # x of column 0 (pin 39/40 side)
-HDR_PITCH = 2.54
-HDR_COLS = 20
+HDR_X0, HDR_PITCH, HDR_COLS = 28.52, 2.54, 20
 HDR_ROWS_Y = (1.78, 4.32)
-HDR_BODY_PAD = 1.27     # body plastic overhangs 1.27 beyond the end pins
+HDR_BODY_PAD = 1.27
 
-# Board mount holes (DXF r=1.3 -> Dia 2.6 -> M2.5 clearance)
 MOUNT_HOLES = [(23.5, 3.5), (81.5, 3.5), (23.5, 52.5), (81.5, 52.5)]
 MOUNT_HOLE_D = 2.6
 
-# Top plate
 PLATE_T = 1.6
-GAP = 11.0              # LBC3 top surface -> plate bottom. # TBC (= 40-pin
-                        #   mated height; must also fit the fan below)
-M25_CLEAR_D = 2.7       # M2.5 clearance in the plate
-M25_HEAD_D = 4.7        # M2.5 socket/lens head recess  # TBC
+GAP = 8.5                 # PCB top -> plate bottom (= 40-pin mated height)
+M25_CLEAR_D = 2.7
 
-# Fan (mounted to the underside of the plate, above the SoC)   -- all TBC
-FAN_U = 40.0            # fan size (square)
-FAN_THK = 10.0
-FAN_SCREW_SPAN = 32.0   # hole centre spacing
-FAN_SCREW_D = 3.2       # M3 screws into the fan
-FAN_OPEN_D = 34.0       # opening in the plate
-FAN_CX = 55.0           # centre  # TBC (SoC position)
-FAN_CY = 22.0
+# Plate footprint: cut away the left edge so the Ethernet stays reachable.
+PLATE_X_MIN = 18.4        # right edge of the HR911130A jack
+# Power-input (24V -> 5V) keep-out on the right.   # TBC: real module footprint
+POWER_OPEN = (68.0, 8.0, 84.0, 20.0)
 
-# Camera B2B -> FPC30 adapter board that we want to pin down  -- all TBC
-B2B_CX, B2B_CY = 38.0, 51.0
-B2B_L, B2B_W, B2B_H = 20.0, 8.0, 3.0
+# Fan: 15 x 15 x 4 mm, mounted under the plate above the SoC.
+FAN_U, FAN_THK = 15.0, 4.0
+FAN_SCREW_SPAN, FAN_SCREW_D = 12.0, 2.2
+FAN_OPEN_D = 12.5
+FAN_CX, FAN_CY = 58.5, 32.2      # RK3576 centre, measured from the STEP
 
-# Notch in the LBC3 top edge (from DXF BG_OUTLINE), as a closed polygon
+# Camera B2B -> FPC30 adapter board we want to pin down.   # TBC: verify location
+ADAPTER_L, ADAPTER_W, ADAPTER_T = 24.0, 11.0, 1.6
+ADAPTER_CX, ADAPTER_CY = 57.0, 52.0
+ADAPTER_HOLE_SPAN_X = 20.0
+ADAPTER_HOLE_D = 2.7             # M2.5 screws
+
 NOTCH = [(16.0, 56.0), (17.0, 55.0), (17.0, 52.5), (18.5, 51.0),
          (20.0, 52.5), (20.0, 55.0), (21.0, 56.0), (21.0, 57.5), (16.0, 57.5)]
 
-COL_BOARD = (0.20, 0.45, 0.20)
-COL_PLATE = (0.20, 0.35, 0.70)
-COL_STAND = (0.85, 0.55, 0.10)
-COL_HDR = (0.35, 0.35, 0.35)
-COL_FAN = (0.15, 0.15, 0.15)
-COL_B2B = (0.10, 0.60, 0.10)
+COL_BOARD, COL_PLATE = (0.20, 0.45, 0.20), (0.20, 0.35, 0.70)
+COL_STAND, COL_HDR = (0.85, 0.55, 0.10), (0.35, 0.35, 0.35)
+COL_FAN, COL_ADAPTER = (0.15, 0.15, 0.15), (0.10, 0.60, 0.10)
 
 
+# --------------------------------------------------------------------------
+# helpers (board frame)
+# --------------------------------------------------------------------------
 def rounded_box(length, width, height, z0):
     s = Part.makeBox(length, width, height, Vector(0, 0, z0))
     vert = [e for e in s.Edges
@@ -81,70 +79,103 @@ def rounded_box(length, width, height, z0):
     return s.makeFillet(CORNER_R, vert)
 
 
+def box_between(x0, y0, z0, x1, y1, z1):
+    return Part.makeBox(x1 - x0, y1 - y0, z1 - z0, Vector(x0, y0, z0))
+
+
 def poly_prism(points, z0, height):
     wire = Part.makePolygon([Vector(x, y, z0) for x, y in points])
     return Part.Face(wire).extrude(Vector(0, 0, height))
 
 
-def show(shape, name, color):
-    obj = Part.show(shape, name)
+def cyl(x, y, z0, d, h):
+    return Part.makeCylinder(d / 2, h, Vector(x, y, z0))
+
+
+# --------------------------------------------------------------------------
+# solids (board frame)
+# --------------------------------------------------------------------------
+def build_plate():
+    s = rounded_box(BOARD_L, BOARD_W, PLATE_T, GAP)
+    s = s.cut(box_between(-4, -4, GAP - 2, PLATE_X_MIN, 60, GAP + PLATE_T + 2))
+    s = s.cut(poly_prism(NOTCH, GAP - 1, PLATE_T + 2))
+    for x, y in MOUNT_HOLES:
+        s = s.cut(cyl(x, y, GAP - 2, M25_CLEAR_D, PLATE_T + 4))
+    s = s.cut(cyl(FAN_CX, FAN_CY, GAP - 2, FAN_OPEN_D, PLATE_T + 4))
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            s = s.cut(cyl(FAN_CX + sx * FAN_SCREW_SPAN / 2,
+                          FAN_CY + sy * FAN_SCREW_SPAN / 2,
+                          GAP - 2, FAN_SCREW_D, PLATE_T + 4))
+    x0, y0, x1, y1 = POWER_OPEN
+    s = s.cut(box_between(x0, y0, GAP - 2, x1, y1, GAP + PLATE_T + 2))
+    return s
+
+
+def build_adapter():
+    s = Part.makeBox(ADAPTER_L, ADAPTER_W, ADAPTER_T,
+                     Vector(ADAPTER_CX - ADAPTER_L / 2, ADAPTER_CY - ADAPTER_W / 2, 0))
+    for sx in (-1, 1):
+        s = s.cut(cyl(ADAPTER_CX + sx * ADAPTER_HOLE_SPAN_X / 2, ADAPTER_CY, -1,
+                      ADAPTER_HOLE_D, ADAPTER_T + 2))
+    return s
+
+
+def build_standoffs():
+    return [cyl(x, y, 0, M25_CLEAR_D + 1.8, GAP) for x, y in MOUNT_HOLES]
+
+
+# --------------------------------------------------------------------------
+# frame conversion
+# --------------------------------------------------------------------------
+def to_step(shape):
+    """(board_x, board_y, board_z) -> (board_x, board_z, -board_y)."""
+    m = App.Matrix()
+    m.A11, m.A12, m.A13 = 1, 0, 0
+    m.A21, m.A22, m.A23 = 0, 0, 1
+    m.A31, m.A32, m.A33 = 0, -1, 0
+    return shape.transformGeometry(m)
+
+
+def show(shape, name, color, doc=None, transparency=0):
+    doc = doc or App.ActiveDocument
+    obj = doc.addObject("Part::Feature", name)
+    obj.Shape = shape
     obj.ViewObject.ShapeColor = color
-    obj.ViewObject.Transparency = 70 if name.startswith("REF") else 0
+    obj.ViewObject.Transparency = transparency
     return obj
 
 
-def build():
-    doc = App.newDocument("lbc3_hat")
-
-    # ---- reference: LBC3 board -------------------------------------------
+def build(doc_name="lbc3_hat"):
+    """Standalone board-frame document (reference + plate + adapter)."""
+    doc = App.newDocument(doc_name)
     board = rounded_box(BOARD_L, BOARD_W, BOARD_T, -BOARD_T)
     board = board.cut(poly_prism(NOTCH, -BOARD_T - 1, BOARD_T + 2))
     for x, y in MOUNT_HOLES:
-        board = board.cut(Part.makeCylinder(MOUNT_HOLE_D / 2, BOARD_T + 4,
-                                            Vector(x, y, -BOARD_T - 2)))
-    show(board, "REF_LBC3_board", COL_BOARD)
+        board = board.cut(cyl(x, y, -BOARD_T - 2, MOUNT_HOLE_D, BOARD_T + 4))
+    show(board, "REF_lbc3_board", COL_BOARD, doc, 75)
 
-    # ---- reference: 40-pin male header on the LBC3 -----------------------
-    body = Part.makeBox(HDR_COLS * HDR_PITCH + 2 * HDR_BODY_PAD, 5.08, 2.5,
-                        Vector(HDR_X0 - HDR_PITCH / 2 - HDR_BODY_PAD,
-                               HDR_ROWS_Y[0] - 1.27, 0.0))
-    show(body, "REF_header40_male", COL_HDR)
-
-    # ---- reference: SoC + fan envelope -----------------------------------
-    soc = Part.makeBox(16, 16, 1.0, Vector(FAN_CX - 8, FAN_CY - 8, 0.0))
-    show(soc, "REF_soc", COL_HDR)
+    hdr = Part.makeBox(HDR_COLS * HDR_PITCH + 2 * HDR_BODY_PAD, 5.08, 2.5,
+                       Vector(HDR_X0 - HDR_PITCH / 2 - HDR_BODY_PAD, HDR_ROWS_Y[0] - 1.27, 0))
+    show(hdr, "REF_header40_male", COL_HDR, doc)
     fan = Part.makeBox(FAN_U, FAN_U, FAN_THK,
-                       Vector(FAN_CX - FAN_U / 2, FAN_CY - FAN_U / 2,
-                              GAP - FAN_THK))
-    show(fan, "REF_fan", COL_FAN)
+                       Vector(FAN_CX - FAN_U / 2, FAN_CY - FAN_U / 2, GAP - FAN_THK))
+    show(fan, "REF_fan15", COL_FAN, doc)
 
-    # ---- reference: camera B2B -> FPC30 adapter --------------------------
-    b2b = Part.makeBox(B2B_L, B2B_W, B2B_H,
-                       Vector(B2B_CX - B2B_L / 2, B2B_CY - B2B_W / 2, 0.0))
-    show(b2b, "REF_b2b_adapter", COL_B2B)
+    show(build_plate(), "TOP_plate", COL_PLATE, doc, 40)
+    show(build_adapter(), "B2B_adapter", COL_ADAPTER, doc)
+    for i, st in enumerate(build_standoffs()):
+        show(st, "STANDOFF_%d" % (i + 1), COL_STAND, doc)
+    doc.recompute()
+    return doc
 
-    # ---- top plate -------------------------------------------------------
-    plate = rounded_box(BOARD_L, BOARD_W, PLATE_T, GAP)
-    plate = plate.cut(poly_prism(NOTCH, GAP - 1, PLATE_T + 2))
-    for x, y in MOUNT_HOLES:                      # M2.5 fixing holes
-        plate = plate.cut(Part.makeCylinder(M25_CLEAR_D / 2, PLATE_T + 4,
-                                            Vector(x, y, GAP - 2)))
-    # fan opening + fan screws
-    plate = plate.cut(Part.makeCylinder(FAN_OPEN_D / 2, PLATE_T + 4,
-                                        Vector(FAN_CX, FAN_CY, GAP - 2)))
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            plate = plate.cut(Part.makeCylinder(
-                FAN_SCREW_D / 2, PLATE_T + 4,
-                Vector(FAN_CX + sx * FAN_SCREW_SPAN / 2,
-                       FAN_CY + sy * FAN_SCREW_SPAN / 2, GAP - 2)))
-    show(plate, "TOP_plate", COL_PLATE)
 
-    # ---- copper/nylon standoffs at the 4 board mount holes ---------------
-    for i, (x, y) in enumerate(MOUNT_HOLES):
-        st = Part.makeCylinder(M25_CLEAR_D / 2 + 0.9, GAP, Vector(x, y, 0.0))
-        show(st, "STANDOFF_%d" % (i + 1), COL_STAND)
-
+def fit_into_step(doc):
+    """Add the plate / adapter / standoffs to an open STEP document."""
+    show(to_step(build_plate()), "TOP_plate", COL_PLATE, doc, 40)
+    show(to_step(build_adapter()), "B2B_adapter", COL_ADAPTER, doc)
+    for i, st in enumerate(build_standoffs()):
+        show(to_step(st), "STANDOFF_%d" % (i + 1), COL_STAND, doc)
     doc.recompute()
     return doc
 
