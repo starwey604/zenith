@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- zenith AMP dependencies (Linux + Cortex-M0 RT-Thread on RK3576).
+     Forks hosted at github.com/starwey604; see zenith/sdk/baseline.toml. -->
+<manifest>
+  <remote name="starwey" fetch="https://github.com/starwey604/" />
+
+  <project name="rk3576-rtos" path="rtos" remote="starwey"
+           revision="8541f7ad0c584469cc6dd725b6e489d1e9d29e4a" />
+  <project name="rk3576-hal" path="hal" remote="starwey"
+           revision="277de3fd4b0e640654ee73bb3308be2ef01e3aad" />
+</manifest>

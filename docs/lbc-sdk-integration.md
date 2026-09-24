@@ -65,11 +65,29 @@ kernel 不做 patch series，而是维护个人 fork：
 
 `check`/`apply` 会拒绝脏工作树或 HEAD 不在基线的情况，绝不执行 `reset`/`clean`。
 
-## 待办（RK3576 方向）
+## AMP：Linux + Cortex-M0 (bus_mcu) RT-Thread（已实现骨架）
 
-- AMP / RTOS：SDK 缺 `rtos/` BSP 与 rk3576 amp 打包配置（`amp.its`/板级 defconfig/
-  `parameters-amp.txt`）。framework（内核 `rk3576-amp.dtsi`+驱动、U-Boot `rk3576-amp.config`）
-  已在，需从带 `rtos` 的厂商 SDK 补齐。用户可用小核为 `bus_cm0`（BL31 v1.14 已支持
-  `bus_mcu` NS 配置与 AMP OS）。
-- FDCAN 移交小核：CAN0/1 位于 `0x2ac00000`/`0x2ac10000`，落在 MCU 非缓存外设窗口内；
-  Linux dts 保持 disabled、pin 由 MCU 固件配置。
+- 依赖仓库（个人 fork，Rockchip 未公开）：
+  - `https://github.com/starwey604/rk3576-rtos` @ `8541f7a`（RT-Thread 4.1.1 + `bsp/rockchip`，含 `rk3576-mcu`）
+  - `https://github.com/starwey604/rk3576-hal`  @ `277de3f`（RK HAL，被 rtos 的 symlink 依赖）
+  - 通过 `sdk/local_manifests/01-amp.xml` 挂到 SDK 的 `rtos/`、`hal/`。
+- 板级（`device/rockchip` patch）：
+  - `parameter-amp.txt`：extboot 布局 + **8 MiB `amp` 分区**（`0x4000` 扇区）。
+  - `package-file-amp`：打包 `amp.img`。
+  - `amp_mcu_rtt.its`：Linux + M0 RT-Thread 的 FIT 描述（bus_mcu，`load=0x60000000`，`rpmsg_base=0x47d00000`）。
+  - `LubanCat_rk3576_buildroot_amp_mcu_defconfig`：`RK_AMP=y` + `rk3576-mcu` + `rk-amp` u-boot fragment。
+  - AMP 框架脚本同步为较新的 Forlinx/Rockchip 版（`RTT_EXEC`、`CROSS_COMPILE`、riscv/hpmcu）。
+- 内核（kernel fork，`e93d23c5a`）：
+  - `rk3576-amp.dtsi` 保留内存对齐 M0 BSP：`mcu@60000000`、`amp-shmem@47900000`(4MiB，页对齐，预留 UIO mmap)、`rpmsg@47d00000`、`rpmsg-dma@47f00000`。
+  - 新增 `rk3576-lubancat-generic-mcu.dts`（含 `rk3576-amp.dtsi`）。
+- 工具链：M0 使用公版 `arm-none-eabi`（容器内 `apt install gcc-arm-none-eabi`）。
+
+> **需板上核对/待办**：
+> - M0 控制台 UART5 的引脚（`rk3576-amp.dtsi` 现用 LubanCat 的 `uart5m2`；M0 BSP 默认 `board/evb`）。
+> - `RK_UBOOT_CFG` 默认 `rk3576`，确认 LubanCat 板实际使用的 u-boot defconfig。
+> - 后续 UIO 共享消息：`amp-shmem@47900000`（4 MiB）已按页对齐预留，可绑定 UIO 驱动或经 `/dev/mem` 映射；RPMSG vring 在 `0x47d00000`。
+
+## FDCAN 移交小核（待办）
+
+CAN0/1 位于 `0x2ac00000`/`0x2ac10000`，落在 MCU 非缓存外设窗口 `0x20000000–0x48200000` 内；
+Linux dts 保持 disabled、pin 由 MCU 固件配置。

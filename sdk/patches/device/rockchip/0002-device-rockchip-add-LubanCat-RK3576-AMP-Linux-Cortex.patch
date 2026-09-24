@@ -1,0 +1,259 @@
+From c7317dc43d8f96624ac2955ba040fedfe125c126 Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Thu, 24 Sep 2026 16:51:48 +0800
+Subject: [PATCH] device/rockchip: add LubanCat RK3576 AMP (Linux + Cortex-M0
+ RT-Thread)
+
+Add the combo-B AMP board support for LubanCat RK3576, modeled on the Rockchip/Forlinx AMP SDK and adapted to LubanCat:
+
+- parameter-amp.txt: extboot layout + an 8 MiB 'amp' partition (0x4000 sectors) for amp.img.
+
+- package-file-amp: include the amp.img in the packed firmware.
+
+- amp_mcu_rtt.its: FIT descriptor for Linux + Cortex-M0 (bus_mcu) RT-Thread; reuses Rockchip's validated M0 memory map (load=0x60000000, rpmsg_base=0x47d00000).
+
+- LubanCat_rk3576_buildroot_amp_mcu_defconfig: RK_AMP with rk3576-mcu target, rk-amp u-boot fragment, FIT image.
+
+- Sync AMP framework scripts (Config.in.amp, mk-amp.sh, 25-amp.sh) with the newer Forlinx/Rockchip version: RTT_EXEC handling, CROSS_COMPILE for HAL, riscv/hpmcu support.
+---
+ ...ubanCat_rk3576_buildroot_amp_mcu_defconfig | 27 ++++++++
+ .chips/rk3576/amp_mcu_rtt.its                 | 69 +++++++++++++++++++
+ .chips/rk3576/package-file-amp                |  8 +++
+ .chips/rk3576/parameter-amp.txt               | 14 ++++
+ common/configs/Config.in.amp                  |  4 ++
+ common/scripts/mk-amp.sh                      | 15 ++--
+ 6 files changed, 130 insertions(+), 7 deletions(-)
+ create mode 100644 .chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+ create mode 100644 .chips/rk3576/amp_mcu_rtt.its
+ create mode 100644 .chips/rk3576/package-file-amp
+ create mode 100644 .chips/rk3576/parameter-amp.txt
+
+diff --git a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+new file mode 100644
+index 0000000..5d3ccf5
+--- /dev/null
++++ b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+@@ -0,0 +1,27 @@
++RK_BUILDROOT_BASE_CFG="rk3576_lubancat"
++# RK_YOCTO is not set
++RK_ROOTFS_HOSTNAME_CUSTOM=y
++RK_ROOTFS_HOSTNAME="LubanCat"
++RK_ROOTFS_INSTALL_MODULES=y
++# RK_ROOTFS_STRIP_MODULES is not set
++# RK_WIFIBT is not set
++RK_UBOOT_SPL=y
++RK_UBOOT_CFG_FRAGMENTS="rk-amp"
++RK_AMP=y
++RK_AMP_ARCH="arm"
++RK_AMP_HAL_TARGET="rk3576-mcu"
++RK_AMP_RTT_TARGET="rk3576-64"
++RK_AMP_MCU_RTT_TARGET="rk3576-mcu"
++RK_AMP_FIT_ITS="amp_mcu_rtt.its"
++RK_KERNEL_PREFERRED="6.1"
++RK_KERNEL_CFG="lubancat_linux_rk3576_defconfig"
++RK_KERNEL_DTS_NAME="rk3576-lubancat-generic-mcu"
++RK_KERNEL_EXTBOOT=y
++# RK_RECOVERY is not set
++RK_EXTRA_PARTITION_1_BUILTIN=y
++RK_EXTRA_PARTITION_2_BUILTIN=y
++RK_PARAMETER="parameter-amp.txt"
++RK_USE_FIT_IMG=y
++RK_PACKAGE_FILE_CUSTOM=y
++RK_PACKAGE_FILE="package-file-amp"
++# RK_NETWORK_CHECK is not set
+diff --git a/.chips/rk3576/amp_mcu_rtt.its b/.chips/rk3576/amp_mcu_rtt.its
+new file mode 100644
+index 0000000..61cd1cb
+--- /dev/null
++++ b/.chips/rk3576/amp_mcu_rtt.its
+@@ -0,0 +1,69 @@
++/* SPDX-License-Identifier: BSD-3-Clause */
++/*
++ * Copyright (c) 2024 Rockchip Electronics Co., Ltd.
++ */
++
++/dts-v1/;
++/ {
++	description = "FIT source file for rockchip AMP";
++	#address-cells = <1>;
++
++	images {
++		mcu {
++			description  = "bus_mcu";       // bus_mcu or pmu_mcu
++			data         = /incbin/("rtt.bin");
++			type         = "standalone";
++			compression  = "none";
++			arch         = "arm";
++			udelay       = <10000>;
++			load         = <0x60000000>;
++			cpu          = <0>;
++			compile {
++				size         = <0x00100000>;  
++				sys          = "rtt";    // "hal" or "rtt"
++				rtt_config   = "board/evb/defconfig"
++				core         = "mcu";    // "mcu" or "ap"
++			};
++
++			hash {
++				algo = "sha256";
++			};
++		};
++	};
++
++	share {
++		rpmsg_base      = <0x47d00000>;
++		rpmsg_size      = <0x00400000>;
++	};
++
++	configurations {
++		default = "conf";
++		conf {
++			description = "Rockchip AMP images";
++			rollback-index = <0x0>;
++			loadables = "mcu";
++
++			signature {
++				algo = "sha256,rsa2048";
++				padding = "pss";
++				key-name-hint = "dev";
++				sign-images = "loadables";
++			};
++
++			/* - run linux on cpu0
++			 * - it is brought up by amp(that run on U-Boot)
++			 * - it is boot entry depends on U-Boot
++			 */
++			linux {
++				description  = "linux-os";
++				arch         = "arm64";
++				cpu          = <0x000>;
++				thumb        = <0>;
++				hyp          = <0>;
++				udelay       = <0>;
++				load         = <0x42100000>;
++				load_c       = <0x45480000>;
++			};
++		};
++	};
++};
+diff --git a/.chips/rk3576/package-file-amp b/.chips/rk3576/package-file-amp
+new file mode 100644
+index 0000000..e4ca966
+--- /dev/null
++++ b/.chips/rk3576/package-file-amp
+@@ -0,0 +1,8 @@
++# NAME	PATH
++package-file	package-file
++parameter	parameter.txt
++bootloader	MiniLoaderAll.bin
++uboot	uboot.img
++boot	boot.img
++amp	amp.img
++rootfs	rootfs.img
+diff --git a/.chips/rk3576/parameter-amp.txt b/.chips/rk3576/parameter-amp.txt
+new file mode 100644
+index 0000000..37f593b
+--- /dev/null
++++ b/.chips/rk3576/parameter-amp.txt
+@@ -0,0 +1,14 @@
++FIRMWARE_VER: 1.0
++MACHINE_MODEL: RK3576
++MACHINE_ID: 007
++MANUFACTURER: RK3576
++MAGIC: 0x5041524B
++ATAG: 0x00200800
++MACHINE: 0xffffffff
++CHECK_MASK: 0x80
++PWR_HLD: 0,0,A,0,1
++TYPE: GPT
++GROW_ALIGN: 0
++CMDLINE: mtdparts=:0x00004000@0x00004000(uboot),0x00040000@0x00008000(boot:bootable),0x00004000@0x00048000(amp),-@0x0004c000(rootfs:grow)
++uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
++uuid:boot=7A3F0000-0000-446A-8000-702F00006273
+diff --git a/common/configs/Config.in.amp b/common/configs/Config.in.amp
+index 09af409..179227c 100644
+--- a/common/configs/Config.in.amp
++++ b/common/configs/Config.in.amp
+@@ -14,6 +14,7 @@ config RK_AMP_ARCH
+ 	string
+ 	default "arm" if RK_AMP_ARM32
+ 	default "arm64" if RK_AMP_ARM64
++	default "riscv" if RK_AMP_RISCV
+ 
+ choice
+ 	prompt "arch"
+@@ -26,6 +27,9 @@ config RK_AMP_ARM64
+ config RK_AMP_ARM32
+ 	bool "arm"
+ 
++config RK_AMP_RISCV
++	bool "riscv"
++
+ endchoice # AMP arch
+ 
+ config RK_AMP_HAL_TARGET
+diff --git a/common/scripts/mk-amp.sh b/common/scripts/mk-amp.sh
+index aecdb13..55d5e2e 100755
+--- a/common/scripts/mk-amp.sh
++++ b/common/scripts/mk-amp.sh
+@@ -66,7 +66,7 @@ build_hal()
+ 
+ 	cd "$RK_RTOS_BSP_DIR/common/hal/project/"${!1}"/GCC"
+ 
+-	[ ! -n "$CC" ] || append=$CC
++	[ ! -n "$CC" ] || append="CROSS_COMPILE=$CC"
+ 	(
+ 		amp_touch_export FIRMWARE_CPU_BASE
+ 		amp_touch_export DRAM_SIZE
+@@ -107,7 +107,7 @@ build_rtthread()
+ 	amp_touch_export SRAM_SIZE RTT_SRAM_SIZE
+ 	amp_touch_export SHMEM_BASE RTT_SHMEM_BASE
+ 	amp_touch_export SHMEM_SIZE RTT_SHMEM_SIZE
+-	amp_touch_export CC RTT_EXEC_PATH
++	amp_touch_export RTT_EXEC RTT_EXEC_PATH
+ 
+ 	ROOT_PART_OFFSET=$(rk_partition_start root)
+ 	ROOT_PART_SIZE=$(rk_partition_size root)
+@@ -181,17 +181,18 @@ build_images()
+ 		for p in FIRMWARE_CPU_BASE DRAM_SIZE SRAM_BASE SRAM_SIZE SHMEM_BASE \
+ 			 SHMEM_SIZE LINUX_RPMSG_BASE LINUX_RPMSG_SIZE CUR_CPU
+ 		do
+-			echo $(env | grep -w $p && true)
++			echo $(set | grep -w "^$p" && true)
+ 		done
+ 
+ 		SYS=$(amp_get_string "$ITS_IMAGE" sys)
+ 		CORE=$(amp_get_string "$ITS_IMAGE" core)
+ 
+-		# In RTT: 'CC' means the directory where the GCC tools are located.
+-		# In HAL: 'CC' means the directory and the prefix of GCC.
+ 		CC=$(amp_get_string "$ITS_IMAGE" cc)
+ 		[ ! -n "$CC" ] || CC="${RK_SDK_DIR}/${CC}"
+ 
++		RTT_EXEC=$(amp_get_string "$ITS_IMAGE" rtt_exec)
++		[ ! -n "$RTT_EXEC" ] || RTT_EXEC="${RK_SDK_DIR}/${RTT_EXEC}"
++
+ 		SYS="${SYS}${CORE:+_$CORE}"
+ 
+ 		case $SYS in
+@@ -241,7 +242,7 @@ build_hook()
+ 		set +a
+ 	fi
+ 
+-	CORE_NUMBERS=$(grep -wcE "amp[0-9]* {|mcu {" $ITS_FILE)
++	CORE_NUMBERS=$(grep -wcE "amp[0-9]* {|mcu {|hpmcu {" $ITS_FILE)
+ 	echo "CORE_NUMBERS=$CORE_NUMBERS"
+ 
+ 	EXT_SHARE=$(amp_get_node "$(cat $ITS_FILE)" share)
+@@ -261,7 +262,7 @@ build_hook()
+ 		fi
+ 	fi
+ 
+-	ITS_IMAGES=$(grep -wE "amp[0-9]* {|mcu {" $ITS_FILE | grep -oE "amp[0-9]*|mcu")
++	ITS_IMAGES=$(grep -wE "amp[0-9]* {|mcu {|hpmcu {" $ITS_FILE | grep -oE "amp[0-9]*|mcu")
+ 	build_images "$ITS_IMAGES"
+ 
+ 	cd "$RK_OUTDIR"
+-- 
+2.55.0
+

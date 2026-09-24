@@ -18,5 +18,22 @@ buildroot_version = "2024.02-rkr5 (Rockchip fork)"
 origin = "https://github.com/starwey604/kernel"      # personal fork = source of truth
 upstream = "https://github.com/LubanCat/kernel.git"  # vendor, for future merges
 branch = "lbc-develop-6.1-rt36"
-commit = "3d027a80ff4023e4ee6dba24db140a2eab2c1f28"
+commit = "e93d23c5a3893ea568d3fdad21656eadb6346188"
 note = "Consumed by the SDK via the kernel-6.1 symlink. Pin `commit` for reproducible builds. The vendor manifest still pins the older 95cee116 on lbc-develop-6.1."
+
+# AMP: Linux + Cortex-M0 (bus_mcu) RT-Thread on RK3576.
+# rk3576-rtos and rk3576-hal are personal forks (Rockchip's trees are not public);
+# they are pulled into the SDK by sdk/local_manifests/01-amp.xml at the pinned commits.
+[amp]
+combo = "Linux + Cortex-M0 (bus_mcu) RT-Thread"
+amp_partition = "8 MiB (0x4000 sectors)"
+board_dts = "rk3576-lubancat-generic-mcu"
+board_defconfig = "LubanCat_rk3576_buildroot_amp_mcu_defconfig"
+its = "amp_mcu_rtt.its"
+parameter = "parameter-amp.txt"
+toolchain = "arm-none-eabi (public Arm GNU toolchain; `apt install gcc-arm-none-eabi` or ARM 10-2020-q4-major)"
+rtos_repo = "https://github.com/starwey604/rk3576-rtos"
+rtos_commit = "8541f7ad0c584469cc6dd725b6e489d1e9d29e4a"
+hal_repo = "https://github.com/starwey604/rk3576-hal"
+hal_commit = "277de3fd4b0e640654ee73bb3308be2ef01e3aad"
+manifest = "sdk/local_manifests/01-amp.xml"

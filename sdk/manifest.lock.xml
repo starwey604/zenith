@@ -2,6 +2,7 @@
 <manifest>
   <remote name="internal" fetch="ssh://git@gitlab.ebf.local/rockchip/linux_internal/"/>
   <remote name="origin" fetch="https://github.com/LubanCat/"/>
+  <remote name="starwey" fetch="https://github.com/starwey604/"/>
   
   <default remote="origin" sync-j="4"/>
   
@@ -13,9 +14,9 @@
   <project name="buildroot" revision="ad92be956b0fe4251408b9bf30dee24e8780d14a" upstream="4c038732919b526ea263fd2316feac97dc082213" dest-branch="4c038732919b526ea263fd2316feac97dc082213" clone-depth="1">
     <linkfile src="build/envsetup.sh" dest="envsetup.sh"/>
   </project>
-  <project name="debian11" revision="4ac7fced01309643a19b852439caaaa3be20b76a" dest-branch="debian11" clone-depth="1"/>
-  <project name="debian12" revision="8d1fc893b448b623337ee565f4d6bd1f80d70df3" dest-branch="debian12" clone-depth="1"/>
-  <project name="device_rockchip" path="device/rockchip" revision="e2c5242cd969f782e9c92b6e438c2b865e50ebff" upstream="1f1392c6e7f43d4654b24d2fcfefed5811e61a7a" dest-branch="main" clone-depth="1">
+  <project name="debian11" revision="4ac7fced01309643a19b852439caaaa3be20b76a" upstream="ef491103dd415f16364285a1ea9958949355fb7c" dest-branch="debian11" clone-depth="1"/>
+  <project name="debian12" revision="8d1fc893b448b623337ee565f4d6bd1f80d70df3" upstream="58085b6c8a03e21ad1afae00c8a9a80ccca87b80" dest-branch="debian12" clone-depth="1"/>
+  <project name="device_rockchip" path="device/rockchip" revision="c7317dc43d8f96624ac2955ba040fedfe125c126" upstream="1f1392c6e7f43d4654b24d2fcfefed5811e61a7a" dest-branch="main" clone-depth="1">
     <linkfile src="common/scripts/build.sh" dest="build.sh"/>
     <linkfile src="common/Makefile" dest="Makefile"/>
     <linkfile src="common/scripts/rkflash.sh" dest="rkflash.sh"/>
@@ -26,7 +27,7 @@
   <project name="external/chromium" remote="internal" revision="e011b26200c4e4e059463a84c533bf5a42217c36" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
   <project name="external/common_algorithm" remote="internal" revision="321899fdde38f1b72db4d542da4c271d4f877516" upstream="refs/tags/linux-6.1-stan-rkr5.1" dest-branch="refs/tags/linux-6.1-stan-rkr5.1" clone-depth="1"/>
   <project name="external/dpdk" remote="internal" revision="77b6da771bdd80d5dad8f484994d2a44306ae7a1" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
-  <project name="external/ethercat_igh" remote="internal" revision="a604f1c8cadf4d095eea562102cc988ad6fa9a5a" clone-depth="1"/>
+  <project name="external/ethercat_igh" remote="internal" revision="a604f1c8cadf4d095eea562102cc988ad6fa9a5a" upstream="775df71d3cff2be090572ead3472ff36c5e90486" dest-branch="775df71d3cff2be090572ead3472ff36c5e90486" clone-depth="1"/>
   <project name="external/firmware" remote="internal" revision="93649896c8b31b00ff0c997188c4af58c09786b7" clone-depth="1"/>
   <project name="external/gstreamer-rockchip" remote="internal" revision="ca829e0dc1d814df01711a5796e7510812af9e85" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
   <project name="external/iva" remote="internal" revision="edfa2c5dab7cffcf8a35731c4cb7ed9c090b0dec" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
@@ -55,12 +56,14 @@
   <project name="external/uvc_app" remote="internal" revision="2974d251b0df0f28fdbfe1c9c8a319aa03833320" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
   <project name="gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu" path="prebuilts/gcc/linux-x86/aarch64/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu" revision="adbb295a970c4b39dc487c95226fe84d2c460072" clone-depth="1"/>
   <project name="gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf" path="prebuilts/gcc/linux-x86/arm/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf" revision="2e89382ca3f8c34086272509ae4d7a5c340ffafc" clone-depth="1"/>
-  <project name="kernel" path="kernel-5.10" revision="163eb52c309272d964d899375b93002b58059239" dest-branch="lbc-develop-5.10" clone-depth="1"/>
-  <project name="kernel" path="kernel-6.1" revision="3d027a80ff4023e4ee6dba24db140a2eab2c1f28" upstream="95cee11643baab39f63d1de481b37b90d8a2f43b" dest-branch="lbc-develop-6.1" clone-depth="1"/>
+  <project name="kernel" path="kernel-5.10" revision="163eb52c309272d964d899375b93002b58059239" upstream="c9b55815cf77f85c4d7e7eb1eecf4fcd52b2d3dd" dest-branch="lbc-develop-5.10" clone-depth="1"/>
+  <project name="kernel" path="kernel-6.1" revision="e93d23c5a3893ea568d3fdad21656eadb6346188" upstream="1bc19c520831b6d0ca7d7afb4639189a2064e9bc" dest-branch="lbc-develop-6.1" clone-depth="1"/>
   <project name="lubancat-bin" revision="62e2a1db86d9ce76b35d38314634ca8b201c2ce4" dest-branch="main" clone-depth="1"/>
+  <project name="rk3576-hal" path="hal" remote="starwey" revision="277de3fd4b0e640654ee73bb3308be2ef01e3aad" groups="local::01-amp"/>
+  <project name="rk3576-rtos" path="rtos" remote="starwey" revision="8541f7ad0c584469cc6dd725b6e489d1e9d29e4a" groups="local::01-amp"/>
   <project name="rkbin" revision="58a39b47f77a26a1e110fa1a1ce80bcfcb0b3505" dest-branch="main" clone-depth="1"/>
   <project name="tools" revision="c27464a38afb984e5928e90371b57cd89291f288" dest-branch="main" clone-depth="1"/>
   <project name="u-boot" revision="ce67cf027de25347c5c790c3087f6e663f4f3d56" dest-branch="main" clone-depth="1"/>
-  <project name="ubuntu20.04" revision="d2081d7040f33c66d77cd0085165d23979f069f1" dest-branch="ubuntu20.04" clone-depth="1"/>
-  <project name="ubuntu22.04" revision="f5aeff1af5f8ffa2d1bcb2ac788eee5ace19a306" dest-branch="ubuntu22.04" clone-depth="1"/>
+  <project name="ubuntu20.04" revision="d2081d7040f33c66d77cd0085165d23979f069f1" upstream="8bfa2d3e2d19162791b404b8c919460c78caa482" dest-branch="ubuntu20.04" clone-depth="1"/>
+  <project name="ubuntu22.04" revision="f5aeff1af5f8ffa2d1bcb2ac788eee5ace19a306" upstream="b2109962e8ff50dd671f3ff570af5dfa4ba1bd0a" dest-branch="ubuntu22.04" clone-depth="1"/>
 </manifest>
