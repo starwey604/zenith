@@ -83,7 +83,7 @@ kernel 不做 patch series，而是维护个人 fork：
 - 工具链：M0 使用公版 `arm-none-eabi`（容器内 `apt install gcc-arm-none-eabi`）。
 
 > **需板上核对/待办**：
-> - M0 控制台 UART5 的引脚（`rk3576-amp.dtsi` 现用 LubanCat 的 `uart5m2`；M0 BSP 默认 `board/evb`）。
+> - M0 控制台 UART5 已定为 **M0 mux（GPIO3_D4=RX / GPIO3_D5=TX，40pin pin16/18）**：内核 `rk3576-amp.dtsi` 用 `uart5m0_xfer`，M0 BSP 用 `uart5_m0_iomux_config()`（默认的 M1=GPIO4_B0/B1 不在 40pin，M2=GPIO2_A4/A5 与 SDMMC0 冲突）。
 > - `RK_UBOOT_CFG` 默认 `rk3576`，确认 LubanCat 板实际使用的 u-boot defconfig。
 > - 后续 UIO 共享消息：`amp-shmem@47900000`（4 MiB）已按页对齐预留，可绑定 UIO 驱动或经 `/dev/mem` 映射；RPMSG vring 在 `0x47d00000`。
 
