@@ -48,17 +48,22 @@ PLATE_X_MIN = 18.4        # right edge of the HR911130A jack
 # Power-input (24V -> 5V) keep-out on the right.   # TBC: real module footprint
 POWER_OPEN = (68.0, 8.0, 84.0, 20.0)
 
-# Fan: 15 x 15 x 4 mm, mounted under the plate above the SoC.
-FAN_U, FAN_THK = 15.0, 4.0
-FAN_SCREW_SPAN, FAN_SCREW_D = 12.0, 2.2
-FAN_OPEN_D = 12.5
+# Fan: 18 x 18 x 4 mm, mounted under the plate above the SoC.
+FAN_U, FAN_THK = 18.0, 4.0
+FAN_SCREW_SPAN, FAN_SCREW_D = 15.0, 1.8
+FAN_OPEN_D = 16.0
 FAN_CX, FAN_CY = 58.5, 32.2      # RK3576 centre, measured from the STEP
 
-# Camera B2B -> FPC30 adapter board we want to pin down.   # TBC: verify location
-ADAPTER_L, ADAPTER_W, ADAPTER_T = 24.0, 11.0, 1.6
-ADAPTER_CX, ADAPTER_CY = 57.0, 52.0
-ADAPTER_HOLE_SPAN_X = 20.0
-ADAPTER_HOLE_D = 2.7             # M2.5 screws
+# CAM1 board-to-board socket  "0.4mm BTB母座2x15P 双槽 立贴式"
+# board x 35.20..43.70, y 50.03..52.53, height 0.77  (from the STEP)
+CAM1_RECT = (35.20, 50.03, 43.70, 52.53)
+CAM1_H = 0.77
+# Adapter board: just covers CAM1 + two M2.5 screws.   # TBC: refine with user
+ADAPTER_L, ADAPTER_W, ADAPTER_T = 10.0, 10.0, 1.6
+ADAPTER_CX, ADAPTER_CY = 39.45, 51.0
+ADAPTER_Z0 = CAM1_H              # sits on top of the socket
+ADAPTER_HOLE_SPAN = 3.5          # the two M2.5 holes, along board y
+ADAPTER_HOLE_D = 2.7
 
 NOTCH = [(16.0, 56.0), (17.0, 55.0), (17.0, 52.5), (18.5, 51.0),
          (20.0, 52.5), (20.0, 55.0), (21.0, 56.0), (21.0, 57.5), (16.0, 57.5)]
@@ -109,16 +114,28 @@ def build_plate():
                           GAP - 2, FAN_SCREW_D, PLATE_T + 4))
     x0, y0, x1, y1 = POWER_OPEN
     s = s.cut(box_between(x0, y0, GAP - 2, x1, y1, GAP + PLATE_T + 2))
+    # two M2.5 holes for the CAM1 adapter board
+    for sy in (-1, 1):
+        s = s.cut(cyl(ADAPTER_CX, ADAPTER_CY + sy * ADAPTER_HOLE_SPAN,
+                      GAP - 2, ADAPTER_HOLE_D, PLATE_T + 4))
     return s
 
 
 def build_adapter():
     s = Part.makeBox(ADAPTER_L, ADAPTER_W, ADAPTER_T,
-                     Vector(ADAPTER_CX - ADAPTER_L / 2, ADAPTER_CY - ADAPTER_W / 2, 0))
-    for sx in (-1, 1):
-        s = s.cut(cyl(ADAPTER_CX + sx * ADAPTER_HOLE_SPAN_X / 2, ADAPTER_CY, -1,
-                      ADAPTER_HOLE_D, ADAPTER_T + 2))
+                     Vector(ADAPTER_CX - ADAPTER_L / 2, ADAPTER_CY - ADAPTER_W / 2,
+                            ADAPTER_Z0))
+    for sy in (-1, 1):
+        s = s.cut(cyl(ADAPTER_CX, ADAPTER_CY + sy * ADAPTER_HOLE_SPAN,
+                      ADAPTER_Z0 - 1, ADAPTER_HOLE_D, ADAPTER_T + 2))
     return s
+
+
+def build_adapter_spacers():
+    """M2.5 nylon spacers between the plate underside and the adapter board."""
+    z0 = ADAPTER_Z0 + ADAPTER_T
+    return [cyl(ADAPTER_CX, ADAPTER_CY + sy * ADAPTER_HOLE_SPAN, z0,
+                M25_CLEAR_D + 1.8, GAP - z0) for sy in (-1, 1)]
 
 
 def build_standoffs():
@@ -166,6 +183,8 @@ def build(doc_name="lbc3_hat"):
     show(build_adapter(), "B2B_adapter", COL_ADAPTER, doc)
     for i, st in enumerate(build_standoffs()):
         show(st, "STANDOFF_%d" % (i + 1), COL_STAND, doc)
+    for i, sp in enumerate(build_adapter_spacers()):
+        show(sp, "ADAPTER_SPACER_%d" % (i + 1), COL_ADAPTER, doc)
     doc.recompute()
     return doc
 
@@ -176,6 +195,8 @@ def fit_into_step(doc):
     show(to_step(build_adapter()), "B2B_adapter", COL_ADAPTER, doc)
     for i, st in enumerate(build_standoffs()):
         show(to_step(st), "STANDOFF_%d" % (i + 1), COL_STAND, doc)
+    for i, sp in enumerate(build_adapter_spacers()):
+        show(to_step(sp), "ADAPTER_SPACER_%d" % (i + 1), COL_ADAPTER, doc)
     doc.recompute()
     return doc
 
