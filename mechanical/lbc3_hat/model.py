@@ -62,10 +62,18 @@ CAM1_RECT = (35.20, 50.03, 43.70, 52.53)
 CAM1_H = 0.77
 # Adapter board: just covers CAM1 + two M2.5 screws.   # TBC: refine with user
 ADAPTER_L, ADAPTER_W, ADAPTER_T = 10.0, 10.0, 1.6
-ADAPTER_CX, ADAPTER_CY = 39.45, 51.0
+ADAPTER_CX, ADAPTER_CY = 39.45, 51.28
 ADAPTER_Z0 = CAM1_H              # sits on top of the socket
-ADAPTER_HOLE_SPAN = 3.5          # the two M2 holes, along board y
-ADAPTER_HOLE_D = M2_CLEAR_D
+# CAM1 adapter retention.
+# The top plate is a PCB and cannot carry moulded bosses, so the downward
+# pressure comes from a SEPARATE part: a 3D-printed press bar screwed to the
+# plate's underside.  It is shaped to clear the IR receiver (y>=51.12) and the
+# 24P FPC (y<=46.24), and leaves the +y edge free for the 30P ribbon.
+PRESS_BAR = (33.0, 47.2, 46.0, 50.4)      # x0, y0, x1, y1
+PRESS_BAR_Z0 = 3.4                        # bar bottom (foam sits below it)
+FOAM_T = 1.0                              # silicone/EPDM pad -> compliance
+PRESS_BAR_HOLES = [(34.6, 48.8), (44.4, 48.8)]   # 2x M2 into heat-set inserts
+M2_INSERT_D = 3.6                         # cosmetic: modelled as a hole
 
 NOTCH = [(16.0, 56.0), (17.0, 55.0), (17.0, 52.5), (18.5, 51.0),
          (20.0, 52.5), (20.0, 55.0), (21.0, 56.0), (21.0, 57.5), (16.0, 57.5)]
@@ -73,6 +81,7 @@ NOTCH = [(16.0, 56.0), (17.0, 55.0), (17.0, 52.5), (18.5, 51.0),
 COL_BOARD, COL_PLATE = (0.20, 0.45, 0.20), (0.20, 0.35, 0.70)
 COL_STAND, COL_HDR = (0.85, 0.55, 0.10), (0.35, 0.35, 0.35)
 COL_FAN, COL_ADAPTER = (0.15, 0.15, 0.15), (0.10, 0.60, 0.10)
+COL_PRESS, COL_FOAM_PAD = (0.85, 0.30, 0.30), (0.95, 0.85, 0.20)
 
 
 # --------------------------------------------------------------------------
@@ -116,28 +125,30 @@ def build_plate():
                           GAP - 2, FAN_SCREW_D, PLATE_T + 4))
     x0, y0, x1, y1 = POWER_OPEN
     s = s.cut(box_between(x0, y0, GAP - 2, x1, y1, GAP + PLATE_T + 2))
-    # two M2.5 holes for the CAM1 adapter board
-    for sy in (-1, 1):
-        s = s.cut(cyl(ADAPTER_CX, ADAPTER_CY + sy * ADAPTER_HOLE_SPAN,
-                      GAP - 2, ADAPTER_HOLE_D, PLATE_T + 4))
+    # two M2 holes for the printed press bar that holds the CAM1 adapter
+    for hx, hy in PRESS_BAR_HOLES:
+        s = s.cut(cyl(hx, hy, GAP - 2, M2_CLEAR_D, PLATE_T + 4))
     return s
 
 
 def build_adapter():
-    s = Part.makeBox(ADAPTER_L, ADAPTER_W, ADAPTER_T,
-                     Vector(ADAPTER_CX - ADAPTER_L / 2, ADAPTER_CY - ADAPTER_W / 2,
-                            ADAPTER_Z0))
-    for sy in (-1, 1):
-        s = s.cut(cyl(ADAPTER_CX, ADAPTER_CY + sy * ADAPTER_HOLE_SPAN,
-                      ADAPTER_Z0 - 1, ADAPTER_HOLE_D, ADAPTER_T + 2))
+    """The user's CAM1 -> FPC30 adapter board, just resting on the socket."""
+    return Part.makeBox(ADAPTER_L, ADAPTER_W, ADAPTER_T,
+                        Vector(ADAPTER_CX - ADAPTER_L / 2, ADAPTER_CY - ADAPTER_W / 2,
+                               ADAPTER_Z0))
+
+
+def build_press_bar():
+    x0, y0, x1, y1 = PRESS_BAR
+    s = box_between(x0, y0, PRESS_BAR_Z0, x1, y1, GAP)
+    for hx, hy in PRESS_BAR_HOLES:                 # heat-set insert holes
+        s = s.cut(cyl(hx, hy, PRESS_BAR_Z0 + 2.0, M2_INSERT_D, GAP - PRESS_BAR_Z0))
     return s
 
 
-def build_adapter_spacers():
-    """M2 nylon spacers between the plate underside and the adapter board."""
-    z0 = ADAPTER_Z0 + ADAPTER_T
-    return [cyl(ADAPTER_CX, ADAPTER_CY + sy * ADAPTER_HOLE_SPAN, z0,
-                M2_SPACER_OD, GAP - z0) for sy in (-1, 1)]
+def build_press_foam():
+    x0, y0, x1, y1 = PRESS_BAR
+    return box_between(x0, y0, PRESS_BAR_Z0 - FOAM_T, x1, y1, PRESS_BAR_Z0)
 
 
 def build_standoffs():
@@ -186,8 +197,8 @@ def build(doc_name="lbc3_hat"):
     show(build_adapter(), "B2B_adapter", COL_ADAPTER, doc)
     for i, st in enumerate(build_standoffs()):
         show(st, "STANDOFF_%d" % (i + 1), COL_STAND, doc)
-    for i, sp in enumerate(build_adapter_spacers()):
-        show(sp, "ADAPTER_SPACER_%d" % (i + 1), COL_ADAPTER, doc)
+    show(build_press_bar(), "PRESS_BAR", COL_PRESS, doc)
+    show(build_press_foam(), "PRESS_FOAM", COL_FOAM_PAD, doc)
     doc.recompute()
     return doc
 
@@ -198,8 +209,8 @@ def fit_into_step(doc):
     show(to_step(build_adapter()), "B2B_adapter", COL_ADAPTER, doc)
     for i, st in enumerate(build_standoffs()):
         show(to_step(st), "STANDOFF_%d" % (i + 1), COL_STAND, doc)
-    for i, sp in enumerate(build_adapter_spacers()):
-        show(to_step(sp), "ADAPTER_SPACER_%d" % (i + 1), COL_ADAPTER, doc)
+    show(to_step(build_press_bar()), "PRESS_BAR", COL_PRESS, doc)
+    show(to_step(build_press_foam()), "PRESS_FOAM", COL_FOAM_PAD, doc)
     doc.recompute()
     return doc
 
