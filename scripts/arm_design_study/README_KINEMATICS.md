@@ -16,6 +16,10 @@ python3 -m venv .venv
 .venv/bin/python -m pytest -q scripts/arm_design_study/tests
 ```
 
+单姿态多逆解入口是 [ik_solutions.py](ik_solutions.py) 的 `enumerate_ik(arm, target, seeds=..., collision_free=...)`。`target` 是**臂座坐标系下的法兰** 4×4 位姿，`seeds` 可传一个 6 维关节向量或多个；求解器还会加入零位、关节中位和确定性的 Sobol 种子。默认累计尝试 32、64、128 个 Sobol 点；连续两档没有新增物理分支就停止。返回的 `branches[].canonical_q_rad` 按 2π 去重，`branches[].lifts[].q_rad` 列出限位内的各圈数，供后续轨迹图计算真实关节位移。`to_dict()` 可直接写入 JSON。
+
+场景相关碰撞应通过 `collision_free(q)` 传入；回调返回布尔值，且会对每个提升解调用。没有回调时 `diagnostics.collision_checked` 为 `false`，结果只完成 FK 误差和限位筛选。`diagnostics.geometric_branches` 是碰撞筛选前的物理分支数，`independent_branches` 是至少保留一个无碰撞提升解的分支数；`best_position_error_m` 和 `best_angle_error_rad` 对应保留的解。`stable` 只表示这次确定性采样连续两档没有找到新分支，不能证明一般六轴机构所有逆解已经穷尽，也不能把空结果当作不可达证明。
+
 运行**合成接口**路径检查，并把逐点关节角和失败码写到被 Git 忽略的 `runs/`：
 
 ```bash
