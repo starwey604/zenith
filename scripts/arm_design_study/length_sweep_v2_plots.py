@@ -41,10 +41,9 @@ def _render_many_robots(rows: list[dict], best_rows: list[dict],
                         frontier: set[str], output_dir: Path) -> tuple[Path, Path]:
     """Keep a large generated-topology catalog readable without a 134-item legend."""
     metrics = (("一至三级存矿均衡通过率", 0),
-               ("取矿越过边沿通过率", 1),
-               ("英雄头装配通过率", 2))
+               ("取矿越过边沿通过率", 1))
     fig, axes = plt.subplots(1, 3, figsize=(19, 8), constrained_layout=True)
-    for ax, (title, metric_index) in zip(axes, metrics):
+    for ax, (title, metric_index) in zip(axes[:2], metrics):
         top = sorted(best_rows, key=lambda row: task_fractions(row)[metric_index],
                      reverse=True)[:18]
         values = [task_fractions(row)[metric_index] * 100 for row in reversed(top)]
@@ -52,7 +51,13 @@ def _render_many_robots(rows: list[dict], best_rows: list[dict],
         ax.barh(names, values, color="#31788f")
         ax.set(xlim=(0, 100), xlabel="通过率 %", title=title)
         ax.grid(axis="x", alpha=0.2)
-    fig.suptitle("每个构型取四个泊位中的最佳值；显示各任务前18名")
+    module_counts = np.bincount([row["module_stress_complete"] for row in best_rows],
+                                minlength=10)
+    axes[2].bar(range(10), module_counts, color="#31788f")
+    axes[2].set(xticks=range(10), xlabel="通过的装配位姿数 / 9", ylabel="构型数",
+                title="英雄头装配：各构型最佳泊位的通过数")
+    axes[2].grid(axis="y", alpha=0.2)
+    fig.suptitle("每个构型取四个泊位中的最佳值；左两图显示各任务前18名")
     overview = output_dir / "configuration_overview.png"
     fig.savefig(overview, dpi=170)
     plt.close(fig)
@@ -67,11 +72,17 @@ def _render_many_robots(rows: list[dict], best_rows: list[dict],
                        edgecolors="black", linewidths=1.4)
     ranked = sorted(rows, key=lambda row: (robust_fraction(row), sum(task_fractions(row))),
                     reverse=True)
-    for row in ranked[:8]:
+    annotated = set()
+    for row in ranked:
+        if row["robot"] in annotated:
+            continue
+        annotated.add(row["robot"])
         storage, pickup, _ = task_fractions(row)
         ax.annotate(row["robot"].removeprefix("orth6r_"),
                     (pickup * 100, storage * 100), xytext=(4, 4),
                     textcoords="offset points", fontsize=8)
+        if len(annotated) >= 8:
+            break
     fig.colorbar(artist, ax=ax, label="9个位姿装配通过率 %")
     ax.set(xlabel="取矿通过率 %", ylabel="存矿均衡通过率 %",
            xlim=(-2, 102), ylim=(-2, 102),
