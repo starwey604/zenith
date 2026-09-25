@@ -37,6 +37,52 @@ def pareto_3d(rows: list[dict]) -> set[str]:
     return frontier
 
 
+def _render_many_robots(rows: list[dict], best_rows: list[dict],
+                        frontier: set[str], output_dir: Path) -> tuple[Path, Path]:
+    """Keep a large generated-topology catalog readable without a 134-item legend."""
+    metrics = (("一至三级存矿均衡通过率", 0),
+               ("取矿越过边沿通过率", 1),
+               ("英雄头装配通过率", 2))
+    fig, axes = plt.subplots(1, 3, figsize=(19, 8), constrained_layout=True)
+    for ax, (title, metric_index) in zip(axes, metrics):
+        top = sorted(best_rows, key=lambda row: task_fractions(row)[metric_index],
+                     reverse=True)[:18]
+        values = [task_fractions(row)[metric_index] * 100 for row in reversed(top)]
+        names = [row["robot"].removeprefix("orth6r_") for row in reversed(top)]
+        ax.barh(names, values, color="#31788f")
+        ax.set(xlim=(0, 100), xlabel="通过率 %", title=title)
+        ax.grid(axis="x", alpha=0.2)
+    fig.suptitle("每个构型取四个泊位中的最佳值；显示各任务前18名")
+    overview = output_dir / "configuration_overview.png"
+    fig.savefig(overview, dpi=170)
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(10.7, 7.3), constrained_layout=True)
+    fractions = np.asarray([task_fractions(row) for row in rows]) * 100
+    artist = ax.scatter(fractions[:, 1], fractions[:, 0], c=fractions[:, 2],
+                        cmap="viridis", vmin=0, vmax=100, s=40, alpha=0.75)
+    for row, (storage, pickup, _) in zip(rows, fractions):
+        if row["candidate_id"] in frontier:
+            ax.scatter([pickup], [storage], s=130, facecolors="none",
+                       edgecolors="black", linewidths=1.4)
+    ranked = sorted(rows, key=lambda row: (robust_fraction(row), sum(task_fractions(row))),
+                    reverse=True)
+    for row in ranked[:8]:
+        storage, pickup, _ = task_fractions(row)
+        ax.annotate(row["robot"].removeprefix("orth6r_"),
+                    (pickup * 100, storage * 100), xytext=(4, 4),
+                    textcoords="offset points", fontsize=8)
+    fig.colorbar(artist, ax=ax, label="9个位姿装配通过率 %")
+    ax.set(xlabel="取矿通过率 %", ylabel="存矿均衡通过率 %",
+           xlim=(-2, 102), ylim=(-2, 102),
+           title="六轴构型与底盘泊位：黑圈是三任务 Pareto 候选")
+    ax.grid(alpha=0.24)
+    tradeoff = output_dir / "three_task_tradeoff.png"
+    fig.savefig(tradeoff, dpi=175)
+    plt.close(fig)
+    return overview, tradeoff
+
+
 def render(summary_path: Path, output_dir: Path) -> dict:
     report = json.loads(summary_path.read_text(encoding="utf-8"))
     rows = report["rows"]
@@ -88,6 +134,12 @@ def render(summary_path: Path, output_dir: Path) -> dict:
                                  "pickup_fraction": pk, "module_fraction": md,
                                  **{fields[i + 4]: round(r["span_m"][str(i)] * 1000, 2)
                                     for i in range(2, 6)}})
+
+    if len(robots) > 12:
+        overview, tradeoff = _render_many_robots(rows, best_rows, frontier, output_dir)
+        return {"plots": [str(overview), str(tradeoff)],
+                "pareto_candidate_count": len(frontier),
+                "best_by_robot": [r["candidate_id"] for r in best_rows]}
 
     metrics = [("一至三级存矿（均衡通过率）", 0),
                ("取矿越过边沿（72项）", 1),
