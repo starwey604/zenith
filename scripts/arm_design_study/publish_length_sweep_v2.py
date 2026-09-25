@@ -9,6 +9,7 @@ import shutil
 import tarfile
 
 from .length_sweep_v2 import artifact_path
+from .length_sweep import _sha256
 from .length_sweep_v2_plots import render
 
 
@@ -50,6 +51,13 @@ def publish(work_dir: Path, result_dir: Path, archive_candidates: bool = False) 
             shutil.copy2(source, candidates_dir / source.name)
     for name in ("manifest.json", "summary.json", "summary.csv"):
         shutil.copy2(work_dir / name, result_dir / name)
+    for name, expected_key in (("scene.json", "base_scene_sha256"),
+                               ("spec.json", "spec_sha256")):
+        source = work_dir / "inputs" / name
+        if source.exists():
+            if _sha256(source) != manifest["inputs"][expected_key]:
+                raise ValueError(f"prepared input changed: {source}")
+            shutil.copy2(source, result_dir / name)
     rendered = render(result_dir / "summary.json", result_dir / "plots")
     return {"candidate_count": len(ids), "result_dir": str(result_dir),
             "candidate_archive": str(archive) if archive is not None else None,
