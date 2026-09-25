@@ -35,10 +35,10 @@ def test_generated_length_samples_include_shorter_and_longer_designs(tmp_path):
 
 
 def test_workstation_worker_cap_is_frozen_in_run_spec(tmp_path):
-    scene_path, spec_path = prepare_inputs(tmp_path, max_workers=12,
+    scene_path, spec_path = prepare_inputs(tmp_path, max_workers=20,
                                            reserve_available_memory_gib=4.0)
     scene = json.loads(scene_path.read_text(encoding="utf-8"))
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
-    assert spec["max_workers"] == 12
+    assert spec["max_workers"] == 20
     assert spec["reserve_available_memory_gib"] == 4.0
     assert len(generate_candidates(spec, scene)) == 536

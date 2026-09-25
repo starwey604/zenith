@@ -28,8 +28,8 @@ def prepare_inputs(output_root: Path, base_path: Path = DEFAULT_SCENE,
         raise ValueError("Sobol length sample count must be zero or a power of two >= 2")
     if solver_mode not in ("greedy", "graph"):
         raise ValueError("solver_mode must be greedy or graph")
-    if isinstance(max_workers, bool) or not isinstance(max_workers, int) or not 1 <= max_workers <= 16:
-        raise ValueError("max_workers must be 1..16")
+    if isinstance(max_workers, bool) or not isinstance(max_workers, int) or not 1 <= max_workers <= 24:
+        raise ValueError("max_workers must be 1..24")
     if reserve_available_memory_gib <= 0:
         raise ValueError("memory reserve must be positive")
     catalog = generate_topology_catalog()
