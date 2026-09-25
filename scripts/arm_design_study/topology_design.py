@@ -21,7 +21,7 @@ GENERATED_ARM_NAMES = (
     "rm_offset_shoulder",
 )
 
-_COMMON_LIMITS = np.array([
+COMMON_LIMITS = np.array([
     [-np.pi, np.pi],
     [-2.35, 2.35],
     [-2.70, 2.70],
@@ -43,7 +43,7 @@ def _arm(name: str, axes: list[list[float]], points: list[np.ndarray],
         axes=_unit_rows(axes),
         points=np.asarray(points, dtype=float),
         home_flange=transform(translation=np.asarray(flange_xyz, dtype=float)),
-        limits=_COMMON_LIMITS.copy(),
+        limits=COMMON_LIMITS.copy(),
         provenance=(
             "synthetic constrained-topology design assumption; "
             "main spans 0.290/0.390 m, shoulder height 0.150 m; " + description
