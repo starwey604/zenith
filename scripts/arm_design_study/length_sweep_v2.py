@@ -60,8 +60,8 @@ def validate_spec(spec: dict, scene: dict) -> None:
             or not explicit_valid):
         raise ValueError("v2 needs zero or a fixed-seed Sobol power-of-two count, one bounds mode, baseline and valid explicit spans")
     if (isinstance(spec.get("max_workers"), bool) or not isinstance(spec.get("max_workers"), int)
-            or not 1 <= spec["max_workers"] <= 3):
-        raise ValueError("v2 limits workers to one, two or three for the 12 GB laptop")
+            or not 1 <= spec["max_workers"] <= 16):
+        raise ValueError("v2 limits workers to 1..16; set the cap for available memory")
 
 
 def generate_candidates(spec: dict, scene: dict) -> list[dict]:

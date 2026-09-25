@@ -19,13 +19,19 @@ DEFAULT_PARKING = ("rear_left", "rear_center", "rear_right", "mid_left")
 def prepare_inputs(output_root: Path, base_path: Path = DEFAULT_SCENE,
                    sobol_sample_count: int = 0,
                    solver_mode: str = "greedy",
-                   ik_sobol_tiers: tuple[int, ...] = (8, 16, 32)) -> tuple[Path, Path]:
+                   ik_sobol_tiers: tuple[int, ...] = (8, 16, 32),
+                   max_workers: int = 3,
+                   reserve_available_memory_gib: float = 2.0) -> tuple[Path, Path]:
     """Freeze generated IDs, geometry and equal task settings into input files."""
     if sobol_sample_count < 0 or (sobol_sample_count and
                                   (sobol_sample_count < 2 or sobol_sample_count & (sobol_sample_count - 1))):
         raise ValueError("Sobol length sample count must be zero or a power of two >= 2")
     if solver_mode not in ("greedy", "graph"):
         raise ValueError("solver_mode must be greedy or graph")
+    if isinstance(max_workers, bool) or not isinstance(max_workers, int) or not 1 <= max_workers <= 16:
+        raise ValueError("max_workers must be 1..16")
+    if reserve_available_memory_gib <= 0:
+        raise ValueError("memory reserve must be positive")
     catalog = generate_topology_catalog()
     scene = copy.deepcopy(json.loads(base_path.read_text(encoding="utf-8")))
     scene["scenario_id"] = "rm_orthogonal_grammar_full_tasks_v1_chassis250_synthetic"
@@ -53,8 +59,8 @@ def prepare_inputs(output_root: Path, base_path: Path = DEFAULT_SCENE,
                          "sample_count": sobol_sample_count, "seed": 20260925,
                          "include_baseline": True},
             "parking_ids": list(DEFAULT_PARKING),
-            "max_workers": 3,
-            "reserve_available_memory_gib": 2.0,
+            "max_workers": max_workers,
+            "reserve_available_memory_gib": reserve_available_memory_gib,
             "notes": "同一完整任务分母；每构型基线加指定数量的固定Sobol长度样本，并遍历四个泊位。"}
     output_root.mkdir(parents=True, exist_ok=True)
     scene_path, spec_path = output_root / "scene.json", output_root / "spec.json"
@@ -72,12 +78,15 @@ def main() -> None:
     parser.add_argument("--length-samples", type=int, default=0)
     parser.add_argument("--solver", choices=("greedy", "graph"), default="greedy")
     parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument("--memory-reserve-gib", type=float, default=2.0)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--prepare-only", action="store_true")
     args = parser.parse_args()
     scene_path, spec_path = prepare_inputs(args.work_dir / "inputs",
                                           sobol_sample_count=args.length_samples,
-                                          solver_mode=args.solver)
+                                          solver_mode=args.solver,
+                                          max_workers=args.workers,
+                                          reserve_available_memory_gib=args.memory_reserve_gib)
     if args.prepare_only:
         print(json.dumps({"scene": str(scene_path), "spec": str(spec_path)}))
         return
