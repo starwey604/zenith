@@ -14,3 +14,5 @@
 `summary.csv` 可按构型、泊位和任务分数排序；`best_by_robot.csv` 给出每个构型的最佳泊位；`pareto_3tasks.csv` 记录非支配候选。`plots/configuration_overview.png` 展示存矿、取矿前列和各构型的装配通过数分布，`plots/three_task_tradeoff.png` 展示三任务权衡。`candidates.tar.gz` 通过 Git LFS 保存经校验的 536 份逐轨迹 JSON 报告，解包后位于 `candidates/`。`scene.json`、`spec.json` 和 `manifest.json` 固定本轮输入与哈希。
 
 本轮用旧的逐点贪心 IK 作全量筛查；完整多逆解图搜索尚未用于全部 536 个候选，因此 `ik_failed` 不能解释为数学上不可达。碰撞使用胶囊体与盒体近似，尚未评分收纳、载荷、材料、关节力矩、线束及动力学。规则值与合成设计假设的来源以输入文件中的 `source_type` 为准。
+
+名义长度的 [134 构型最小收纳搜索](../grammar_baseline_stowage_v1/README.md)现已单独完成；收纳不是上表任务分数的一部分。

@@ -15,3 +15,5 @@
 `summary.csv` 和 `best_by_robot.csv` 可直接比较构型、长度及泊位，`pareto_3tasks.csv` 给出非支配候选。`plots/` 提供图表；`candidates.tar.gz` 通过 Git LFS 保存经校验的 476 份逐轨迹 JSON 报告。`scene.json`、`spec.json`、`manifest.json` 固定输入与哈希。
 
 本轮仍是合成几何与逐点贪心 IK 筛选，尚未用完整多逆解图搜索重判所有轨迹。16 个 Sobol 样本不是连续长度最优证明；`ik_failed` 不等于数学不可达。收纳、实际外壳/线束、关节力矩、结构强度和动力学需单独评估，不能仅凭本表定型。
+
+同一长度矩阵的收纳搜索现已完成：[零间隙下限](../grammar_length_stowage_v1/README.md)和[额外要求 5 mm 几何间隙的敏感性分析](../grammar_length_stowage_5mm_v1/README.md)。两项 81.9% 任务首位都在后者找到小于 600 mm 的收纳姿态；该结论仍基于粗胶囊体，而非 CAD 外壳。
