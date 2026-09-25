@@ -1,0 +1,3 @@
+candidate_id,robot,parking_id,storage_fraction,pickup_fraction,module_fraction,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm
+orth6r_4ab675a33402_q00_rear_right,orth6r_4ab675a33402,rear_right,0.6207407407407407,0.7777777777777778,1.0,290.0,390.0,0.0,60.0
+orth6r_d94907e07b06_q00_rear_right,orth6r_d94907e07b06,rear_right,0.5807407407407408,0.8194444444444444,1.0,290.0,390.0,0.0,0.0
