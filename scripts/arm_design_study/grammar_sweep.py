@@ -21,7 +21,8 @@ def prepare_inputs(output_root: Path, base_path: Path = DEFAULT_SCENE,
                    solver_mode: str = "greedy",
                    ik_sobol_tiers: tuple[int, ...] = (8, 16, 32),
                    max_workers: int = 3,
-                   reserve_available_memory_gib: float = 2.0) -> tuple[Path, Path]:
+                   reserve_available_memory_gib: float = 2.0,
+                   robot_ids: tuple[str, ...] | None = None) -> tuple[Path, Path]:
     """Freeze generated IDs, geometry and equal task settings into input files."""
     if sobol_sample_count < 0 or (sobol_sample_count and
                                   (sobol_sample_count < 2 or sobol_sample_count & (sobol_sample_count - 1))):
@@ -33,9 +34,15 @@ def prepare_inputs(output_root: Path, base_path: Path = DEFAULT_SCENE,
     if reserve_available_memory_gib <= 0:
         raise ValueError("memory reserve must be positive")
     catalog = generate_topology_catalog()
+    catalog_ids = {candidate.topology_id for candidate in catalog.candidates}
+    if robot_ids is not None and (not robot_ids or not all(isinstance(name, str) for name in robot_ids)
+                                  or len(set(robot_ids)) != len(robot_ids)
+                                  or not set(robot_ids) <= catalog_ids):
+        raise ValueError("robot_ids must be unique generated topology IDs")
     scene = copy.deepcopy(json.loads(base_path.read_text(encoding="utf-8")))
     scene["scenario_id"] = "rm_orthogonal_grammar_full_tasks_v1_chassis250_synthetic"
-    scene["robots"] = [candidate.topology_id for candidate in catalog.candidates]
+    scene["robots"] = (list(robot_ids) if robot_ids is not None else
+                       [candidate.topology_id for candidate in catalog.candidates])
     radii = next(iter(scene["geometry"]["link_capsule_radii_by_robot_m"].values()))
     scene["geometry"]["link_capsule_radii_by_robot_m"] = {
         name: list(radii) for name in scene["robots"]}
@@ -79,14 +86,19 @@ def main() -> None:
     parser.add_argument("--solver", choices=("greedy", "graph"), default="greedy")
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--memory-reserve-gib", type=float, default=2.0)
+    parser.add_argument("--robots-file", type=Path,
+                        help="JSON list of generated topology IDs for a follow-up sweep")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--prepare-only", action="store_true")
     args = parser.parse_args()
+    robot_ids = (tuple(json.loads(args.robots_file.read_text(encoding="utf-8")))
+                 if args.robots_file is not None else None)
     scene_path, spec_path = prepare_inputs(args.work_dir / "inputs",
                                           sobol_sample_count=args.length_samples,
                                           solver_mode=args.solver,
                                           max_workers=args.workers,
-                                          reserve_available_memory_gib=args.memory_reserve_gib)
+                                          reserve_available_memory_gib=args.memory_reserve_gib,
+                                          robot_ids=robot_ids)
     if args.prepare_only:
         print(json.dumps({"scene": str(scene_path), "spec": str(spec_path)}))
         return

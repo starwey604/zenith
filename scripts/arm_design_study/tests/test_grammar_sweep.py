@@ -42,3 +42,16 @@ def test_workstation_worker_cap_is_frozen_in_run_spec(tmp_path):
     assert spec["max_workers"] == 20
     assert spec["reserve_available_memory_gib"] == 4.0
     assert len(generate_candidates(spec, scene)) == 536
+
+
+def test_followup_length_sweep_can_select_generated_topologies(tmp_path):
+    from scripts.arm_design_study.topology_grammar import generate_topology_catalog
+
+    selected = tuple(candidate.topology_id
+                     for candidate in generate_topology_catalog().candidates[:2])
+    scene_path, spec_path = prepare_inputs(tmp_path, sobol_sample_count=8,
+                                           robot_ids=selected)
+    scene = json.loads(scene_path.read_text(encoding="utf-8"))
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    assert scene["robots"] == list(selected)
+    assert len(generate_candidates(spec, scene)) == 2 * 9 * 4
