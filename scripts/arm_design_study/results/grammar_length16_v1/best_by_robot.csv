@@ -1,0 +1,8 @@
+robot,candidate_id,parking_id,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm,tier1,tier2,tier3,pickup,module_basic,module_stress,module_min_clearance_mm,module_min_joint_margin_rad,robust_fraction
+orth6r_4ab675a33402,orth6r_4ab675a33402_q07_rear_right,rear_right,317.42,454.89,0.0,57.06,15/15,25/25,9/27,53/72,True,9/9,3.3,0.22069628494919713,0.7361
+orth6r_d94907e07b06,orth6r_d94907e07b06_q07_rear_right,rear_right,353.24,452.37,0.0,0.0,15/15,25/25,13/27,59/72,True,9/9,6.67,0.22069628494948157,0.8194
+orth6r_39bf1ac80cbc,orth6r_39bf1ac80cbc_q03_mid_left,mid_left,359.83,414.23,0.0,62.66,11/15,21/25,12/27,48/72,True,9/9,6.67,0.5235935312939364,0.6667
+orth6r_ebb9ebb875ae,orth6r_ebb9ebb875ae_q07_rear_right,rear_right,353.24,452.37,0.0,0.0,13/15,25/25,22/27,59/72,True,9/9,6.67,0.6325363786879028,0.8194
+orth6r_148133fca859,orth6r_148133fca859_q15_rear_center,rear_center,63.51,318.31,478.72,0.0,14/15,22/25,4/27,44/72,True,9/9,6.67,1.0940026156626361,0.6111
+orth6r_9cb821f00d15,orth6r_9cb821f00d15_q07_rear_center,rear_center,0.0,353.24,452.37,0.0,13/15,22/25,8/27,46/72,True,9/9,6.67,1.0990251497382943,0.6389
+orth6r_27d47e03a0b7,orth6r_27d47e03a0b7_q11_rear_center,rear_center,339.18,472.81,0.0,45.49,13/15,21/25,10/27,41/72,True,9/9,6.67,0.505154502056987,0.5694

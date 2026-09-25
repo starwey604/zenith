@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "run_id": "rm_orthogonal_grammar_greedy_length16_v1_20260925",
+  "source_type": "design_assumption",
+  "robots": [
+    "orth6r_4ab675a33402",
+    "orth6r_d94907e07b06",
+    "orth6r_39bf1ac80cbc",
+    "orth6r_ebb9ebb875ae",
+    "orth6r_148133fca859",
+    "orth6r_9cb821f00d15",
+    "orth6r_27d47e03a0b7"
+  ],
+  "span_indices": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "sampling": {
+    "mode": "sobol",
+    "factor_bounds": [
+      0.75,
+      1.25
+    ],
+    "sample_count": 16,
+    "seed": 20260925,
+    "include_baseline": true
+  },
+  "parking_ids": [
+    "rear_left",
+    "rear_center",
+    "rear_right",
+    "mid_left"
+  ],
+  "max_workers": 20,
+  "reserve_available_memory_gib": 4.0,
+  "notes": "同一完整任务分母；每构型基线加指定数量的固定Sobol长度样本，并遍历四个泊位。"
+}
