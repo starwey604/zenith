@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "orthogonal_6r_baseline_stowage_chassis250_v1_20260926",
+  "source_type": "design_assumption",
+  "rule_reference_file": "/home/ww/codings/zenith/references/RoboMaster 2026 机甲大师高校系列赛机器人制作规范手册V2.0.0（20260626）.pdf",
+  "studies": [
+    {
+      "study_id": "baseline",
+      "summary_file": "/home/ww/codings/zenith/scripts/arm_design_study/results/grammar_baseline_v1/summary.json",
+      "scene_file": "/home/ww/codings/zenith/scripts/arm_design_study/results/grammar_baseline_v1/scene.json",
+      "include_task_results": true
+    }
+  ],
+  "rule_limit_m": [
+    0.6,
+    0.6,
+    0.6
+  ],
+  "minimum_clearance_m": 0.0,
+  "search": {
+    "sobol_sample_count": 1024,
+    "local_start_count": 6,
+    "local_max_iterations": 140,
+    "seed": 20260916
+  },
+  "max_workers": 20,
+  "reserve_available_memory_gib": 4.0,
+  "notes": "250 mm底盘安装高度；按同一600 mm规则搜索每个构型/长度的最小几何收纳包络，泊位去重。"
+}

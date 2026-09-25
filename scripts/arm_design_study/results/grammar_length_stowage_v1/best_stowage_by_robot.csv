@@ -1,0 +1,8 @@
+robot,candidate_id,J2_J3_mm,J3_J4_mm,J4_J5_mm,J5_J6_mm,size_x_mm,size_y_mm,size_z_mm,worst_axis_ratio,rule_pass,arm_size_x_mm,arm_size_y_mm,arm_size_z_mm,clearance_mm,task_best_candidate,task_robust_fraction
+orth6r_148133fca859,orth6r_148133fca859_q08,51.45,251.35,437.52,0.0,434.18,412.14,491.02,0.81836,True,418.51,412.14,296.02,0.0,orth6r_148133fca859_q08_mid_left,0.44444
+orth6r_27d47e03a0b7,orth6r_27d47e03a0b7_q04,287.82,384.24,0.0,54.17,360.0,480.2,490.57,0.81761,True,268.16,476.4,295.57,0.0,orth6r_27d47e03a0b7_q04_rear_right,0.41728
+orth6r_39bf1ac80cbc,orth6r_39bf1ac80cbc_q04,287.82,384.24,0.0,54.17,360.0,480.2,490.57,0.81761,True,277.08,479.36,295.57,0.0,orth6r_39bf1ac80cbc_q04_rear_center,0.40593
+orth6r_4ab675a33402,orth6r_4ab675a33402_q00,290.0,390.0,0.0,60.0,360.0,482.68,490.6,0.81767,True,283.44,474.37,295.6,0.0,orth6r_4ab675a33402_q00_rear_right,0.62074
+orth6r_9cb821f00d15,orth6r_9cb821f00d15_q08,0.0,242.49,318.58,0.0,360.0,404.76,455.0,0.75833,True,214.12,402.08,260.0,0.0,orth6r_9cb821f00d15_q08_rear_right,0.13679
+orth6r_d94907e07b06,orth6r_d94907e07b06_q00,290.0,390.0,0.0,0.0,483.22,424.75,479.39,0.80537,True,358.22,299.75,479.39,6.998,orth6r_d94907e07b06_q00_rear_right,0.58074
+orth6r_ebb9ebb875ae,orth6r_ebb9ebb875ae_q04,268.21,383.38,0.0,0.0,460.77,410.17,484.06,0.80676,True,335.77,285.17,484.06,3.619,orth6r_ebb9ebb875ae_q04_rear_right,0.4321
