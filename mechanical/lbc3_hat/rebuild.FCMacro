@@ -1,0 +1,20 @@
+"""Rebuild the colored FreeCAD assembly from model.py and save it."""
+
+import os
+import sys
+
+import FreeCAD as App
+import FreeCADGui as Gui
+
+here = os.path.dirname(os.path.abspath(__file__))
+if here not in sys.path:
+    sys.path.insert(0, here)
+
+from model import build
+
+doc = build("lbc3_hat")
+view = Gui.activeDocument().activeView()
+view.viewAxonometric()
+view.fitAll()
+doc.saveAs(os.path.join(here, "lbc3_hat.FCStd"))
+print("saved", doc.FileName)

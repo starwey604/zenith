@@ -5,6 +5,8 @@ Outputs (into ./dxf/):
                          with the 40P footprint called out.
   * lbc3_board.dxf     : the LubanCat-3 board outline + mount holes, with the
                          CAM1 (B2B) footprint called out.
+  * lbc3_cam1_adapter.dxf : the CAM1 adapter PCB outline and mechanical
+                            connector envelopes (not copper land patterns).
 
 Everything is drawn in the **board frame** with Z as the drawing normal:
 x to the right, y away from the 40-pin edge, millimetres.
@@ -28,6 +30,10 @@ BOARD_L, BOARD_W, CORNER_R = _ns["BOARD_L"], _ns["BOARD_W"], _ns["CORNER_R"]
 HDR_X0, HDR_PITCH, HDR_COLS = _ns["HDR_X0"], _ns["HDR_PITCH"], _ns["HDR_COLS"]
 HDR_ROWS_Y, HDR_BODY_PAD = _ns["HDR_ROWS_Y"], _ns["HDR_BODY_PAD"]
 CAM1_RECT = _ns["CAM1_RECT"]
+ADAPTER_CX, ADAPTER_CY = _ns["ADAPTER_CX"], _ns["ADAPTER_CY"]
+AXE_L, AXE_W = _ns["AXE630124D_L"], _ns["AXE630124D_W"]
+FPC_CX, FPC_CY = _ns["FPC30_CX"], _ns["FPC30_CY"]
+FPC_L, FPC_W = _ns["FPC30_L"], _ns["FPC30_W"]
 MOUNT_HOLES, MOUNT_HOLE_D = _ns["MOUNT_HOLES"], _ns["MOUNT_HOLE_D"]
 NOTCH = _ns["NOTCH"]
 
@@ -113,8 +119,37 @@ def export_board():
     App.closeDocument(doc.Name)
 
 
+def export_adapter():
+    doc = App.newDocument("dxf_cam1_adapter")
+    adapter = _ns["build_adapter"]()
+    adapter.translate(Vector(0, 0, -_ns["ADAPTER_Z0"]))
+    feat(doc, "ADAPTER_PCB_OUTLINE", horizontal_face(adapter, +1))
+
+    # Both connectors are shown in the LBC3 top-view board frame.  The B2B
+    # header is mounted on the adapter's bottom, so its PCB pad order must be
+    # mirrored in the actual ECAD footprint.
+    feat(doc, "ANNO_AXE630124D_BOTTOM_BODY",
+         rect(ADAPTER_CX - AXE_L / 2, ADAPTER_CY - AXE_W / 2,
+              ADAPTER_CX + AXE_L / 2, ADAPTER_CY + AXE_W / 2))
+    feat(doc, "ANNO_KH_FG0_5_H2_0_30PIN_TOP_BODY",
+         rect(FPC_CX - FPC_L / 2, FPC_CY - FPC_W / 2,
+              FPC_CX + FPC_L / 2, FPC_CY + FPC_W / 2))
+    feat(doc, "ANNO_FPC_RIBBON_EXIT_PLUS_Y",
+         Part.makePolygon([Vector(FPC_CX, FPC_CY + FPC_W / 2, 0),
+                           Vector(FPC_CX, FPC_CY + FPC_W / 2 + 1.0, 0)]))
+    text(doc, "ANNO_AXE_TEXT", "BOTTOM AXE630124D", 53.0, 50.5, 1.8)
+    text(doc, "ANNO_FPC_TEXT", "TOP KH-FG0.5-H2.0-30PIN", 53.0, 60.0, 1.8)
+    text(doc, "ANNO_DXF_NOTE", "MECHANICAL ONLY - CHECK ECAD LAND PATTERNS", 53.0, 56.0, 1.5)
+    doc.recompute()
+    out = os.path.join(HERE, "dxf", "lbc3_cam1_adapter.dxf")
+    importDXF.export(doc.Objects, out)
+    print("wrote", out)
+    App.closeDocument(doc.Name)
+
+
 if __name__ == "__main__":
     os.makedirs(os.path.join(HERE, "dxf"), exist_ok=True)
     export_top_plate()
     export_board()
+    export_adapter()
     print("done")

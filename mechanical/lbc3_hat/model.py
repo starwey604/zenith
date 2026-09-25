@@ -56,14 +56,30 @@ FAN_SCREW_SPAN, FAN_SCREW_D = 15.0, 1.8
 FAN_OPEN_D = 16.0
 FAN_CX, FAN_CY = 58.5, 32.2      # RK3576 centre, measured from the STEP
 
-# CAM1 board-to-board socket  "0.4mm BTB母座2x15P 双槽 立贴式"
-# board x 35.20..43.70, y 50.03..52.53, height 0.77  (from the STEP)
+# CAM1 J16 is AXE530127D (V2R0 schematic sheet 27), also measured in STEP.
+# Its mating header AXE630124D goes on the UNDERSIDE of the adapter.
 CAM1_RECT = (35.20, 50.03, 43.70, 52.53)
 CAM1_H = 0.77
-# Adapter board: just covers CAM1 + two M2.5 screws.   # TBC: refine with user
-ADAPTER_L, ADAPTER_W, ADAPTER_T = 10.0, 10.0, 1.6
+CAM1_MATED_H = 0.8
+AXE630124D_L, AXE630124D_W, AXE630124D_H = 7.8, 2.0, 0.65
+
+# CAM1 -> 30P FPC adapter.  The 10 mm neck fits between the infrared receiver
+# and the neighbouring FPC connector.  The 24 mm head is beyond the rear edge
+# of the LBC3 board, with 1 mm diagonal transitions at the shoulders.
+ADAPTER_NECK_X = (34.45, 44.45)
+ADAPTER_NECK_Y0 = 47.0
+ADAPTER_SHOULDER_Y = 55.3
+ADAPTER_HEAD_X = (27.45, 51.45)
+ADAPTER_HEAD_Y = (56.3, 65.3)
+ADAPTER_T = 1.6
 ADAPTER_CX, ADAPTER_CY = 39.45, 51.28
-ADAPTER_Z0 = CAM1_H              # sits on top of the socket
+ADAPTER_Z0 = CAM1_MATED_H
+
+# Kinghelm KH-FG0.5-H2.0-30PIN: 19.4 mm body length, 6.0 mm depth,
+# 2.0 mm height.  The FPC enters from the rear (+y) edge.  These are
+# mechanical envelopes, not production land patterns.
+FPC30_CX, FPC30_CY = ADAPTER_CX, 60.3
+FPC30_L, FPC30_W, FPC30_H = 19.4, 6.0, 2.0
 # CAM1 adapter retention.
 # The top plate is a PCB and cannot carry moulded bosses, so the downward
 # pressure comes from a SEPARATE part: a 3D-printed press bar screwed to the
@@ -132,10 +148,33 @@ def build_plate():
 
 
 def build_adapter():
-    """The user's CAM1 -> FPC30 adapter board, just resting on the socket."""
-    return Part.makeBox(ADAPTER_L, ADAPTER_W, ADAPTER_T,
-                        Vector(ADAPTER_CX - ADAPTER_L / 2, ADAPTER_CY - ADAPTER_W / 2,
-                               ADAPTER_Z0))
+    """One-piece CAM1 adapter with a narrow neck and rear FPC head."""
+    nx0, nx1 = ADAPTER_NECK_X
+    hx0, hx1 = ADAPTER_HEAD_X
+    hy0, hy1 = ADAPTER_HEAD_Y
+    points = [(nx0, ADAPTER_NECK_Y0), (nx1, ADAPTER_NECK_Y0),
+              (nx1, ADAPTER_SHOULDER_Y), (nx1 + 1.0, hy0),
+              (hx1, hy0), (hx1, hy1), (hx0, hy1), (hx0, hy0),
+              (nx0 - 1.0, hy0), (nx0, ADAPTER_SHOULDER_Y),
+              (nx0, ADAPTER_NECK_Y0)]
+    return poly_prism(points, ADAPTER_Z0, ADAPTER_T)
+
+
+def build_adapter_header():
+    """AXE630124D body envelope, with the 0.8 mm mated stack height."""
+    return box_between(ADAPTER_CX - AXE630124D_L / 2,
+                       ADAPTER_CY - AXE630124D_W / 2,
+                       ADAPTER_Z0 - AXE630124D_H,
+                       ADAPTER_CX + AXE630124D_L / 2,
+                       ADAPTER_CY + AXE630124D_W / 2, ADAPTER_Z0)
+
+
+def build_fpc30():
+    """KH-FG0.5-H2.0-30PIN body envelope on the adapter top face."""
+    return box_between(FPC30_CX - FPC30_L / 2, FPC30_CY - FPC30_W / 2,
+                       ADAPTER_Z0 + ADAPTER_T,
+                       FPC30_CX + FPC30_L / 2, FPC30_CY + FPC30_W / 2,
+                       ADAPTER_Z0 + ADAPTER_T + FPC30_H)
 
 
 def build_press_bar():
@@ -171,8 +210,9 @@ def show(shape, name, color, doc=None, transparency=0):
     doc = doc or App.ActiveDocument
     obj = doc.addObject("Part::Feature", name)
     obj.Shape = shape
-    obj.ViewObject.ShapeColor = color
-    obj.ViewObject.Transparency = transparency
+    if obj.ViewObject is not None:  # FreeCADCmd has no GUI view provider
+        obj.ViewObject.ShapeColor = color
+        obj.ViewObject.Transparency = transparency
     return obj
 
 
@@ -195,6 +235,8 @@ def build(doc_name="lbc3_hat"):
 
     show(build_plate(), "TOP_plate", COL_PLATE, doc, 40)
     show(build_adapter(), "B2B_adapter", COL_ADAPTER, doc)
+    show(build_adapter_header(), "AXE630124D_bottom", COL_HDR, doc)
+    show(build_fpc30(), "KH_FG0_5_H2_0_30PIN_top", COL_HDR, doc)
     for i, st in enumerate(build_standoffs()):
         show(st, "STANDOFF_%d" % (i + 1), COL_STAND, doc)
     show(build_press_bar(), "PRESS_BAR", COL_PRESS, doc)
@@ -207,6 +249,8 @@ def fit_into_step(doc):
     """Add the plate / adapter / standoffs to an open STEP document."""
     show(to_step(build_plate()), "TOP_plate", COL_PLATE, doc, 40)
     show(to_step(build_adapter()), "B2B_adapter", COL_ADAPTER, doc)
+    show(to_step(build_adapter_header()), "AXE630124D_bottom", COL_HDR, doc)
+    show(to_step(build_fpc30()), "KH_FG0_5_H2_0_30PIN_top", COL_HDR, doc)
     for i, st in enumerate(build_standoffs()):
         show(to_step(st), "STANDOFF_%d" % (i + 1), COL_STAND, doc)
     show(to_step(build_press_bar()), "PRESS_BAR", COL_PRESS, doc)
