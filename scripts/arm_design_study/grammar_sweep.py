@@ -22,7 +22,8 @@ def prepare_inputs(output_root: Path, base_path: Path = DEFAULT_SCENE,
                    ik_sobol_tiers: tuple[int, ...] = (8, 16, 32),
                    max_workers: int = 3,
                    reserve_available_memory_gib: float = 2.0,
-                   robot_ids: tuple[str, ...] | None = None) -> tuple[Path, Path]:
+                   robot_ids: tuple[str, ...] | None = None,
+                   length_factor_bounds: tuple[float, float] = (0.85, 1.15)) -> tuple[Path, Path]:
     """Freeze generated IDs, geometry and equal task settings into input files."""
     if sobol_sample_count < 0 or (sobol_sample_count and
                                   (sobol_sample_count < 2 or sobol_sample_count & (sobol_sample_count - 1))):
@@ -33,6 +34,9 @@ def prepare_inputs(output_root: Path, base_path: Path = DEFAULT_SCENE,
         raise ValueError("max_workers must be 1..24")
     if reserve_available_memory_gib <= 0:
         raise ValueError("memory reserve must be positive")
+    if (len(length_factor_bounds) != 2 or
+            not 0.25 <= length_factor_bounds[0] < length_factor_bounds[1] <= 4.0):
+        raise ValueError("invalid length factor bounds")
     catalog = generate_topology_catalog()
     catalog_ids = {candidate.topology_id for candidate in catalog.candidates}
     if robot_ids is not None and (not robot_ids or not all(isinstance(name, str) for name in robot_ids)
@@ -62,7 +66,7 @@ def prepare_inputs(output_root: Path, base_path: Path = DEFAULT_SCENE,
             "source_type": "design_assumption",
             "robots": scene["robots"],
             "span_indices": [2, 3, 4, 5],
-            "sampling": {"mode": "sobol", "factor_bounds": [0.85, 1.15],
+            "sampling": {"mode": "sobol", "factor_bounds": list(length_factor_bounds),
                          "sample_count": sobol_sample_count, "seed": 20260925,
                          "include_baseline": True},
             "parking_ids": list(DEFAULT_PARKING),
@@ -88,6 +92,8 @@ def main() -> None:
     parser.add_argument("--memory-reserve-gib", type=float, default=2.0)
     parser.add_argument("--robots-file", type=Path,
                         help="JSON list of generated topology IDs for a follow-up sweep")
+    parser.add_argument("--length-factor-bounds", type=float, nargs=2,
+                        metavar=("LOW", "HIGH"), default=(0.85, 1.15))
     parser.add_argument("--limit", type=int)
     parser.add_argument("--prepare-only", action="store_true")
     args = parser.parse_args()
@@ -98,7 +104,8 @@ def main() -> None:
                                           solver_mode=args.solver,
                                           max_workers=args.workers,
                                           reserve_available_memory_gib=args.memory_reserve_gib,
-                                          robot_ids=robot_ids)
+                                          robot_ids=robot_ids,
+                                          length_factor_bounds=tuple(args.length_factor_bounds))
     if args.prepare_only:
         print(json.dumps({"scene": str(scene_path), "spec": str(spec_path)}))
         return

@@ -50,8 +50,10 @@ def test_followup_length_sweep_can_select_generated_topologies(tmp_path):
     selected = tuple(candidate.topology_id
                      for candidate in generate_topology_catalog().candidates[:2])
     scene_path, spec_path = prepare_inputs(tmp_path, sobol_sample_count=8,
-                                           robot_ids=selected)
+                                           robot_ids=selected,
+                                           length_factor_bounds=(0.75, 1.25))
     scene = json.loads(scene_path.read_text(encoding="utf-8"))
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
     assert scene["robots"] == list(selected)
     assert len(generate_candidates(spec, scene)) == 2 * 9 * 4
+    assert spec["sampling"]["factor_bounds"] == [0.75, 1.25]
