@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source_type": "design_assumption",
+  "sweep_scene_sha256": "016c91a6d1e91a6ba579b0471eb012d8d71e339d9a089fb8bff41c8b1fd8aa7c",
+  "candidate_archive_sha256": "a5d9db170591970b9777a66ec4a06de2df7756e494700be0b2d4ec4a44e39449",
+  "module_stress_sha256": "f4a838ab2fc1abb2d9db1aab33e9b8a79051ebc79bd811ba51fb18e8570ba1e5",
+  "inputs": [
+    {
+      "candidate_id": "orth6r_ebb9ebb875ae_q07_rear_right",
+      "sweep_input_key": "abc3d80aec44dd063aead812a432361e17e005776d03f7a6ef2e7eb34d93d37b",
+      "graph_scene_sha256": "731af9def6bdc15a7b9c59b9e109e1fa685f4ae06a65c84a90757eae30c9e13b",
+      "graph_benchmark_sha256": "260e2bcd695ed5baabaac1aa7493afa30d028187a15f8f1d9ade36c3db2ba30c",
+      "graph_module_stress_sha256": "71b8f96e0f0fbb78901368d26d5a3cf95e6edc998c6e343760c30358e42b7f55"
+    },
+    {
+      "candidate_id": "orth6r_d94907e07b06_q07_rear_right",
+      "sweep_input_key": "abc3d80aec44dd063aead812a432361e17e005776d03f7a6ef2e7eb34d93d37b",
+      "graph_scene_sha256": "04313465c45263866e6895834df60ca9c93af53965ab48440ebf60bd860f2222",
+      "graph_benchmark_sha256": "31264e41bd9b67abeb0393fc884713b67715b767677d8f7e2ae940ccc667aa89",
+      "graph_module_stress_sha256": "3c2434bf157477450fc4a716e2063bfd95f76e466f9f37da8a88c57f5c354e4a"
+    }
+  ]
+}

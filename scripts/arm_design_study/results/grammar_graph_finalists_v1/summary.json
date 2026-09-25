@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "candidate_count": 2,
+  "rows": [
+    {
+      "candidate_id": "orth6r_ebb9ebb875ae_q07_rear_right",
+      "benchmark": {
+        "greedy_complete": 8,
+        "graph_complete": 8,
+        "case_count": 8,
+        "cases": [
+          {
+            "id": "module_2027",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "core_2026",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 139,
+            "graph_edges": 138
+          },
+          {
+            "id": "pickup_1",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 66,
+            "graph_edges": 66
+          },
+          {
+            "id": "pickup_2",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 66,
+            "graph_edges": 66
+          },
+          {
+            "id": "pickup_3",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 66,
+            "graph_edges": 66
+          },
+          {
+            "id": "pickup_4",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 66,
+            "graph_edges": 66
+          },
+          {
+            "id": "pickup_5",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 66,
+            "graph_edges": 66
+          },
+          {
+            "id": "pickup_6",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 66,
+            "graph_edges": 66
+          }
+        ]
+      },
+      "module_stress": {
+        "greedy_complete": 9,
+        "graph_complete": 9,
+        "case_count": 9,
+        "cases": [
+          {
+            "id": "nominal",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "x_minus_30mm",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "x_plus_30mm",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "y_minus_30mm",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "y_plus_30mm",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "diagonal_left_front",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "diagonal_right_rear",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "yaw_minus_15deg",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          },
+          {
+            "id": "yaw_plus_15deg",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 192,
+            "graph_edges": 192
+          }
+        ]
+      }
+    },
+    {
+      "candidate_id": "orth6r_d94907e07b06_q07_rear_right",
+      "benchmark": {
+        "greedy_complete": 7,
+        "graph_complete": 7,
+        "case_count": 8,
+        "cases": [
+          {
+            "id": "module_2027",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 392,
+            "graph_edges": 378
+          },
+          {
+            "id": "core_2026",
+            "greedy_complete": false,
+            "graph_complete": false,
+            "greedy_failure": {
+              "index": 33,
+              "phase": "turn_p_90",
+              "reason": "joint_jump",
+              "seed_attempts": 7,
+              "max_step_rad": 0.9784822634295993
+            },
+            "graph_failure": {
+              "index": 33,
+              "phase": "turn_p_90",
+              "reason": "joint_step",
+              "candidate_nodes": 6,
+              "reachable_previous_nodes": 3
+            },
+            "graph_nodes": 247,
+            "graph_edges": 229
+          },
+          {
+            "id": "pickup_1",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 170,
+            "graph_edges": 160
+          },
+          {
+            "id": "pickup_2",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 169,
+            "graph_edges": 163
+          },
+          {
+            "id": "pickup_3",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 135,
+            "graph_edges": 134
+          },
+          {
+            "id": "pickup_4",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 123,
+            "graph_edges": 119
+          },
+          {
+            "id": "pickup_5",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 69,
+            "graph_edges": 69
+          },
+          {
+            "id": "pickup_6",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 66,
+            "graph_edges": 66
+          }
+        ]
+      },
+      "module_stress": {
+        "greedy_complete": 9,
+        "graph_complete": 9,
+        "case_count": 9,
+        "cases": [
+          {
+            "id": "nominal",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 392,
+            "graph_edges": 378
+          },
+          {
+            "id": "x_minus_30mm",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 416,
+            "graph_edges": 402
+          },
+          {
+            "id": "x_plus_30mm",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 397,
+            "graph_edges": 386
+          },
+          {
+            "id": "y_minus_30mm",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 406,
+            "graph_edges": 389
+          },
+          {
+            "id": "y_plus_30mm",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 377,
+            "graph_edges": 363
+          },
+          {
+            "id": "diagonal_left_front",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 431,
+            "graph_edges": 417
+          },
+          {
+            "id": "diagonal_right_rear",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 365,
+            "graph_edges": 350
+          },
+          {
+            "id": "yaw_minus_15deg",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 373,
+            "graph_edges": 356
+          },
+          {
+            "id": "yaw_plus_15deg",
+            "greedy_complete": true,
+            "graph_complete": true,
+            "greedy_failure": null,
+            "graph_failure": null,
+            "graph_nodes": 260,
+            "graph_edges": 252
+          }
+        ]
+      }
+    }
+  ]
+}
