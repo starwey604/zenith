@@ -7,7 +7,7 @@ from scripts.arm_design_study.chassis import ChassisMount
 from scripts.arm_design_study.collision import Capsule, chassis_box
 from scripts.arm_design_study.frames import transform
 from scripts.arm_design_study.stowage import geometry_aabb, periodic_search_limits
-from scripts.arm_design_study.stowage_sweep import manifest
+from scripts.arm_design_study.stowage_sweep import manifest, validate_spec
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +44,8 @@ def test_manifest_deduplicates_field_parking_from_stowage_geometry():
         "xarm6", "ur5e", "lite6", "unitree_z1", "ur10e", "widowx250", "piper", "willow0907"}
     config = json.loads((ROOT / "configs/stowage_sweep.v1.json").read_text(encoding="utf-8"))
     assert config["max_workers"] == 3
+    config["max_workers"] = 20
+    validate_spec(config)
 
 
 def test_chassis250_stowage_reuses_geometry_samples_without_stale_task_scores():

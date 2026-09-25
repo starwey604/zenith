@@ -35,8 +35,9 @@ def validate_spec(spec: dict) -> None:
             or not isinstance(search.get("local_max_iterations"), int)
             or search["local_max_iterations"] < 1 or not isinstance(search.get("seed"), int)):
         raise ValueError("invalid deterministic search settings")
-    if not 1 <= spec.get("max_workers", 0) <= 3:
-        raise ValueError("stowage sweep is capped at three workers")
+    workers = spec.get("max_workers")
+    if isinstance(workers, bool) or not isinstance(workers, int) or not 1 <= workers <= 24:
+        raise ValueError("stowage sweep needs a memory-safe worker cap in 1..24")
 
 
 def _resolved(config_path: Path, value: str) -> Path:

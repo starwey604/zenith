@@ -21,6 +21,53 @@ def _task_robust(task: dict | None) -> float | None:
     return None if task is None else robust_fraction(task)
 
 
+def _render_many_robots(rows: list[dict], robots: list[str], best: dict[str, dict],
+                        baseline: dict[str, dict], output_dir: Path) -> list[str]:
+    """Show distributions rather than 134 overlapping robot labels."""
+    fig, ax = plt.subplots(figsize=(11, 6.2), constrained_layout=True)
+    sizes = [best[robot]["worst_axis_ratio"] * 600 for robot in robots]
+    ax.hist(sizes, bins=24, color="#31788f", edgecolor="white")
+    ax.axvline(600, color="#c83e4d", linestyle="--", label="规则上限 600 mm")
+    ax.set(xlabel="最紧张方向的最小收纳尺寸 / mm", ylabel="构型数",
+           title="各构型最佳无碰撞收纳包络分布")
+    ax.legend()
+    dimensions_plot = output_dir / "best_dimensions_by_robot.png"
+    fig.savefig(dimensions_plot, dpi=180)
+    plt.close(fig)
+    plots = [str(dimensions_plot)]
+
+    if any(row["task_best"] is not None for row in rows):
+        fig, ax = plt.subplots(figsize=(10.8, 7.2), constrained_layout=True)
+        scorable = [row for row in rows if row["collision_free"] and row["task_best"] is not None]
+        ax.scatter([row["worst_axis_ratio"] * 600 for row in scorable],
+                   [max(0.0, _task_robust(row["task_best"])) * 100 for row in scorable],
+                   s=30, alpha=0.55, color="#31788f")
+        ax.axvline(600, color="#c83e4d", linestyle="--")
+        ax.set(xlabel="最紧张方向的收纳尺寸 / mm", ylabel="三任务稳健通过率 / %",
+               title="收纳尺寸与任务能力")
+        ax.grid(alpha=0.22)
+        tradeoff_plot = output_dir / "stowage_task_tradeoff.png"
+        fig.savefig(tradeoff_plot, dpi=180)
+        plt.close(fig)
+        plots.append(str(tradeoff_plot))
+
+    fig, ax = plt.subplots(figsize=(8, 7.2), constrained_layout=True)
+    x = [baseline[robot]["worst_axis_ratio"] * 600 for robot in robots]
+    y = [best[robot]["worst_axis_ratio"] * 600 for robot in robots]
+    ax.scatter(x, y, s=34, alpha=0.6, color="#31788f")
+    limit = max(600, *x, *y) * 1.02
+    ax.plot([0, limit], [0, limit], color="#888888", linestyle="--")
+    ax.axhline(600, color="#c83e4d", linestyle=":")
+    ax.set(xlabel="名义长度收纳尺寸 / mm", ylabel="测试长度中最小尺寸 / mm",
+           xlim=(0, limit), ylim=(0, limit), title="长度变化对最小收纳尺寸的影响")
+    ax.grid(alpha=0.22)
+    comparison_plot = output_dir / "baseline_vs_best.png"
+    fig.savefig(comparison_plot, dpi=180)
+    plt.close(fig)
+    plots.append(str(comparison_plot))
+    return plots
+
+
 def render(summary_path: Path, output_dir: Path) -> dict:
     report = json.loads(summary_path.read_text(encoding="utf-8"))
     if (report["complete_candidate_count"] != report["candidate_count"] or report["errors"]):
@@ -56,6 +103,12 @@ def render(summary_path: Path, output_dir: Path) -> dict:
                              "clearance_mm": None if row["clearance_m"] is None else round(row["clearance_m"] * 1000, 3),
                              "task_best_candidate": None if task is None else task["candidate_id"],
                              "task_robust_fraction": None if task_score is None else round(task_score, 5)})
+
+    if len(robots) > 12:
+        plots = _render_many_robots(rows, robots, best, baseline, output_dir)
+        return {"best_by_robot": {key: value["candidate_id"] for key, value in best.items()},
+                "rule_pass_count": sum(row["rule_pass"] for row in rows),
+                "plots": plots, "table": str(table_path)}
 
     x = np.arange(len(robots))
     width = 0.23
