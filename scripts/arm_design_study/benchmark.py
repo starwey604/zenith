@@ -71,6 +71,8 @@ def _default_seed(robot: str) -> np.ndarray:
     if robot == "ur5e":
         return np.array([-np.pi / 2, -np.pi / 2, np.pi / 2,
                          -np.pi / 2, -np.pi / 2, 0.0])
+    if robot.startswith("orth6r_"):
+        return np.zeros(6)
     # A bent wrist is closer to an upward-facing workbench connection.
     return np.array([0.0, 0.0, 0.0, 0.0, np.pi - 1e-5, 0.0])
 
@@ -144,8 +146,9 @@ def _screen_one(scene: dict, arm, mount: ChassisMount, parking_id: str,
     module_half = np.asarray(module["body_half_extents_m"], dtype=float)
     held_half = np.asarray(scene["geometry"]["held_unit_half_extents_m"], dtype=float)
 
-    def state_geometry(q: np.ndarray, index: int):
-        point = task["path"][index]
+    def state_geometry(q: np.ndarray, index: int, point_override=None,
+                       carried_from_actual: bool = False):
+        point = task["path"][index] if point_override is None else point_override
         caps = robot_capsules(arm, mount, q, radii,
                               float(scene["geometry"]["tool_radius_m"]),
                               float(scene["geometry"]["tool_length_m"]),
@@ -153,11 +156,15 @@ def _screen_one(scene: dict, arm, mount: ChassisMount, parking_id: str,
                                   "tool_axis_in_flange", [0.0, 0.0, -1.0]), dtype=float))
         carried = None
         if task["kind"] == "module" and point.phase in ("locked", "leave_table"):
-            carried = Box("carried_module", _box_pose(point.world_module, module_local), module_half,
+            world_module = (mount.world_flange(arm, q) @ task["flange_to_pin"] @ inverse(point.relative_pose)
+                            if carried_from_actual else point.world_module)
+            carried = Box("carried_module", _box_pose(world_module, module_local), module_half,
                           False)
         elif task["kind"] == "core" or (task["kind"] == "pickup" and point.phase in ("grasp", "extract_axis")):
             unit_from_tool = task.get("tool_to_unit", np.eye(4))
-            carried = Box("carried_energy_unit", point.world_tool @ unit_from_tool, held_half, False)
+            world_tool = (mount.world_flange(arm, q) @ task["flange_to_tool"]
+                          if carried_from_actual else point.world_tool)
+            carried = Box("carried_energy_unit", world_tool @ unit_from_tool, held_half, False)
         clearance, hit = collision_scan(caps, chassis, obstacles, point.phase,
                                         allowed_contacts, carried)
         extent = _expanded_extent_in_chassis_frame(mount, chassis, caps, carried)
@@ -167,15 +174,64 @@ def _screen_one(scene: dict, arm, mount: ChassisMount, parking_id: str,
         clearance, _, extent = state_geometry(q, index)
         return float(min(clearance, np.min(max_expanded - extent)))
 
-    if task["kind"] == "module":
-        trajectory, ik_failure = follow_ik(arm, mount, task["path"], seed,
-                                           random_seed=int(scene["random_seed"]),
-                                           quality_fn=quality)
+    solver = scene.get("ik_solver", {"mode": "greedy"})
+    if solver["mode"] == "graph":
+        from .ik_graph import solve_ik_path
+        from .task_2026 import solve_task_ik_graph
+
+        def edge_free(q: np.ndarray, index: int, _fraction: float) -> bool:
+            # Check both endpoint phase contact policies. Carried geometry is
+            # reconstructed from the interpolated robot pose at each sample.
+            for point in (task["path"][max(0, index - 1)], task["path"][index]):
+                clearance, _, extent = state_geometry(q, index, point, True)
+                if clearance <= 0 or np.any(extent >= max_expanded):
+                    return False
+            return True
+
+        options = {"sobol_tiers": tuple(solver.get("sobol_tiers", (32, 64, 128))),
+                   "max_joint_step_rad": float(solver.get("max_joint_step_rad", 0.5)),
+                   "interpolation_step_rad": float(solver.get("interpolation_step_rad", 0.05)),
+                   "backward_continuation": bool(solver.get("backward_continuation", True)),
+                   "enforce_start_step": bool(solver.get("enforce_start_step", False))}
+        state_free = lambda q, index, point: quality(q, index, point) > 0
+        if task["kind"] == "module":
+            graph = solve_ik_path(arm, mount, task["path"], seed,
+                                  state_free=state_free, edge_free=edge_free, **options)
+        else:
+            graph = solve_task_ik_graph(arm, mount, task["path"],
+                                        task["flange_to_tool"], seed,
+                                        state_free=state_free, edge_free=edge_free, **options)
+        trajectory = []
+        for choice in graph.path:
+            point = task["path"][choice.index]
+            flange = (point.world_flange if task["kind"] == "module" else
+                      point.world_tool @ inverse(task["flange_to_tool"]))
+            trajectory.append({"index": choice.index, "phase": choice.phase,
+                               "q_rad": choice.q_rad.tolist(),
+                               "world_flange": flange.tolist(),
+                               "position_error_m": choice.position_error_m,
+                               "angle_error_rad": choice.angle_error_rad})
+        ik_failure = graph.failure
+        result["ik_graph"] = {"complete": graph.complete,
+                              "node_count": sum(len(layer.nodes) for layer in graph.layers),
+                              "edge_count": sum(len(layer.incoming_edges) for layer in graph.layers),
+                              "edge_collision_checked": graph.edge_collision_checked,
+                              "collision_samples": graph.collision_samples,
+                              "total_joint_travel_rad": graph.total_joint_travel_rad,
+                              "greedy_complete": graph.greedy_complete,
+                              "greedy_joint_travel_rad": graph.greedy_joint_travel_rad}
+    elif solver["mode"] == "greedy":
+        if task["kind"] == "module":
+            trajectory, ik_failure = follow_ik(arm, mount, task["path"], seed,
+                                               random_seed=int(scene["random_seed"]),
+                                               quality_fn=quality)
+        else:
+            trajectory, ik_failure = follow_task_ik(arm, mount, task["path"],
+                                                    task["flange_to_tool"], seed,
+                                                    random_seed=int(scene["random_seed"]),
+                                                    quality_fn=quality)
     else:
-        trajectory, ik_failure = follow_task_ik(arm, mount, task["path"],
-                                                task["flange_to_tool"], seed,
-                                                random_seed=int(scene["random_seed"]),
-                                                quality_fn=quality)
+        raise ValueError(f"unknown ik_solver mode: {solver['mode']}")
     result["ik_point_count"] = len(trajectory)
     geometric_failure = None
     margins, limit_margins = [], []

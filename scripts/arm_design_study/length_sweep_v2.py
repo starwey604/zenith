@@ -53,11 +53,12 @@ def validate_spec(spec: dict, scene: dict) -> None:
                                       and 0 < value <= 2.0 for value in item.values())
                               for item in explicit))
     if (sampling.get("mode") != "sobol" or factor_bounds_valid == span_bounds_valid
-            or isinstance(count, bool) or not isinstance(count, int) or count < 2
-            or count & (count - 1) or not isinstance(sampling.get("seed"), int)
+            or isinstance(count, bool) or not isinstance(count, int) or count < 0
+            or (count != 0 and (count < 2 or count & (count - 1)))
+            or not isinstance(sampling.get("seed"), int)
             or sampling["seed"] < 0 or sampling.get("include_baseline") is not True
             or not explicit_valid):
-        raise ValueError("v2 needs fixed-seed Sobol power-of-two count, one bounds mode, baseline and valid explicit spans")
+        raise ValueError("v2 needs zero or a fixed-seed Sobol power-of-two count, one bounds mode, baseline and valid explicit spans")
     if (isinstance(spec.get("max_workers"), bool) or not isinstance(spec.get("max_workers"), int)
             or not 1 <= spec["max_workers"] <= 3):
         raise ValueError("v2 limits workers to one, two or three for the 12 GB laptop")
@@ -83,8 +84,8 @@ def generate_candidates(spec: dict, scene: dict) -> list[dict]:
             raise ValueError(f"{robot} has no nonzero design span")
         if span_bounds is not None and set(map(int, span_bounds)) != set(active):
             raise ValueError(f"{robot} absolute span bounds must match its nonzero design spans")
-        points = qmc.Sobol(d=len(active), scramble=True, seed=spec["sampling"]["seed"]).random_base2(
-            m=count.bit_length() - 1)
+        points = (qmc.Sobol(d=len(active), scramble=True, seed=spec["sampling"]["seed"]).random_base2(
+            m=count.bit_length() - 1) if count else [])
         samples: list[tuple[str, tuple[float, ...]]] = [("baseline", tuple(1.0 for _ in active))]
         for explicit_index, values in enumerate(sampling.get("explicit_spans_m", []), start=1):
             factors = tuple(float(values[str(index)] / reference[index]) for index in active)

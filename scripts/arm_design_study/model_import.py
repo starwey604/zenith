@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from functools import lru_cache
 import xml.etree.ElementTree as ET
 import numpy as np
 import mujoco
@@ -10,6 +11,7 @@ from scipy.spatial.transform import Rotation
 from .frames import inverse, transform
 from .sixr import SixR
 from .topology_design import GENERATED_ARM_NAMES, load_generated_arm
+from .topology_grammar import generate_topology_catalog
 
 
 WORKSPACE = Path(__file__).resolve().parents[3]
@@ -18,6 +20,12 @@ UR5E_XML = WORKSPACE / "imitation_learning_lerobot/imitation_learning_lerobot/as
 UR5E_CLASSES = UR5E_XML.with_name("ur5e_classes.xml")
 MENAGERIE = Path(__file__).resolve().parent / "models/menagerie"
 WILLOW_URDF = Path(__file__).resolve().parent / "models/willow_0907/Willow_0907_URDF.urdf"
+GRAMMAR_CATALOG = Path(__file__).resolve().parent / "results/topology_grammar_v1/catalog.json"
+
+
+@lru_cache(maxsize=1)
+def _grammar_arms() -> dict[str, SixR]:
+    return {candidate.topology_id: candidate.arm for candidate in generate_topology_catalog().candidates}
 MODEL_SPECS = {
     "xarm6": (XARM_XML, "left_base", "left_link6", tuple(f"left_joint_{i}" for i in range(1, 7))),
     "ur5e": (UR5E_XML, "ur5e_base", "flange", ("shoulder_pan_joint", "shoulder_lift_joint",
@@ -43,11 +51,14 @@ URDF_SPECS = {
 
 def model_reference_paths(names: list[str]) -> tuple[Path, ...]:
     """XML files whose joint axes and limits drive the requested reference arms."""
-    unknown = set(names) - set(MODEL_SPECS) - set(URDF_SPECS) - set(GENERATED_ARM_NAMES)
+    grammar_names = set(names) & set(_grammar_arms()) if any(name.startswith("orth6r_") for name in names) else set()
+    unknown = set(names) - set(MODEL_SPECS) - set(URDF_SPECS) - set(GENERATED_ARM_NAMES) - grammar_names
     if unknown:
         raise ValueError(f"unknown local robots: {sorted(unknown)}")
     paths = {MODEL_SPECS[name][0] if name in MODEL_SPECS else URDF_SPECS[name][0]
-             for name in names if name not in GENERATED_ARM_NAMES}
+             for name in names if name not in GENERATED_ARM_NAMES and name not in grammar_names}
+    if grammar_names:
+        paths.add(GRAMMAR_CATALOG)
     if "ur5e" in names:
         paths.add(UR5E_CLASSES)
     return tuple(sorted(paths))
@@ -115,6 +126,11 @@ def load_local(name: str) -> SixR:
     """Import one existing six-joint MJCF or URDF reference; it is not certified CAD."""
     if name in GENERATED_ARM_NAMES:
         return load_generated_arm(name)
+    if name.startswith("orth6r_"):
+        try:
+            return _grammar_arms()[name]
+        except KeyError as error:
+            raise ValueError(f"unknown grammar topology ID: {name}") from error
     if name in URDF_SPECS:
         return _load_urdf(name)
     if name not in MODEL_SPECS:
