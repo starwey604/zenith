@@ -36,6 +36,24 @@ def follow_task_ik(arm: SixR, mount: ChassisMount, path: list[TaskWaypoint],
                      quality_fn=quality_fn)
 
 
+def solve_task_ik_graph(arm: SixR, mount: ChassisMount, path: list[TaskWaypoint],
+                        flange_to_tool: np.ndarray, seed: np.ndarray,
+                        state_free=None, edge_free=None, **graph_options):
+    """Search all enumerated IK branches for an existing tool-space task path.
+
+    ``state_free`` receives the original TaskWaypoint; ``edge_free`` receives
+    (interpolated_q, destination_index, fraction) for scene-aware checks.
+    """
+    from .ik_graph import solve_ik_path
+
+    offset = _pose(flange_to_tool, "flange_to_tool")
+    targets = [ToolIKTarget(point.phase, point.world_tool @ inverse(offset)) for point in path]
+    state_check = (None if state_free is None else
+                   lambda q, index, _target: state_free(q, index, path[index]))
+    return solve_ik_path(arm, mount, targets, seed, state_free=state_check,
+                         edge_free=edge_free, **graph_options)
+
+
 def _unit_axis(axis: np.ndarray, label: str) -> np.ndarray:
     value = np.asarray(axis, dtype=float)
     if value.shape != (3,) or not np.isfinite(value).all() or not np.isclose(np.linalg.norm(value), 1.0, atol=1e-6):

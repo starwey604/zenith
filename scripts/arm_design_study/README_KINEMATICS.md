@@ -20,6 +20,10 @@ python3 -m venv .venv
 
 场景相关碰撞应通过 `collision_free(q)` 传入；回调返回布尔值，且会对每个提升解调用。没有回调时 `diagnostics.collision_checked` 为 `false`，结果只完成 FK 误差和限位筛选。`diagnostics.geometric_branches` 是碰撞筛选前的物理分支数，`independent_branches` 是至少保留一个无碰撞提升解的分支数；`best_position_error_m` 和 `best_angle_error_rad` 对应保留的解。`stable` 只表示这次确定性采样连续两档没有找到新分支，不能证明一般六轴机构所有逆解已经穷尽，也不能把空结果当作不可达证明。
 
+整条路径的逆解图入口是 [ik_graph.py](ik_graph.py) 的 `solve_ik_path(arm, mount, path, seed, ...)`。`path` 使用现有卡口路径的 `world_flange` 目标；2026 取矿与存矿等工具路径可调用 [task_2026.py](task_2026.py) 的 `solve_task_ik_graph(...)`，由它把工具位姿转换成法兰位姿。图搜索对每个路径点做前向、后向多逆解枚举，保留各分支在关节限位内的圈数解；连边检查**未取模**的最大关节步长，逐关节角线性插值后由 `edge_free(q, destination_index, fraction)` 检查路径段碰撞。节点碰撞由 `state_free(q, index, waypoint)` 检查。场景需要自行在回调中插值搬运物、工装等运动几何；未提供 `edge_free` 时结果的 `edge_collision_checked` 为 `false`。
+
+`IKGraphResult` 返回最小总关节行程的完整路径或到首个断点的最佳前缀，并报告 `no_ik`、`state_collision`、`joint_step`、`edge_collision`、`disconnected` 等原因。同一组节点和边会额外跑一次逐点贪心选择，输出 `greedy_complete` 便于识别贪心死路。默认首个目标可从任意限位内的逆解开始，但会把它与 `seed` 的关节距离计入代价；若 `seed` 是必须连续出发的实际姿态，设置 `enforce_start_step=True`。`to_dict(include_graph=True)` 会导出全部候选节点与合法边；路径图的“完整”仅相对于当前数值枚举发现的解和当前路径点采样密度成立。
+
 运行**合成接口**路径检查，并把逐点关节角和失败码写到被 Git 忽略的 `runs/`：
 
 ```bash
