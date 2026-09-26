@@ -11,7 +11,7 @@
   <project name="app/rkadk" remote="internal" revision="6cdc8799f7dde11578f5b0e153d31f8f4c40d595" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
   <project name="app/rkipc" remote="internal" revision="e34f3b1621339185ef214b2e12b38ef03b7262fe" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
   <project name="app/rkpartybox" remote="internal" revision="4480de522ad8f0439049c5d2e3b8db9005ad3266" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
-  <project name="buildroot" revision="ec62d7fa76368163a07990d8e091afcd72796a36" upstream="4c038732919b526ea263fd2316feac97dc082213" dest-branch="4c038732919b526ea263fd2316feac97dc082213" clone-depth="1">
+  <project name="buildroot" revision="b69578476ba6357144a19978e1e28e42f395d8d0" upstream="4c038732919b526ea263fd2316feac97dc082213" dest-branch="4c038732919b526ea263fd2316feac97dc082213" clone-depth="1">
     <linkfile src="build/envsetup.sh" dest="envsetup.sh"/>
   </project>
   <project name="debian11" revision="4ac7fced01309643a19b852439caaaa3be20b76a" upstream="ef491103dd415f16364285a1ea9958949355fb7c" dest-branch="debian11" clone-depth="1"/>

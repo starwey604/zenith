@@ -92,3 +92,14 @@ kernel 不做 patch series，而是维护个人 fork：
 
 CAN0/1 位于 `0x2ac00000`/`0x2ac10000`，落在 MCU 非缓存外设窗口 `0x20000000–0x48200000` 内；
 Linux dts 保持 disabled、pin 由 MCU 固件配置。
+
+## 开发链路（直连网口）
+
+- 板上 eth0 默认静态 **192.168.77.2/24**（buildroot overlay `30-eth0-static`；`dhcpcd` 已 `denyinterfaces eth0`）。
+- 主机侧 `tools/lbc-host-link.sh`：把主机网口从 NetworkManager 拿开（写 `conf.d/99-unmanaged-lubancat.conf`）并设静态 IP。
+
+  ```sh
+  sudo tools/lbc-host-link.sh up      # 默认 enp195s0 = 192.168.77.1/24
+  ssh root@192.168.77.2
+  sudo tools/lbc-host-link.sh down    # 还原
+  ```

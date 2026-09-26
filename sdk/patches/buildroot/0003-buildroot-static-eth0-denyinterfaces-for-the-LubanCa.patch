@@ -1,0 +1,53 @@
+From b69578476ba6357144a19978e1e28e42f395d8d0 Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Sat, 26 Sep 2026 17:45:17 +0800
+Subject: [PATCH] buildroot: static eth0 + denyinterfaces for the LubanCat AMP
+ dev link
+
+Add overlay 30-eth0-static: ifupdown static address 192.168.77.2/24 on eth0 and 'denyinterfaces eth0' in dhcpcd.conf, so the board is reachable on a direct cable to the host (see zenith/tools/lbc-host-link.sh).
+---
+ .../etc/network/interfaces.d/eth0              |  6 ++++++
+ .../common/overlays/30-eth0-static/prepare.sh  | 18 ++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 board/rockchip/common/overlays/30-eth0-static/etc/network/interfaces.d/eth0
+ create mode 100755 board/rockchip/common/overlays/30-eth0-static/prepare.sh
+
+diff --git a/board/rockchip/common/overlays/30-eth0-static/etc/network/interfaces.d/eth0 b/board/rockchip/common/overlays/30-eth0-static/etc/network/interfaces.d/eth0
+new file mode 100644
+index 00000000..a485de36
+--- /dev/null
++++ b/board/rockchip/common/overlays/30-eth0-static/etc/network/interfaces.d/eth0
+@@ -0,0 +1,6 @@
++# LubanCat AMP dev link (direct cable to the host, no DHCP server).
++# Keep in sync with zenith/tools/lbc-host-link.sh.
++auto eth0
++iface eth0 inet static
++	address 192.168.77.2
++	netmask 255.255.255.0
+diff --git a/board/rockchip/common/overlays/30-eth0-static/prepare.sh b/board/rockchip/common/overlays/30-eth0-static/prepare.sh
+new file mode 100755
+index 00000000..1eea98b7
+--- /dev/null
++++ b/board/rockchip/common/overlays/30-eth0-static/prepare.sh
+@@ -0,0 +1,18 @@
++#!/bin/bash -e
++# LubanCat AMP: give eth0 a fixed address and keep dhcpcd off it, so the board is
++# always reachable on a direct link to the host (see zenith/tools/lbc-host-link.sh).
++# Applied for every buildroot image from this tree (harmless: it is a dev default).
++
++[ "$BR2_PACKAGE_DHCPCD" ]
++[ "$BR2_PACKAGE_IFUPDOWN_SCRIPTS" ]
++
++if ! grep -wq "interfaces.d" "$TARGET_DIR/etc/network/interfaces"; then
++	echo -e "\nsource-directory /etc/network/interfaces.d" >> \
++		"$TARGET_DIR/etc/network/interfaces"
++fi
++
++# dhcpcd would otherwise race the static address configured by ifup -a.
++if [ -f "$TARGET_DIR/etc/dhcpcd.conf" ] && \
++   ! grep -qE '^[[:space:]]*denyinterfaces[[:space:]].*\beth0\b' "$TARGET_DIR/etc/dhcpcd.conf"; then
++	echo "denyinterfaces eth0" >> "$TARGET_DIR/etc/dhcpcd.conf"
++fi
+-- 
+2.55.0
+
