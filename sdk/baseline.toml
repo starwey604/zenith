@@ -18,7 +18,7 @@ buildroot_version = "2024.02-rkr5 (Rockchip fork)"
 origin = "https://github.com/starwey604/kernel"      # personal fork = source of truth
 upstream = "https://github.com/LubanCat/kernel.git"  # vendor, for future merges
 branch = "lbc-develop-6.1-rt36"
-commit = "b4d650df01acfed5c054569f637f24d6f343735b"
+commit = "28ac52396569ab1972037097fea1fb963e4567d6"
 note = "Consumed by the SDK via the kernel-6.1 symlink. Pin `commit` for reproducible builds. The vendor manifest pins 1bc19c520831b6d0ca7d7afb4639189a2064e9bc on lbc-develop-6.1 (see sdk/manifest.lock.xml, which points kernel-6.1 at this fork)."
 
 # AMP: Linux + Cortex-M0 (bus_mcu) RT-Thread on RK3576.

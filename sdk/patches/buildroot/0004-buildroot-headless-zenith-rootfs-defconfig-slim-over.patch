@@ -1,0 +1,104 @@
+From f0b32759006e2e180de863818e8063b97acd5108 Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Sat, 26 Sep 2026 20:01:30 +0800
+Subject: [PATCH] buildroot: headless zenith rootfs defconfig + slim overlay
+
+rockchip_rk3576_zenith_defconfig keeps camera/ISP/GStreamer, MPP/RGA, NPU, WiFi, ssh and bring-up tools; drops weston/chromium, audio, bluetooth, GPU, USB gadget/adb/usbmount, exfat/ntfs tools and demos. overlays/40-zenith-slim (zenith-only) keeps just rtw88/rtw8822c firmware and removes the rkscript usbdevice gadget helper.
+---
+ .../common/overlays/40-zenith-slim/prepare.sh | 30 ++++++++++++
+ configs/rockchip_rk3576_zenith_defconfig      | 46 +++++++++++++++++++
+ 2 files changed, 76 insertions(+)
+ create mode 100755 board/rockchip/common/overlays/40-zenith-slim/prepare.sh
+ create mode 100644 configs/rockchip_rk3576_zenith_defconfig
+
+diff --git a/board/rockchip/common/overlays/40-zenith-slim/prepare.sh b/board/rockchip/common/overlays/40-zenith-slim/prepare.sh
+new file mode 100755
+index 00000000..789d9b62
+--- /dev/null
++++ b/board/rockchip/common/overlays/40-zenith-slim/prepare.sh
+@@ -0,0 +1,30 @@
++#!/bin/bash -e
++# zenith project slim (gated to the rockchip_rk3576_zenith defconfig):
++#  - the stock lbc-firmware copies a whole firmware zoo; the board only has an
++#    RTL8822CE (rtw88 PCIe), so keep just its firmware;
++#  - the rkscript package installs the USB-gadget helper (usbdevice) and its
++#    init script regardless of RK_USB_GADGET; drop them (OTG is host-only).
++
++case "${BR2_DEFCONFIG:-}" in
++	*rk3576_zenith*) ;;
++	*) exit 1 ;;
++esac
++
++TARGET_DIR="${TARGET_DIR:?}"
++
++# --- firmware: keep only rtw88/rtw8822c_*.bin ---
++FW="${TARGET_DIR}/lib/firmware"
++if [ -d "$FW" ]; then
++	find "$FW" -mindepth 1 -maxdepth 1 ! -name rtw88 -exec rm -rf {} +
++	find "$FW/rtw88" -mindepth 1 ! -name 'rtw8822c_*.bin' -delete 2>/dev/null || true
++fi
++
++# --- USB gadget / adb leftovers (from rkscript and android-tools-adbd) ---
++rm -f "${TARGET_DIR}/usr/bin/usbdevice" \
++      "${TARGET_DIR}/usr/bin/adbd" \
++      "${TARGET_DIR}/usr/bin/adbd-auth.sh" \
++      "${TARGET_DIR}/usr/bin/logcat" \
++      "${TARGET_DIR}/etc/init.d/S50usbdevice.sh" \
++      "${TARGET_DIR}/.usb_config"
++rm -rf "${TARGET_DIR}/etc/usbdevice.d" \
++       "${TARGET_DIR}/etc/profile.d/adbd.sh"
+diff --git a/configs/rockchip_rk3576_zenith_defconfig b/configs/rockchip_rk3576_zenith_defconfig
+new file mode 100644
+index 00000000..720e43b1
+--- /dev/null
++++ b/configs/rockchip_rk3576_zenith_defconfig
+@@ -0,0 +1,46 @@
++# LubanCat-3 AMP (Linux + Cortex-M0) - headless robot rootfs (round 2).
++# Kept: camera/ISP/GStreamer, video codec (MPP/RGA), NPU (rknpu2), WiFi (RTL8822CE),
++#       ssh, dev/bring-up tools, rt-tests.
++# Dropped vs the stock lubancat config: weston/chromium, audio (pulseaudio/alsa),
++#       Bluetooth (bluez/rkwifibt-app), GPU (libmali), USB gadget/adb/usbmount,
++#       CAN userspace (CAN lives on the M0), exfat/ntfs tools, demos.
++
++#include "base/base.config"
++#include "bus/pci.config"
++#include "chips/rk3576_aarch64.config"
++#include "fs/vfat.config"
++#include "multimedia/camera.config"
++#include "multimedia/gst/camera.config"
++#include "multimedia/gst/rtsp.config"
++#include "multimedia/gst/video.config"
++#include "multimedia/mpp.config"
++#include "wifibt/wireless.config"
++#include "npu2.config"
++
++# --- keep: firmware (pruned by overlays/40-zenith-slim) + tools ---
++BR2_PACKAGE_LBC_FIRMWARE=y
++BR2_PACKAGE_PM_UTILS=y
++BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_VIM=y
++BR2_PACKAGE_IPROUTE2=y
++BR2_PACKAGE_I2C_TOOLS=y
++BR2_PACKAGE_IPUTILS=y
++BR2_PACKAGE_IW=y
++BR2_PACKAGE_COREUTILS=y
++BR2_PACKAGE_PROCPS_NG=y
++BR2_PACKAGE_STRACE=y
++BR2_PACKAGE_RT_TESTS=y
++BR2_PACKAGE_STRESS_NG=y
++BR2_PACKAGE_IPERF=y
++
++# --- drop: USB gadget / adb / auto-mount / input daemon (from base.config) ---
++# BR2_PACKAGE_ANDROID_ADBD is not set
++# BR2_PACKAGE_USBMOUNT is not set
++# BR2_PACKAGE_INPUT_EVENT_DAEMON is not set
++
++BR2_PRIMARY_SITE="https://sources.buildroot.net"
++BR2_GNU_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/gnu"
++BR2_ROOTFS_OVERLAY="board/rockchip/common/base board/rockchip/rk3576/fs-overlay/ board/rockchip/common/lubancat/"
++# BR2_TARGET_ROOTFS_CPIO is reset to default
++# BR2_TARGET_ROOTFS_SQUASHFS is reset to default
++# BR2_TARGET_ROOTFS_TAR is not set
+-- 
+2.55.0
+

@@ -1,0 +1,40 @@
+From e790d3dffd0f801cf94908386148f9499e509f7c Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Sat, 26 Sep 2026 20:01:32 +0800
+Subject: [PATCH] device/rockchip: AMP defconfig: headless kernel fragment +
+ zenith rootfs
+
+RK_KERNEL_CFG_FRAGMENTS=lubancat_rk3576_headless.config, RK_BUILDROOT_BASE_CFG=rk3576_zenith, RK_USB_GADGET off.
+---
+ .chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+index a741a9c..780ea33 100644
+--- a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
++++ b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+@@ -1,11 +1,12 @@
+ RK_ROOTFS=y
+-RK_BUILDROOT_BASE_CFG="rk3576_lubancat"
++RK_BUILDROOT_BASE_CFG="rk3576_zenith"
+ # RK_YOCTO is not set
+ RK_ROOTFS_HOSTNAME_CUSTOM=y
+ RK_ROOTFS_HOSTNAME="LubanCat"
+ RK_ROOTFS_INSTALL_MODULES=y
+ # RK_ROOTFS_STRIP_MODULES is not set
+ # RK_WIFIBT is not set
++# RK_USB_GADGET is not set
+ RK_UBOOT_SPL=y
+ RK_UBOOT_CFG_FRAGMENTS="rk-amp"
+ RK_AMP=y
+@@ -16,6 +17,7 @@ RK_AMP_MCU_RTT_TARGET="rk3576-mcu"
+ RK_AMP_FIT_ITS="amp_mcu_rtt.its"
+ RK_KERNEL_PREFERRED="6.1"
+ RK_KERNEL_CFG="lubancat_linux_rk3576_defconfig"
++RK_KERNEL_CFG_FRAGMENTS="lubancat_rk3576_headless.config"
+ RK_KERNEL_DTS_NAME="rk3576-lubancat-3-v2-mcu"
+ RK_KERNEL_EXTBOOT=y
+ # RK_RECOVERY is not set
+-- 
+2.55.0
+
