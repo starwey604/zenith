@@ -1,0 +1,68 @@
+From dbacf3a33f2519c353ca68b9607857b15a895279 Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Sat, 26 Sep 2026 21:15:07 +0800
+Subject: [PATCH] device/rockchip: build the AMP kernel with Clang + ThinLTO by
+ default
+
+Add RK_KERNEL_LLVM and append LLVM=-<v> LLVM_IAS=1 to KMAKE when set (single token avoids config-string word-splitting). The LubanCat AMP defconfig now uses the headless+clang+lto kernel fragments with LLVM=15, making Clang+ThinLTO the default build.
+
+Measured on hardware: Clang+ThinLTO is runtime-neutral vs GCC, cuts the module footprint 5.6M -> 1.8M, Image -3.4%, update.img unchanged.
+---
+ .chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig | 3 ++-
+ common/configs/Config.in.kernel                           | 7 +++++++
+ common/scripts/kernel-helper                              | 6 +++++-
+ 3 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+index 780ea33..89e2e30 100644
+--- a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
++++ b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+@@ -17,7 +17,8 @@ RK_AMP_MCU_RTT_TARGET="rk3576-mcu"
+ RK_AMP_FIT_ITS="amp_mcu_rtt.its"
+ RK_KERNEL_PREFERRED="6.1"
+ RK_KERNEL_CFG="lubancat_linux_rk3576_defconfig"
+-RK_KERNEL_CFG_FRAGMENTS="lubancat_rk3576_headless.config"
++RK_KERNEL_CFG_FRAGMENTS="lubancat_rk3576_headless.config lubancat_rk3576_clang.config lubancat_rk3576_lto.config"
++RK_KERNEL_LLVM="15"
+ RK_KERNEL_DTS_NAME="rk3576-lubancat-3-v2-mcu"
+ RK_KERNEL_EXTBOOT=y
+ # RK_RECOVERY is not set
+diff --git a/common/configs/Config.in.kernel b/common/configs/Config.in.kernel
+index 579dde8..4d22d63 100644
+--- a/common/configs/Config.in.kernel
++++ b/common/configs/Config.in.kernel
+@@ -43,6 +43,13 @@ config RK_KERNEL_CFG
+ config RK_KERNEL_CFG_FRAGMENTS
+ 	string "defconfig fragments"
+ 
++config RK_KERNEL_LLVM
++	string "LLVM/Clang version suffix (e.g. \"15\"; empty = GCC toolchain)"
++	help
++	  When set, the kernel is built with Clang:
++	  make LLVM=-<suffix> LLVM_IAS=1 (integrated assembler, required for LTO).
++	  A single token avoids config-string word-splitting in the SDK.
++
+ config RK_KERNEL_DTS_NAME
+ 	string "device-tree script name"
+ 
+diff --git a/common/scripts/kernel-helper b/common/scripts/kernel-helper
+index a0e7f7b..e5d5df6 100644
+--- a/common/scripts/kernel-helper
++++ b/common/scripts/kernel-helper
+@@ -21,8 +21,12 @@ fi
+ export RK_KERNEL_TOOLCHAIN="$(get_toolchain kernel "$RK_KERNEL_ARCH")"
+ [ "$RK_KERNEL_TOOLCHAIN" ] || exit 1
+ 
++if [ "$RK_KERNEL_LLVM" ]; then
++	RK_KERNEL_MAKE_EXTRA="$RK_KERNEL_MAKE_EXTRA LLVM=-$RK_KERNEL_LLVM LLVM_IAS=1"
++fi
++
+ export KMAKE="make -C "$RK_SDK_DIR/kernel/" -j$(( $(nproc) + 1 )) \
+-	CROSS_COMPILE=$RK_KERNEL_TOOLCHAIN ARCH=$RK_KERNEL_ARCH"
++	CROSS_COMPILE=$RK_KERNEL_TOOLCHAIN ARCH=$RK_KERNEL_ARCH ${RK_KERNEL_MAKE_EXTRA}"
+ 
+ if [ -z "$DRY_RUN" ] && [ "$RK_SUDO_ROOT" ]; then
+ 	# Sudo to source code owner for Debian's post stage
+-- 
+2.55.0
+

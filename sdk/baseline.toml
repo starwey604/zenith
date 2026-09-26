@@ -5,6 +5,7 @@ chip = "rk3576"
 board = "LubanCat-3"
 build_container = "ubuntu:22.04 (Distrobox: aura-sdk)"
 kernel_version = "6.1.99 (LubanCat lbc-develop-6.1-rt36)"
+kernel_toolchain = "Clang 15 (clang-15/lld-15/llvm-15, default) ; GCC 10.3.1 (SDK prebuilt, fallback)"
 buildroot_version = "2024.02-rkr5 (Rockchip fork)"
 
 # Pinned commits of SDK sub-repos this project patches (see series.tsv).
@@ -18,7 +19,7 @@ buildroot_version = "2024.02-rkr5 (Rockchip fork)"
 origin = "https://github.com/starwey604/kernel"      # personal fork = source of truth
 upstream = "https://github.com/LubanCat/kernel.git"  # vendor, for future merges
 branch = "lbc-develop-6.1-rt36"
-commit = "28ac52396569ab1972037097fea1fb963e4567d6"
+commit = "79c7f9aadf5d17ec552f48c307802288106a822b"
 note = "Consumed by the SDK via the kernel-6.1 symlink. Pin `commit` for reproducible builds. The vendor manifest pins 1bc19c520831b6d0ca7d7afb4639189a2064e9bc on lbc-develop-6.1 (see sdk/manifest.lock.xml, which points kernel-6.1 at this fork)."
 
 # AMP: Linux + Cortex-M0 (bus_mcu) RT-Thread on RK3576.

@@ -98,3 +98,15 @@ LTO 的目标应是可量化收益（关键路径耗时、镜像大小），而�
 裁剪前（round1）基线：`target/`=343M；大块 = modules 86M、`libmali.so` 54M、firmware 22M、gstreamer 8.2M、`librknnrt.so` 7M。
 
 第 2 轮结果：`target/` 343M→**173M**；`lib/modules` 86M→**5.6M**（251→12 个 .ko）；`lib/firmware` 22M→**344K**；`rootfs.img` 439M→**202M**；`update.img` 573M→**335M**（相对原版 −70%）。期间修正两处遗漏：`mt76` 家族与 `MEDIA_TUNER/DVB` 需显式关闭（`MEDIA_SUPPORT_FILTER=y`）；`usbdevice`/`S50usbdevice.sh` 来自 `rkscript` 包、与 `RK_USB_GADGET` 无关，已在 `40-zenith-slim` overlay 里删除。
+
+## 第 3 轮：Clang + ThinLTO 探索（2026-09-26）
+
+结论：**运行中性、模块瘦身、镜像尺寸基本不变；clang 15/16 无差异**。已把 V2 固化为主线默认。
+
+- 变量隔离：V0=GCC/LTO_NONE（原默认）；V1=Clang/无LTO（仅探测，`Image` 17.7M）；V2=Clang/ThinLTO；V3=FullLTO（未做，成本高、预期收益低）。
+- SDK 接入：`Config.in.kernel` 新增 `RK_KERNEL_LLVM`；`kernel-helper` 按其值给 KMAKE 追加 `LLVM=-<v> LLVM_IAS=1`（用单 token 避免 config 字符串被 SDK 拆开——曾导致 modules 阶段漏 `LLVM_IAS`）。板级 `LubanCat_rk3576_buildroot_amp_mcu_defconfig` 现默认 `RK_KERNEL_CFG_FRAGMENTS="...headless ...clang ...lto"` + `RK_KERNEL_LLVM="15"`。
+- 内核片段（kernel fork）：`lubancat_rk3576_clang.config`（关 `WERROR`，不影响 codegen）+ `lubancat_rk3576_lto.config`（`CONFIG_LTO_CLANG_THIN=y`）。
+- 构建依赖：容器需 `clang-15 lld-15 llvm-15`（jammy 源自带）；`AS_IS_LLVM`（`LLVM_IAS=1`）是 ThinLTO 硬门槛。
+- 尺寸：`Image` 18.8M→18.2M；`/lib/modules` **5.6M→1.8M（−68%）**；`update.img` 331MiB 不变。
+- 运行时：详见 `docs/lbc-bench.md`（cyclictest/吞吐在噪声底内；hackbench 疑似 +15% 但 V0 n=1 未定论，且与尾延迟无关）。
+- 回退纯 GCC：去掉 defconfig 里的 clang+lto 片段并清掉 `RK_KERNEL_LLVM`，用 `LubanCat_rk3576_buildroot_amp_mcu_defconfig` 重编即可。
