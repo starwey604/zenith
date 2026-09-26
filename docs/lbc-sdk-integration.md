@@ -79,13 +79,14 @@ kernel 不做 patch series，而是维护个人 fork：
   - AMP 框架脚本同步为较新的 Forlinx/Rockchip 版（`RTT_EXEC`、`CROSS_COMPILE`、riscv/hpmcu）。
 - 内核（kernel fork，`e93d23c5a`）：
   - `rk3576-amp.dtsi` 保留内存对齐 M0 BSP：`mcu@60000000`、`amp-shmem@47900000`(4MiB，页对齐，预留 UIO mmap)、`rpmsg@47d00000`、`rpmsg-dma@47f00000`。
-  - 新增 `rk3576-lubancat-3-mcu.dts`（含 `rk3576-amp.dtsi`）。
+  - 新增 `rk3576-lubancat-3-v2-mcu.dts`（v2 板 + `rk3576-amp.dtsi`；v1 的 `rk3576-lubancat-3-mcu.dts` 保留）。
   - 工具链：M0 使用公版 `arm-none-eabi`；`mk-amp.sh` 在 SDK 无预置裸机工具链时回退到主机 `arm-none-eabi-`（容器内 `apt install gcc-arm-none-eabi`，Ubuntu 22.04 为 10.3.1）。
 
 > **需板上核对/待办**：
 > - M0 控制台 UART5 已定为 **M0 mux（GPIO3_D4=RX / GPIO3_D5=TX，40pin pin16/18）**：内核 `rk3576-amp.dtsi` 用 `uart5m0_xfer`，M0 BSP 用 `uart5_m0_iomux_config()`（默认的 M1=GPIO4_B0/B1 不在 40pin，M2=GPIO2_A4/A5 与 SDMMC0 冲突）。
 > - `RK_UBOOT_CFG` 默认 `rk3576`，确认 LubanCat 板实际使用的 u-boot defconfig。
 > - 后续 UIO 共享消息：`amp-shmem@47900000`（4 MiB）已按页对齐预留，可绑定 UIO 驱动或经 `/dev/mem` 映射；RPMSG vring 在 `0x47d00000`。
+> - **已踩坑（dtb 选择）**：LubanCat 的 `boot_init.sh` 首次启动会 `ln -sf dtb/$BOARD_DTB /boot/rk-kernel.dtb` 并 **reboot**，把 extboot 里的 AMP dtb 换成 stock 板级 dtb（本机 `BOARD_ID=0100` → `rk3576-lubancat-3-v2.dtb`），导致 AMP 保留内存/`rockchip,amp` 全部丢失。修复：内核新增 `rk3576-lubancat-3-v2-mcu.dts`，defconfig 指向它，并 patch `boot_init.sh` 把 v2 的 `BOARD_DTB` 指到该 AMP dtb。**首次烧录后会自重启一次，第二次启动才是稳定状态。**
 
 ## FDCAN 移交小核（待办）
 

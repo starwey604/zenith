@@ -11,12 +11,12 @@
   <project name="app/rkadk" remote="internal" revision="6cdc8799f7dde11578f5b0e153d31f8f4c40d595" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
   <project name="app/rkipc" remote="internal" revision="e34f3b1621339185ef214b2e12b38ef03b7262fe" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
   <project name="app/rkpartybox" remote="internal" revision="4480de522ad8f0439049c5d2e3b8db9005ad3266" upstream="refs/tags/linux-6.1-stan-rkr5" dest-branch="refs/tags/linux-6.1-stan-rkr5" clone-depth="1"/>
-  <project name="buildroot" revision="ad92be956b0fe4251408b9bf30dee24e8780d14a" upstream="4c038732919b526ea263fd2316feac97dc082213" dest-branch="4c038732919b526ea263fd2316feac97dc082213" clone-depth="1">
+  <project name="buildroot" revision="ec62d7fa76368163a07990d8e091afcd72796a36" upstream="4c038732919b526ea263fd2316feac97dc082213" dest-branch="4c038732919b526ea263fd2316feac97dc082213" clone-depth="1">
     <linkfile src="build/envsetup.sh" dest="envsetup.sh"/>
   </project>
   <project name="debian11" revision="4ac7fced01309643a19b852439caaaa3be20b76a" upstream="ef491103dd415f16364285a1ea9958949355fb7c" dest-branch="debian11" clone-depth="1"/>
   <project name="debian12" revision="8d1fc893b448b623337ee565f4d6bd1f80d70df3" upstream="58085b6c8a03e21ad1afae00c8a9a80ccca87b80" dest-branch="debian12" clone-depth="1"/>
-  <project name="device_rockchip" path="device/rockchip" revision="0573ebae2185e98e0ef3047563f3e1e461ee7e8d" upstream="1f1392c6e7f43d4654b24d2fcfefed5811e61a7a" dest-branch="main" clone-depth="1">
+  <project name="device_rockchip" path="device/rockchip" revision="e936d5e65f662d01166ee00bfb42de0c1f8c7ccc" upstream="1f1392c6e7f43d4654b24d2fcfefed5811e61a7a" dest-branch="main" clone-depth="1">
     <linkfile src="common/scripts/build.sh" dest="build.sh"/>
     <linkfile src="common/Makefile" dest="Makefile"/>
     <linkfile src="common/scripts/rkflash.sh" dest="rkflash.sh"/>
@@ -57,7 +57,7 @@
   <project name="gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu" path="prebuilts/gcc/linux-x86/aarch64/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu" revision="adbb295a970c4b39dc487c95226fe84d2c460072" clone-depth="1"/>
   <project name="gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf" path="prebuilts/gcc/linux-x86/arm/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf" revision="2e89382ca3f8c34086272509ae4d7a5c340ffafc" clone-depth="1"/>
   <project name="kernel" path="kernel-5.10" revision="163eb52c309272d964d899375b93002b58059239" upstream="c9b55815cf77f85c4d7e7eb1eecf4fcd52b2d3dd" dest-branch="lbc-develop-5.10" clone-depth="1"/>
-  <project name="kernel" path="kernel-6.1" remote="starwey" revision="140abef929e11e442d22efb4567e3f120775f46e" dest-branch="lbc-develop-6.1" clone-depth="1"/>
+  <project name="kernel" path="kernel-6.1" remote="starwey" revision="b4d650df01acfed5c054569f637f24d6f343735b" dest-branch="lbc-develop-6.1" clone-depth="1"/>
   <project name="lubancat-bin" revision="62e2a1db86d9ce76b35d38314634ca8b201c2ce4" dest-branch="main" clone-depth="1"/>
   <project name="rk3576-hal" path="hal" remote="starwey" revision="277de3fd4b0e640654ee73bb3308be2ef01e3aad" groups="local::01-amp"/>
   <project name="rk3576-rtos" path="rtos" remote="starwey" revision="7c397f41751feb29b0b388dfda3d2c2225f1f87c" groups="local::01-amp"/>

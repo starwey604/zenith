@@ -1,0 +1,26 @@
+From ec62d7fa76368163a07990d8e091afcd72796a36 Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Sat, 26 Sep 2026 17:42:54 +0800
+Subject: [PATCH] buildroot: boot_init.sh: select the AMP dtb for LubanCat-3 v2
+
+On first boot the hook does 'ln -sf dtb/$BOARD_DTB /boot/rk-kernel.dtb' then reboots, which silently replaced the AMP device tree shipped in extboot with the stock v2 one. Point the rk3576 v2 mapping at rk3576-lubancat-3-v2-mcu.dtb so the AMP reserved-memory/rockchip,amp nodes survive.
+---
+ board/rockchip/common/lubancat/usr/bin/boot_init.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/rockchip/common/lubancat/usr/bin/boot_init.sh b/board/rockchip/common/lubancat/usr/bin/boot_init.sh
+index a419989b..ba794788 100755
+--- a/board/rockchip/common/lubancat/usr/bin/boot_init.sh
++++ b/board/rockchip/common/lubancat/usr/bin/boot_init.sh
+@@ -204,7 +204,7 @@ board_info() {
+ 				;;
+ 			0100)
+ 				BOARD_NAME='LubanCat-3 v2'
+-				BOARD_DTB='rk3576-lubancat-3-v2.dtb'
++				BOARD_DTB='rk3576-lubancat-3-v2-mcu.dtb'
+ 				BOARD_uEnv='uEnvLubanCat3-V2.txt'
+ 				;;
+ 			*)
+-- 
+2.55.0
+

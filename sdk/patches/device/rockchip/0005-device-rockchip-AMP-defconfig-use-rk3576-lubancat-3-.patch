@@ -1,0 +1,27 @@
+From e936d5e65f662d01166ee00bfb42de0c1f8c7ccc Mon Sep 17 00:00:00 2001
+From: Starwey <moonbite233@gmail.com>
+Date: Sat, 26 Sep 2026 17:42:54 +0800
+Subject: [PATCH] device/rockchip: AMP defconfig: use rk3576-lubancat-3-v2-mcu
+ dts
+
+The board reports BOARD_ID 0100 (LubanCat-3 v2); boot_init.sh maps that id to rk3576-lubancat-3-v2.dtb, so the AMP image must ship an AMP dtb under that family name.
+---
+ .chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+index 7f8e883..a741a9c 100644
+--- a/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
++++ b/.chips/rk3576/LubanCat_rk3576_buildroot_amp_mcu_defconfig
+@@ -16,7 +16,7 @@ RK_AMP_MCU_RTT_TARGET="rk3576-mcu"
+ RK_AMP_FIT_ITS="amp_mcu_rtt.its"
+ RK_KERNEL_PREFERRED="6.1"
+ RK_KERNEL_CFG="lubancat_linux_rk3576_defconfig"
+-RK_KERNEL_DTS_NAME="rk3576-lubancat-3-mcu"
++RK_KERNEL_DTS_NAME="rk3576-lubancat-3-v2-mcu"
+ RK_KERNEL_EXTBOOT=y
+ # RK_RECOVERY is not set
+ RK_EXTRA_PARTITION_1_BUILTIN=y
+-- 
+2.55.0
+
