@@ -6,3 +6,4 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 scripts/arm_design_study/runs/
+/out/

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "source": "LubanCat RK3576 Buildroot",
+  "buildroot_commit": "f0b32759006e2e180de863818e8063b97acd5108",
+  "buildroot_dirty": false,
+  "buildroot_config_sha256": "060418855a9369088e1c06233a4a60bc5ff0bd2c87dd5eb73aed795fa817fb91",
+  "target": "aarch64-buildroot-linux-gnu",
+  "gcc_version": "12.4.0",
+  "libc": "glibc",
+  "archive_sha256": "3ef05273a3cb321cf4c8d7f0167f7adfc6fad5ce470b3f5eecd4c34b113d5dd6"
+}

@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Import a relocatable Buildroot SDK snapshot without changing the vendor tree."""
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import stat
+import subprocess
+import tempfile
+
+
+def run(*args):
+    subprocess.run(args, check=True)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("buildroot", type=Path, help="Buildroot source directory")
+    parser.add_argument("--output-name", default="rockchip_rk3576_lubancat")
+    args = parser.parse_args()
+    source = args.buildroot.resolve()
+    output = source / "output" / args.output_name
+    original_host = output / "host"
+    relocation_script = source / "support/misc/relocate-sdk.sh"
+    patchelf = original_host / "bin/patchelf"
+    for required in (relocation_script, patchelf, original_host / "share/buildroot/toolchainfile.cmake"):
+        if not required.is_file():
+            parser.error(f"Missing SDK input: {required}")
+
+    repo = Path(__file__).resolve().parents[1]
+    destination = repo / "runtime/toolchains/lbc3"
+    destination.mkdir(parents=True, exist_ok=True)
+    work = repo / "out/runtime/sdk-import"
+    work.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=work) as temporary:
+        host = Path(temporary) / "sdk"
+        print("Copying Buildroot host and sysroot...", flush=True)
+        shutil.copytree(original_host, host, symlinks=True)
+        sysroot = host / "aarch64-buildroot-linux-gnu/sysroot"
+        # Keep target-absolute symlinks in the sysroot; rewrite SDK-internal links.
+        for parent, dirs, files in os.walk(host):
+            for name in dirs + files:
+                path = Path(parent) / name
+                if path.is_symlink():
+                    target = os.readlink(path)
+                    prefix = str(original_host) + "/"
+                    if target.startswith(prefix):
+                        relative = os.path.relpath(host / target[len(prefix):], path.parent)
+                        path.unlink()
+                        path.symlink_to(relative)
+                    elif target.startswith("/") and not path.is_relative_to(sysroot):
+                        candidate = host / target.lstrip("/")
+                        if not candidate.exists():
+                            raise RuntimeError(f"External absolute SDK symlink: {path}: {target}")
+                        path.unlink()
+                        path.symlink_to(os.path.relpath(candidate, path.parent))
+                    continue
+                if not path.is_file():
+                    continue
+                with path.open("rb") as stream:
+                    if stream.read(4) != b"\x7fELF":
+                        continue
+                probe = subprocess.run([str(patchelf), "--print-rpath", str(path)],
+                                       capture_output=True, text=True)
+                if probe.returncode != 0 or not probe.stdout.strip():
+                    continue
+                rpath = probe.stdout.strip().replace(str(original_host), str(host))
+                mode = path.stat().st_mode
+                path.chmod(mode | stat.S_IWUSR)
+                run(str(patchelf), "--set-rpath", rpath, str(path))
+                if path.is_relative_to(sysroot):
+                    run(str(patchelf), "--make-rpath-relative", str(sysroot),
+                        "--no-standard-lib-dirs", str(path))
+                else:
+                    run(str(patchelf), "--make-rpath-relative", str(host),
+                        "--relative-to-file", str(path))
+                path.chmod(mode)
+
+        shutil.copy2(relocation_script, host / "relocate-sdk.sh")
+        location = host / "share/buildroot/sdk-location"
+        location.write_text(str(original_host) + "\n")
+        # A neutral packaging location is rewritten on extraction, never required.
+        run(str(host / "relocate-sdk.sh"), "/opt/zenith-lbc3-sdk")
+        archive = Path(temporary) / "sdk.tar.gz"
+        run("tar", "--sort=name", "--mtime=@0", "--owner=0", "--group=0",
+            "--numeric-owner", "-czf", str(archive), "-C", temporary, "sdk")
+        checksum = hashlib.sha256()
+        with archive.open("rb") as stream:
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                checksum.update(chunk)
+        digest = checksum.hexdigest()
+        shutil.move(archive, destination / "sdk.tar.gz")
+        (destination / "sdk.tar.gz.sha256").write_text(f"{digest}  sdk.tar.gz\n")
+        version = subprocess.check_output(
+            [str(original_host / "bin/aarch64-buildroot-linux-gnu-gcc"), "-dumpfullversion"],
+            text=True).strip()
+        config_hash = hashlib.sha256((output / ".config").read_bytes()).hexdigest()
+        commit = subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip()
+        metadata = {
+            "schema_version": 1,
+            "source": "LubanCat RK3576 Buildroot",
+            "buildroot_commit": commit,
+            "buildroot_dirty": bool(subprocess.check_output(
+                ["git", "-C", str(source), "status", "--porcelain"], text=True).strip()),
+            "buildroot_config_sha256": config_hash,
+            "target": "aarch64-buildroot-linux-gnu",
+            "gcc_version": version,
+            "libc": "glibc",
+            "archive_sha256": digest,
+        }
+        (destination / "manifest.json").write_text(json.dumps(metadata, indent=2) + "\n")
+        print(f"Imported: {destination.relative_to(repo)}/sdk.tar.gz ({digest})")
+
+
+if __name__ == "__main__":
+    main()

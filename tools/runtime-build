@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage: tools/runtime-build <native|lbc3> [--jobs N]
+
+Configure, build, and stage the runtime in out/runtime/<target>/install/usr/.
+Native builds also run CTest. Cross builds are not executed on the host.
+
+LBC3 builds use the Git LFS SDK snapshot in runtime/toolchains/lbc3/.
+EOF
+}
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+    usage
+    exit 0
+fi
+target="${1:-}"
+case "$target" in
+    native|lbc3) shift ;;
+    *) usage >&2; exit 2 ;;
+esac
+jobs=2
+while (($#)); do
+    case "$1" in
+        --jobs)
+            if (($# < 2)) || [[ ! "$2" =~ ^[1-9][0-9]*$ ]]; then
+                printf 'Error: --jobs requires a positive integer\n' >&2
+                exit 2
+            fi
+            jobs="$2"
+            shift 2
+            ;;
+        *) printf 'Unknown argument: %s\n' "$1" >&2; exit 2 ;;
+    esac
+done
+
+repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+for command_name in cmake ninja clang clang++ ld.lld llvm-ar llvm-ranlib llvm-nm llvm-readelf; do
+    command -v "$command_name" >/dev/null || {
+        printf 'Missing required command: %s\n' "$command_name" >&2
+        exit 1
+    }
+done
+
+configure_args=()
+if [[ "$target" == lbc3 ]]; then
+    sdk_source="$repo_dir/runtime/toolchains/lbc3"
+    (cd -- "$sdk_source" && sha256sum --check sdk.tar.gz.sha256) || {
+        printf 'SDK snapshot missing or invalid. Fetch it with git lfs pull.\n' >&2
+        exit 1
+    }
+    sdk_hash="$(cut -d ' ' -f 1 "$sdk_source/sdk.tar.gz.sha256")"
+    sdk_cache="$repo_dir/out/runtime/toolchains/lbc3/$sdk_hash"
+    host_dir="$sdk_cache/sdk"
+    if [[ ! -f "$sdk_cache/.ready" ]]; then
+        mkdir -p -- "$sdk_cache"
+        tar -xzf "$sdk_source/sdk.tar.gz" -C "$sdk_cache"
+        "$host_dir/relocate-sdk.sh"
+        touch "$sdk_cache/.ready"
+    elif [[ "$(cat "$host_dir/share/buildroot/sdk-location")" != "$host_dir" ]]; then
+        "$host_dir/relocate-sdk.sh"
+    fi
+    runtime_prefix="$("$repo_dir/tools/runtime-llvm-runtimes" "$host_dir" "$jobs")"
+    cache_file="$repo_dir/out/runtime/lbc3/build-llvm/CMakeCache.txt"
+    if [[ -f "$cache_file" ]]; then
+        cached_host="$(sed -n 's/^LBC_BUILDROOT_HOST_DIR:PATH=//p' "$cache_file")"
+        cached_runtime="$(sed -n 's/^ZENITH_LLVM_RUNTIME_PREFIX:PATH=//p' "$cache_file")"
+        if [[ "$cached_host" != "$host_dir" || "$cached_runtime" != "$runtime_prefix" ]]; then
+            previous_build="$repo_dir/out/runtime/lbc3/build-llvm.previous-$(date +%s%N)"
+            mv -- "$(dirname -- "$cache_file")" "$previous_build"
+            printf 'Toolchain changed; preserved the previous build at %s\n' "$previous_build"
+        fi
+    fi
+    configure_args+=("-DLBC_BUILDROOT_HOST_DIR=$host_dir")
+    configure_args+=("-DZENITH_LLVM_RUNTIME_PREFIX=$runtime_prefix")
+fi
+
+cd -- "$repo_dir/runtime"
+cmake --preset "$target" "${configure_args[@]}"
+cmake --build --preset "$target" --parallel "$jobs"
+if [[ "$target" == native ]]; then
+    ctest --preset native
+fi
+DESTDIR="$repo_dir/out/runtime/$target/install" \
+    cmake --install "$repo_dir/out/runtime/$target/build-llvm"
+printf '\nStaged executable: %s\n' "$repo_dir/out/runtime/$target/install/usr/bin/zenith-control"

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Build the target LLVM libraries; stdout contains only the installation prefix.
+set -euo pipefail
+host_dir="${1:?Expected extracted Buildroot SDK path}"
+jobs="${2:-2}"
+repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+source_dir="$repo_dir/runtime/third_party/sources"
+archive=llvm-project-22.1.8.src.tar.xz
+(cd -- "$source_dir" && sha256sum --check "$archive.sha256") >&2 || {
+    printf 'LLVM source snapshot missing or invalid; run git lfs pull.\n' >&2
+    exit 1
+}
+clang_version="$(clang -dumpversion)"
+if [[ "$clang_version" != 22.1.8 ]]; then
+    printf 'Expected Clang 22.1.8, found %s. Update the LLVM source lock and recipe together.\n' "$clang_version" >&2
+    exit 1
+fi
+source_hash="$(cut -d ' ' -f 1 "$source_dir/$archive.sha256")"
+source_cache="$repo_dir/out/runtime/sources/llvm-$source_hash"
+if [[ ! -f "$source_cache/.ready" ]]; then
+    mkdir -p -- "$source_cache"
+    tar -xJf "$source_dir/$archive" -C "$source_cache" --strip-components=1
+    touch "$source_cache/.ready"
+fi
+recipe_hash="$(sha256sum "$repo_dir/tools/runtime-llvm-runtimes" "$repo_dir/runtime/cmake/toolchains/lbc3.cmake" "$host_dir/share/buildroot/sdk-location" "$repo_dir/runtime/toolchains/lbc3/sdk.tar.gz.sha256" | sha256sum | cut -c 1-16)"
+runtime_dir="$repo_dir/out/runtime/lbc3/llvm-runtime/$source_hash-$recipe_hash"
+prefix="$runtime_dir/install"
+mkdir -p -- "$runtime_dir"
+log="$runtime_dir/build.log"
+# All ABI-related libraries are built together from one pinned LLVM release.
+if ! {
+    cmake -S "$source_cache/runtimes" -B "$runtime_dir/build" -G Ninja \
+        -DCMAKE_TOOLCHAIN_FILE="$repo_dir/runtime/cmake/toolchains/lbc3.cmake" \
+        -DLBC_BUILDROOT_HOST_DIR="$host_dir" -DZENITH_BUILD_LLVM_RUNTIMES=ON \
+        -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$prefix" \
+        -DCMAKE_C_FLAGS_RELEASE='-O3 -DNDEBUG -flto=thin' \
+        -DCMAKE_CXX_FLAGS_RELEASE='-O3 -DNDEBUG -flto=thin' \
+        -DCMAKE_EXE_LINKER_FLAGS='-fuse-ld=lld -flto=thin -Wl,--thinlto-jobs=2' \
+        -DCMAKE_SHARED_LINKER_FLAGS='-fuse-ld=lld -flto=thin -Wl,--thinlto-jobs=2' \
+        '-DLLVM_ENABLE_RUNTIMES=libcxx;libcxxabi;libunwind;openmp' \
+        -DLLVM_INCLUDE_TESTS=OFF -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=OFF \
+        -DLIBCXX_ENABLE_SHARED=OFF -DLIBCXX_ENABLE_STATIC=ON \
+        -DLIBCXX_INCLUDE_TESTS=OFF -DLIBCXX_INCLUDE_BENCHMARKS=OFF \
+        -DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=OFF \
+        -DLIBCXXABI_ENABLE_SHARED=OFF -DLIBCXXABI_ENABLE_STATIC=ON \
+        -DLIBCXXABI_INCLUDE_TESTS=OFF -DLIBCXXABI_USE_LLVM_UNWINDER=ON \
+        -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=OFF \
+        -DLIBUNWIND_ENABLE_SHARED=OFF -DLIBUNWIND_ENABLE_STATIC=ON \
+        -DLIBUNWIND_INCLUDE_TESTS=OFF \
+        -DLIBOMP_ENABLE_SHARED=OFF -DLIBOMP_OMPD_SUPPORT=OFF \
+        -DOPENMP_ENABLE_LIBOMPTARGET=OFF &&
+    cmake --build "$runtime_dir/build" --parallel "$jobs" &&
+    cmake --install "$runtime_dir/build"
+} >"$log" 2>&1; then
+    tail -n 80 "$log" >&2
+    exit 1
+fi
+printf 'LLVM target runtimes ready; log: %s\n' "$log" >&2
+printf '%s\n' "$prefix"
