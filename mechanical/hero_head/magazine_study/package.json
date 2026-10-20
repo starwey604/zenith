@@ -1,0 +1,19 @@
+{
+  "name": "zenith-magazine-study",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:pick-place",
+    "build:pick-place": "esbuild src/pick-place.js --bundle --format=iife --minify --outfile=pick-place.bundle.js --legal-comments=eof",
+    "check": "npm run check:pick-place",
+    "check:pick-place": "node pick-place-checks.mjs",
+    "serve": "python3 -m http.server 8773 --bind 127.0.0.1 --directory ../../.."
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "@playwright/test": "1.63.0"
+  }
+}

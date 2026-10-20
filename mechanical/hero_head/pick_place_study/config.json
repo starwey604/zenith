@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-20",
+  "units": "mm, kg, N, N·m",
+  "ball_diameter_mm": 42.5,
+  "ball_max_diameter_mm": 43,
+  "ball_mass_kg": 0.0445,
+  "pocket_diameter_mm": 46,
+  "reference_launcher_mass_kg": 1.2,
+  "gripper_mass_kg": 0.24,
+  "rated_endpoint_mass_kg": 3,
+  "table": {
+    "outer_xy_mm": [
+      750,
+      450
+    ],
+    "straight_xy_mm": [
+      650,
+      350
+    ],
+    "height_mm": 400
+  },
+  "common_masses": [
+    {
+      "name": "发射核心与测速",
+      "kg": 1.2,
+      "center_mm": [
+        18,
+        0,
+        5
+      ]
+    },
+    {
+      "name": "LBC3、现有外壳及局部附件",
+      "kg": 0.25,
+      "center_mm": [
+        68,
+        0,
+        80
+      ]
+    },
+    {
+      "name": "相机及局部固定件",
+      "kg": 0.06,
+      "center_mm": [
+        110,
+        0,
+        117
+      ]
+    },
+    {
+      "name": "骨架、视觉桥架与支脚",
+      "kg": 0.18,
+      "center_mm": [
+        -38,
+        0,
+        -7
+      ]
+    },
+    {
+      "name": "底部被动定位框与锁销",
+      "kg": 0.125,
+      "center_mm": [
+        -15,
+        0,
+        -53
+      ]
+    },
+    {
+      "name": "供电通信、保护电路与线束",
+      "kg": 0.08,
+      "center_mm": [
+        15,
+        0,
+        20
+      ]
+    },
+    {
+      "name": "未细化零件预留",
+      "kg": 0.12,
+      "center_mm": [
+        -15,
+        0,
+        10
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "id": "axial5",
+      "title": "轴向五格＋二级主动推送",
+      "short": "五格 · 轴向直推",
+      "tag": "当前主线",
+      "kind": "axial",
+      "slots": 5,
+      "ammo": 5,
+      "radius_mm": 42,
+      "outer_radius_mm": 69,
+      "rotor_center_mm": [
+        -120,
+        0,
+        42
+      ],
+      "rotor_depth_mm": 43,
+      "grip": "ears",
+      "grip_point_mm": [
+        -12,
+        0,
+        64
+      ],
+      "wrist_point_mm": [
+        -12,
+        0,
+        166
+      ],
+      "magazine_mass_kg": 0.42,
+      "grip_mass_kg": 0.055,
+      "feed_masses": [
+        {
+          "name": "轴向五格盘与前后限位板",
+          "kg": 0.12,
+          "center_mm": [
+            -120,
+            0,
+            42
+          ]
+        },
+        {
+          "name": "分度驱动与断电定位",
+          "kg": 0.055,
+          "center_mm": [
+            -166,
+            0,
+            42
+          ]
+        },
+        {
+          "name": "二级伸缩推送总成（含驱动预算）",
+          "kg": 0.195,
+          "center_mm": [
+            -205,
+            14,
+            0
+          ]
+        },
+        {
+          "name": "短直导路与常闭止弹件",
+          "kg": 0.05,
+          "center_mm": [
+            -64,
+            8,
+            0
+          ]
+        }
+      ],
+      "extra_masses": [
+        {
+          "name": "后伸骨架增量",
+          "kg": 0.025,
+          "center_mm": [
+            -194,
+            0,
+            -27
+          ]
+        }
+      ],
+      "axial": {
+        "pusher_home_face_x_mm": -154,
+        "handoff_ball_center_x_mm": -8,
+        "stage_length_mm": 88,
+        "minimum_overlap_mm": 25,
+        "rear_cap_mm": 3,
+        "guide_start_x_mm": -95,
+        "guide_end_x_mm": -36,
+        "gate_travel_mm": 52,
+        "retention": "各格轻弹性保持、前后限位；出口止弹片常闭，转盘断电定位。保持力与推出力均待实测。"
+      },
+      "why": "转盘放在YZ平面，转轴沿炮口X方向。最低一格对准入口，推头沿直线把单颗球送到摩擦轮接管位置，不再依靠最后一发滚过90°弯管。",
+      "reuse": "保留五格独立储弹、侧耳、底部被动接口、原摩擦轮关系和居中视觉组件；重新画前后限位板与轮座入口。",
+      "tradeoff": "有效推送行程约125 mm。普通单级长杆会拖长尾部，这版用两级伸缩占位把长度压到约393 mm；传动、刚度、磨损及堵转保护未详设。按当前质量预算已接近3 kg末端额定值。",
+      "next": "先做单格直推台架，验证最后一发在−15°、0°、＋45°停住后能主动入轮；再验证五格分度、推头退净与止弹片的互锁。"
+    }
+  ]
+}

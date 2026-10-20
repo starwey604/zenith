@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-20",
+  "source_sha256": "2e1592bbce154bfd040903b51ba422ae8ab95d8fd9990b729fd2b64a12655075",
+  "candidates": [
+    {
+      "id": "axial5",
+      "route_length_mm": 90.0,
+      "centreline_bend_radius_mm": null,
+      "pitches": [
+        {
+          "pitch_deg": -15,
+          "centreline_exit_above_lowest_point_mm": 0,
+          "final_segment_uphill": false
+        },
+        {
+          "pitch_deg": 0,
+          "centreline_exit_above_lowest_point_mm": 0,
+          "final_segment_uphill": false
+        },
+        {
+          "pitch_deg": 15,
+          "centreline_exit_above_lowest_point_mm": 23.293714059226865,
+          "final_segment_uphill": true
+        },
+        {
+          "pitch_deg": 30,
+          "centreline_exit_above_lowest_point_mm": 44.99999999999999,
+          "final_segment_uphill": true
+        },
+        {
+          "pitch_deg": 45,
+          "centreline_exit_above_lowest_point_mm": 63.639610306789265,
+          "final_segment_uphill": true
+        }
+      ],
+      "feed_actuation_coverage": "Axial pusher follows the single ball to an assumed wheel-handoff centre at X=-8 mm; contact/drive implementation remains unresolved."
+    }
+  ],
+  "interpretation": "The axial line is uphill when the muzzle is raised. A following pusher is required; no gravity-only transport is assumed. This is a geometric review, not a jam probability or contact/rolling simulation."
+}

@@ -1,0 +1,5 @@
+cad/reference_full.FCStd
+cad/*.FCStd1
+cad/*.FCBak
+reports/import.log
+reports/reference_inventory.json

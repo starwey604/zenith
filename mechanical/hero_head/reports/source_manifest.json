@@ -1,0 +1,10 @@
+{
+  "source": "/home/ww/文档/HERO.STEP",
+  "bytes": 184775157,
+  "sha256": "c80dcc5aee543828851fa56d5d413e196a820bea3a26ffcd7760eb5b637c311d",
+  "header": "ISO-10303-21;\r\nHEADER;\r\nFILE_DESCRIPTION (( 'STEP AP214' ),\r\n    '1' );\r\nFILE_NAME ('HERO.STEP',\r\n    '2021-08-27T03:31:49',\r\n    ( '' ),\r\n    ( '' ),\r\n    'SwSTEP 2.0',\r\n    'SolidWorks 2020',\r\n    '' );\r\nFILE_SCHEMA (( 'AUTOMOTIVE_DESIGN' ));\r\nENDSEC;",
+  "label_encoding": "gb18030 (strict decode succeeded)",
+  "product_definitions": 232,
+  "assembly_occurrences": 561,
+  "source_attribution": "User identifies source as SJTU JiaoLong HERO open source; release/license not yet verified"
+}

@@ -1,0 +1,2563 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-20",
+  "config": {
+    "schema_version": 1,
+    "date": "2026-10-20",
+    "units": "mm, kg, N, N·m",
+    "ball_diameter_mm": 42.5,
+    "ball_max_diameter_mm": 43,
+    "ball_mass_kg": 0.0445,
+    "pocket_diameter_mm": 46,
+    "reference_launcher_mass_kg": 1.2,
+    "gripper_mass_kg": 0.24,
+    "rated_endpoint_mass_kg": 3,
+    "table": {
+      "outer_xy_mm": [
+        750,
+        450
+      ],
+      "straight_xy_mm": [
+        650,
+        350
+      ],
+      "height_mm": 400
+    },
+    "common_masses": [
+      {
+        "name": "发射核心与测速",
+        "kg": 1.2,
+        "center_mm": [
+          18,
+          0,
+          5
+        ]
+      },
+      {
+        "name": "LBC3、现有外壳及局部附件",
+        "kg": 0.25,
+        "center_mm": [
+          68,
+          0,
+          80
+        ]
+      },
+      {
+        "name": "相机及局部固定件",
+        "kg": 0.06,
+        "center_mm": [
+          110,
+          0,
+          117
+        ]
+      },
+      {
+        "name": "骨架、视觉桥架与支脚",
+        "kg": 0.18,
+        "center_mm": [
+          -38,
+          0,
+          -7
+        ]
+      },
+      {
+        "name": "底部被动定位框与锁销",
+        "kg": 0.125,
+        "center_mm": [
+          -15,
+          0,
+          -53
+        ]
+      },
+      {
+        "name": "供电通信、保护电路与线束",
+        "kg": 0.08,
+        "center_mm": [
+          15,
+          0,
+          20
+        ]
+      },
+      {
+        "name": "未细化零件预留",
+        "kg": 0.12,
+        "center_mm": [
+          -15,
+          0,
+          10
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "id": "axial5",
+        "title": "轴向五格＋二级主动推送",
+        "short": "五格 · 轴向直推",
+        "tag": "当前主线",
+        "kind": "axial",
+        "slots": 5,
+        "ammo": 5,
+        "radius_mm": 42,
+        "outer_radius_mm": 69,
+        "rotor_center_mm": [
+          -120,
+          0,
+          42
+        ],
+        "rotor_depth_mm": 43,
+        "grip": "ears",
+        "grip_point_mm": [
+          -12,
+          0,
+          64
+        ],
+        "wrist_point_mm": [
+          -12,
+          0,
+          166
+        ],
+        "magazine_mass_kg": 0.42,
+        "grip_mass_kg": 0.055,
+        "feed_masses": [
+          {
+            "name": "轴向五格盘与前后限位板",
+            "kg": 0.12,
+            "center_mm": [
+              -120,
+              0,
+              42
+            ]
+          },
+          {
+            "name": "分度驱动与断电定位",
+            "kg": 0.055,
+            "center_mm": [
+              -166,
+              0,
+              42
+            ]
+          },
+          {
+            "name": "二级伸缩推送总成（含驱动预算）",
+            "kg": 0.195,
+            "center_mm": [
+              -205,
+              14,
+              0
+            ]
+          },
+          {
+            "name": "短直导路与常闭止弹件",
+            "kg": 0.05,
+            "center_mm": [
+              -64,
+              8,
+              0
+            ]
+          }
+        ],
+        "extra_masses": [
+          {
+            "name": "后伸骨架增量",
+            "kg": 0.025,
+            "center_mm": [
+              -194,
+              0,
+              -27
+            ]
+          }
+        ],
+        "axial": {
+          "pusher_home_face_x_mm": -154,
+          "handoff_ball_center_x_mm": -8,
+          "stage_length_mm": 88,
+          "minimum_overlap_mm": 25,
+          "rear_cap_mm": 3,
+          "guide_start_x_mm": -95,
+          "guide_end_x_mm": -36,
+          "gate_travel_mm": 52,
+          "retention": "各格轻弹性保持、前后限位；出口止弹片常闭，转盘断电定位。保持力与推出力均待实测。"
+        },
+        "why": "转盘放在YZ平面，转轴沿炮口X方向。最低一格对准入口，推头沿直线把单颗球送到摩擦轮接管位置，不再依靠最后一发滚过90°弯管。",
+        "reuse": "保留五格独立储弹、侧耳、底部被动接口、原摩擦轮关系和居中视觉组件；重新画前后限位板与轮座入口。",
+        "tradeoff": "有效推送行程约125 mm。普通单级长杆会拖长尾部，这版用两级伸缩占位把长度压到约393 mm；传动、刚度、磨损及堵转保护未详设。按当前质量预算已接近3 kg末端额定值。",
+        "next": "先做单格直推台架，验证最后一发在−15°、0°、＋45°停住后能主动入轮；再验证五格分度、推头退净与止弹片的互锁。"
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "id": "axial5",
+      "title": "轴向五格＋二级主动推送",
+      "short": "五格 · 轴向直推",
+      "tag": "当前主线",
+      "kind": "axial",
+      "slots": 5,
+      "ammo": 5,
+      "radius_mm": 42,
+      "outer_radius_mm": 69,
+      "rotor_center_mm": [
+        -120,
+        0,
+        42
+      ],
+      "rotor_depth_mm": 43,
+      "grip": "ears",
+      "grip_point_mm": [
+        -12,
+        0,
+        64
+      ],
+      "wrist_point_mm": [
+        -12,
+        0,
+        166
+      ],
+      "magazine_mass_kg": 0.42,
+      "grip_mass_kg": 0.055,
+      "feed_masses": [
+        {
+          "name": "轴向五格盘与前后限位板",
+          "kg": 0.12,
+          "center_mm": [
+            -120,
+            0,
+            42
+          ]
+        },
+        {
+          "name": "分度驱动与断电定位",
+          "kg": 0.055,
+          "center_mm": [
+            -166,
+            0,
+            42
+          ]
+        },
+        {
+          "name": "二级伸缩推送总成（含驱动预算）",
+          "kg": 0.195,
+          "center_mm": [
+            -205,
+            14,
+            0
+          ]
+        },
+        {
+          "name": "短直导路与常闭止弹件",
+          "kg": 0.05,
+          "center_mm": [
+            -64,
+            8,
+            0
+          ]
+        }
+      ],
+      "extra_masses": [
+        {
+          "name": "后伸骨架增量",
+          "kg": 0.025,
+          "center_mm": [
+            -194,
+            0,
+            -27
+          ]
+        }
+      ],
+      "axial": {
+        "pusher_home_face_x_mm": -154,
+        "handoff_ball_center_x_mm": -8,
+        "stage_length_mm": 88,
+        "minimum_overlap_mm": 25,
+        "rear_cap_mm": 3,
+        "guide_start_x_mm": -95,
+        "guide_end_x_mm": -36,
+        "gate_travel_mm": 52,
+        "retention": "各格轻弹性保持、前后限位；出口止弹片常闭，转盘断电定位。保持力与推出力均待实测。"
+      },
+      "why": "转盘放在YZ平面，转轴沿炮口X方向。最低一格对准入口，推头沿直线把单颗球送到摩擦轮接管位置，不再依靠最后一发滚过90°弯管。",
+      "reuse": "保留五格独立储弹、侧耳、底部被动接口、原摩擦轮关系和居中视觉组件；重新画前后限位板与轮座入口。",
+      "tradeoff": "有效推送行程约125 mm。普通单级长杆会拖长尾部，这版用两级伸缩占位把长度压到约393 mm；传动、刚度、磨损及堵转保护未详设。按当前质量预算已接近3 kg末端额定值。",
+      "next": "先做单格直推台架，验证最后一发在−15°、0°、＋45°停住后能主动入轮；再验证五格分度、推头退净与止弹片的互锁。",
+      "axial_metrics": {
+        "home_face_x_mm": -154,
+        "end_face_x_mm": -29.25,
+        "stroke_mm": 124.75,
+        "stage_length_mm": 88,
+        "each_stage_extension_mm": 62.375,
+        "remaining_overlap_mm": 25.625,
+        "rear_extent_x_mm": -245,
+        "single_stage_rod_rear_x_mm": -306.75,
+        "retracted_tip_to_rear_cover_mm": 5,
+        "initial_ball_back_to_home_tip_mm": 12.75,
+        "ball_travel_mm": 112,
+        "centreline_guide_length_mm": 59,
+        "unloaded_wheel_first_contact_ball_x_mm": -15.01873829587559,
+        "ball_travel_after_first_wheel_contact_mm": 7.01873829587559,
+        "gate_closed_y_mm": 0,
+        "gate_open_y_mm": 52,
+        "gate_clearance_when_open_mm": 6,
+        "maximum_pitch_gravity_component_n": 0.30868392979308135,
+        "notes": "Two equal extension stages with assumed downward flange; no actuator product selected. First wheel contact ignores deformation and detailed U-groove profile. Gravity component excludes friction/retention force and is not actuator sizing.",
+        "single_stage_total_length_mm": 454.474,
+        "storage_length_margin_mm": 7.2760000000000105
+      },
+      "layout_rear_mm": -245,
+      "feed_cycle_cases": [
+        {
+          "progress": 0,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -72,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 1,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -70.58333333333333,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 2,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -66.66666666666667,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 3,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -60.75,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 4,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -53.33333333333333,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 5,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -44.916666666666664,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 6,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -36.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 7,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -27.08333333333333,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 8,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -18.66666666666666,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 9,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -11.25,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 10,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -5.333333333333325,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 11,
+          "phase": 0,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": -1.416666666666667,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 12,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 13,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.023290758827948954,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 14,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.08715251690458317,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 15,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.18256949661908337,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 16,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.3005259203606312,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 17,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.4320060105184075,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 18,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.5679939894815927,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 19,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.699474079639369,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 20,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.8174305033809168,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 21,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.9128474830954169,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 22,
+          "phase": 1,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.9767092411720512,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 23,
+          "phase": 2,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 24,
+          "phase": 2,
+          "stroke_mm": 0.25462895465811247,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 25,
+          "phase": 2,
+          "stroke_mm": 1.0003280361568734,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 26,
+          "phase": 2,
+          "stroke_mm": 2.209815570782913,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 27,
+          "phase": 2,
+          "stroke_mm": 3.855809884822862,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 28,
+          "phase": 2,
+          "stroke_mm": 5.9110293045633515,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 29,
+          "phase": 2,
+          "stroke_mm": 8.348192156290997,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 30,
+          "phase": 2,
+          "stroke_mm": 11.140016766292455,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 31,
+          "phase": 2,
+          "stroke_mm": 14.259221460854347,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -118.49077853914565,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 32,
+          "phase": 2,
+          "stroke_mm": 17.6785245662633,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -115.07147543373671,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 33,
+          "phase": 2,
+          "stroke_mm": 21.370644408805948,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -111.37935559119404,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 34,
+          "phase": 2,
+          "stroke_mm": 25.30829931476892,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -107.44170068523107,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 35,
+          "phase": 2,
+          "stroke_mm": 29.464207610438827,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -103.28579238956118,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 36,
+          "phase": 2,
+          "stroke_mm": 33.811087622102335,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -98.93891237789767,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 37,
+          "phase": 2,
+          "stroke_mm": 38.321657676046065,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -94.42834232395393,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 38,
+          "phase": 2,
+          "stroke_mm": 42.968636098556644,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -89.78136390144336,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 39,
+          "phase": 2,
+          "stroke_mm": 47.72474121592068,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -85.02525878407931,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 40,
+          "phase": 2,
+          "stroke_mm": 52.56269135442484,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -80.18730864557516,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 41,
+          "phase": 2,
+          "stroke_mm": 57.45520484035572,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -75.29479515964428,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 42,
+          "phase": 2,
+          "stroke_mm": 62.374999999999986,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -70.37500000000001,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 43,
+          "phase": 2,
+          "stroke_mm": 67.29479515964425,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -65.45520484035575,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 44,
+          "phase": 2,
+          "stroke_mm": 72.18730864557514,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -60.56269135442486,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 45,
+          "phase": 2,
+          "stroke_mm": 77.02525878407931,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -55.72474121592069,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 46,
+          "phase": 2,
+          "stroke_mm": 81.78136390144336,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -50.968636098556644,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 47,
+          "phase": 2,
+          "stroke_mm": 86.42834232395391,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -46.32165767604609,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 48,
+          "phase": 2,
+          "stroke_mm": 90.93891237789765,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -41.81108762210235,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 49,
+          "phase": 2,
+          "stroke_mm": 95.28579238956117,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -37.464207610438834,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 50,
+          "phase": 2,
+          "stroke_mm": 99.44170068523108,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -33.30829931476892,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 51,
+          "phase": 2,
+          "stroke_mm": 103.37935559119407,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -29.37064440880593,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 52,
+          "phase": 2,
+          "stroke_mm": 107.0714754337367,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -25.678524566263306,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 53,
+          "phase": 2,
+          "stroke_mm": 110.49077853914565,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -22.25922146085435,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 54,
+          "phase": 2,
+          "stroke_mm": 113.60998323370755,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -19.140016766292447,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 55,
+          "phase": 2,
+          "stroke_mm": 116.40180784370901,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -16.34819215629099,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 56,
+          "phase": 2,
+          "stroke_mm": 118.83897069543667,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -13.911029304563328,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 57,
+          "phase": 2,
+          "stroke_mm": 120.89419011517712,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -11.855809884822875,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 58,
+          "phase": 2,
+          "stroke_mm": 122.54018442921708,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -10.209815570782922,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 59,
+          "phase": 2,
+          "stroke_mm": 123.74967196384313,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -9.000328036156873,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 60,
+          "phase": 2,
+          "stroke_mm": 124.4953710453419,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -8.254628954658102,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 61,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 62,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 63,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 64,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 65,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 66,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": true,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 67,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 68,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 69,
+          "phase": 3,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 70,
+          "phase": 4,
+          "stroke_mm": 124.75,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -8.0,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 71,
+          "phase": 4,
+          "stroke_mm": 123.63768861454047,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -9.112311385459535,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 72,
+          "phase": 4,
+          "stroke_mm": 120.4718792866941,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -12.278120713305896,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 73,
+          "phase": 4,
+          "stroke_mm": 115.50925925925925,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -17.240740740740748,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 74,
+          "phase": 4,
+          "stroke_mm": 109.00651577503426,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -23.74348422496574,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 75,
+          "phase": 4,
+          "stroke_mm": 101.22033607681753,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -31.52966392318247,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 76,
+          "phase": 4,
+          "stroke_mm": 92.40740740740735,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -40.34259259259265,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 77,
+          "phase": 4,
+          "stroke_mm": 82.82441700960213,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -49.92558299039787,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 78,
+          "phase": 4,
+          "stroke_mm": 72.7280521262002,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -60.0219478737998,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 79,
+          "phase": 4,
+          "stroke_mm": 62.374999999999915,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -70.37500000000009,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 80,
+          "phase": 4,
+          "stroke_mm": 52.02194787379964,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -80.72805212620037,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 81,
+          "phase": 4,
+          "stroke_mm": 41.9255829903977,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -90.8244170096023,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 82,
+          "phase": 4,
+          "stroke_mm": 32.342592592592595,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -100.4074074074074,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 83,
+          "phase": 4,
+          "stroke_mm": 23.529663923182433,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -109.22033607681757,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 84,
+          "phase": 4,
+          "stroke_mm": 15.74348422496568,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -117.00651577503433,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 85,
+          "phase": 4,
+          "stroke_mm": 9.24074074074074,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 86,
+          "phase": 4,
+          "stroke_mm": 4.2781207133058885,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 87,
+          "phase": 4,
+          "stroke_mm": 1.1123113854595124,
+          "gate_open_fraction": 1.0,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": false,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 88,
+          "phase": 5,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 1,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 89,
+          "phase": 5,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.9259259259259258,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 90,
+          "phase": 5,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.7407407407407403,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 91,
+          "phase": 5,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.49999999999999933,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 92,
+          "phase": 5,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.2592592592592584,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 93,
+          "phase": 5,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.07407407407407351,
+          "rotor_angle_deg": 0.0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": false,
+          "indexing_allowed": false,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 94,
+          "phase": 6,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": 0,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 95,
+          "phase": 6,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": 5.333333333333343,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 96,
+          "phase": 6,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": 18.666666666666696,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 97,
+          "phase": 6,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": 36.00000000000005,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 98,
+          "phase": 6,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": 53.33333333333339,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 99,
+          "phase": 6,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": 66.66666666666671,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        },
+        {
+          "progress": 100,
+          "phase": 6,
+          "stroke_mm": 0.0,
+          "gate_open_fraction": 0.0,
+          "rotor_angle_deg": 72,
+          "ball_present": false,
+          "ball_center_x_mm": -120,
+          "pusher_home": true,
+          "gate_closed": true,
+          "indexing_allowed": true,
+          "confirmations": "illustrative assumed milestones; no sensing/contact simulation"
+        }
+      ],
+      "parts": [
+        {
+          "name": "骨架纵梁",
+          "shape": "box",
+          "size": [
+            355,
+            6,
+            6
+          ],
+          "at": [
+            -67.5,
+            -62,
+            -40
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "骨架纵梁",
+          "shape": "box",
+          "size": [
+            355,
+            6,
+            6
+          ],
+          "at": [
+            -67.5,
+            62,
+            -40
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "桌面支脚",
+          "shape": "cylinder",
+          "radius": 7,
+          "height": 24,
+          "at": [
+            -231,
+            -62,
+            -58
+          ],
+          "role": "structure",
+          "axis": "z"
+        },
+        {
+          "name": "桌面支脚",
+          "shape": "cylinder",
+          "radius": 7,
+          "height": 24,
+          "at": [
+            -231,
+            62,
+            -58
+          ],
+          "role": "structure",
+          "axis": "z"
+        },
+        {
+          "name": "桌面支脚",
+          "shape": "cylinder",
+          "radius": 7,
+          "height": 24,
+          "at": [
+            94,
+            -62,
+            -58
+          ],
+          "role": "structure",
+          "axis": "z"
+        },
+        {
+          "name": "桌面支脚",
+          "shape": "cylinder",
+          "radius": 7,
+          "height": 24,
+          "at": [
+            94,
+            62,
+            -58
+          ],
+          "role": "structure",
+          "axis": "z"
+        },
+        {
+          "name": "视觉桥架",
+          "shape": "box",
+          "size": [
+            110,
+            90,
+            3
+          ],
+          "at": [
+            65,
+            0,
+            59
+          ],
+          "role": "electronics"
+        },
+        {
+          "name": "桥架横梁",
+          "shape": "box",
+          "size": [
+            125,
+            6,
+            5
+          ],
+          "at": [
+            62,
+            -47,
+            53
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "桥架支柱",
+          "shape": "box",
+          "size": [
+            6,
+            6,
+            24
+          ],
+          "at": [
+            10,
+            -47,
+            42
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "桥架横梁",
+          "shape": "box",
+          "size": [
+            125,
+            6,
+            5
+          ],
+          "at": [
+            62,
+            47,
+            53
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "桥架支柱",
+          "shape": "box",
+          "size": [
+            6,
+            6,
+            24
+          ],
+          "at": [
+            10,
+            47,
+            42
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "相机占位",
+          "shape": "box",
+          "size": [
+            28,
+            30,
+            28
+          ],
+          "at": [
+            110,
+            0,
+            117
+          ],
+          "role": "electronics"
+        },
+        {
+          "name": "镜头占位",
+          "shape": "cylinder",
+          "radius": 10,
+          "height": 13,
+          "at": [
+            130,
+            0,
+            117
+          ],
+          "role": "electronics",
+          "axis": "x"
+        },
+        {
+          "name": "底部被动框",
+          "shape": "box",
+          "size": [
+            110,
+            6,
+            5
+          ],
+          "at": [
+            -15,
+            -42,
+            -50
+          ],
+          "role": "interface"
+        },
+        {
+          "name": "底部被动框",
+          "shape": "box",
+          "size": [
+            110,
+            6,
+            5
+          ],
+          "at": [
+            -15,
+            42,
+            -50
+          ],
+          "role": "interface"
+        },
+        {
+          "name": "底部被动框",
+          "shape": "box",
+          "size": [
+            6,
+            78,
+            5
+          ],
+          "at": [
+            -67,
+            0,
+            -50
+          ],
+          "role": "interface"
+        },
+        {
+          "name": "底部被动框",
+          "shape": "box",
+          "size": [
+            6,
+            78,
+            5
+          ],
+          "at": [
+            37,
+            0,
+            -50
+          ],
+          "role": "interface"
+        },
+        {
+          "name": "框内承力横梁",
+          "shape": "box",
+          "size": [
+            8,
+            78,
+            5
+          ],
+          "at": [
+            -15,
+            0,
+            -50
+          ],
+          "role": "interface"
+        },
+        {
+          "name": "三点承压面",
+          "shape": "cylinder",
+          "radius": 7,
+          "height": 4,
+          "at": [
+            -52,
+            -30,
+            -54.5
+          ],
+          "role": "interface",
+          "axis": "z"
+        },
+        {
+          "name": "三点承压面",
+          "shape": "cylinder",
+          "radius": 7,
+          "height": 4,
+          "at": [
+            -52,
+            30,
+            -54.5
+          ],
+          "role": "interface",
+          "axis": "z"
+        },
+        {
+          "name": "三点承压面",
+          "shape": "cylinder",
+          "radius": 7,
+          "height": 4,
+          "at": [
+            22,
+            0,
+            -54.5
+          ],
+          "role": "interface",
+          "axis": "z"
+        },
+        {
+          "name": "被动拉紧销",
+          "shape": "cylinder",
+          "radius": 3,
+          "height": 11,
+          "at": [
+            -15,
+            -29,
+            -58
+          ],
+          "role": "interface",
+          "axis": "z"
+        },
+        {
+          "name": "拉紧销头",
+          "shape": "cylinder",
+          "radius": 6,
+          "height": 3,
+          "at": [
+            -15,
+            -29,
+            -64
+          ],
+          "role": "interface",
+          "axis": "z"
+        },
+        {
+          "name": "被动拉紧销",
+          "shape": "cylinder",
+          "radius": 3,
+          "height": 11,
+          "at": [
+            -15,
+            29,
+            -58
+          ],
+          "role": "interface",
+          "axis": "z"
+        },
+        {
+          "name": "拉紧销头",
+          "shape": "cylinder",
+          "radius": 6,
+          "height": 3,
+          "at": [
+            -15,
+            29,
+            -64
+          ],
+          "role": "interface",
+          "axis": "z"
+        },
+        {
+          "name": "定位键占位",
+          "shape": "box",
+          "size": [
+            12,
+            8,
+            7
+          ],
+          "at": [
+            -52,
+            0,
+            -55
+          ],
+          "role": "interface"
+        },
+        {
+          "name": "定位键占位",
+          "shape": "box",
+          "size": [
+            12,
+            8,
+            7
+          ],
+          "at": [
+            22,
+            0,
+            -55
+          ],
+          "role": "interface"
+        },
+        {
+          "name": "承重耳",
+          "shape": "box",
+          "size": [
+            44,
+            18,
+            6
+          ],
+          "at": [
+            -12,
+            -68,
+            64
+          ],
+          "role": "grasp"
+        },
+        {
+          "name": "承重耳根",
+          "shape": "box",
+          "size": [
+            8,
+            8,
+            18
+          ],
+          "at": [
+            -12,
+            -68,
+            52
+          ],
+          "role": "grasp"
+        },
+        {
+          "name": "承重耳",
+          "shape": "box",
+          "size": [
+            44,
+            18,
+            6
+          ],
+          "at": [
+            -12,
+            68,
+            64
+          ],
+          "role": "grasp"
+        },
+        {
+          "name": "承重耳根",
+          "shape": "box",
+          "size": [
+            8,
+            8,
+            18
+          ],
+          "at": [
+            -12,
+            68,
+            52
+          ],
+          "role": "grasp"
+        },
+        {
+          "name": "轴向后限位板",
+          "shape": "cylinder",
+          "radius": 71,
+          "height": 3,
+          "at": [
+            -147.5,
+            0,
+            42
+          ],
+          "role": "magazine",
+          "axis": "x"
+        },
+        {
+          "name": "轴向前限位板",
+          "shape": "cylinder",
+          "radius": 71,
+          "height": 3,
+          "at": [
+            -93.5,
+            0,
+            42
+          ],
+          "role": "shell",
+          "axis": "x"
+        },
+        {
+          "name": "二级推送固定壳",
+          "shape": "box",
+          "size": [
+            88,
+            24,
+            24
+          ],
+          "at": [
+            -198.0,
+            0,
+            0
+          ],
+          "role": "drive"
+        },
+        {
+          "name": "推送尾盖",
+          "shape": "box",
+          "size": [
+            3,
+            28,
+            28
+          ],
+          "at": [
+            -243.5,
+            0,
+            0
+          ],
+          "role": "drive"
+        },
+        {
+          "name": "推送电机占位",
+          "shape": "box",
+          "size": [
+            36,
+            28,
+            32
+          ],
+          "at": [
+            -215,
+            30,
+            0
+          ],
+          "role": "drive"
+        },
+        {
+          "name": "同步传动预留",
+          "shape": "box",
+          "size": [
+            88,
+            6,
+            6
+          ],
+          "at": [
+            -198.0,
+            17,
+            14
+          ],
+          "role": "drive"
+        },
+        {
+          "name": "轴向分度驱动占位",
+          "shape": "cylinder",
+          "radius": 18,
+          "height": 30,
+          "at": [
+            -166,
+            0,
+            42
+          ],
+          "role": "drive",
+          "axis": "x"
+        },
+        {
+          "name": "断电定位占位",
+          "shape": "box",
+          "size": [
+            17,
+            10,
+            13
+          ],
+          "at": [
+            -144,
+            48,
+            88
+          ],
+          "role": "drive"
+        },
+        {
+          "name": "后板支撑",
+          "shape": "box",
+          "size": [
+            6,
+            6,
+            64
+          ],
+          "at": [
+            -148,
+            -56,
+            -5
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "后板支撑",
+          "shape": "box",
+          "size": [
+            6,
+            6,
+            64
+          ],
+          "at": [
+            -148,
+            56,
+            -5
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "止弹片导向架",
+          "shape": "box",
+          "size": [
+            8,
+            66,
+            6
+          ],
+          "at": [
+            -97,
+            0,
+            -28
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "止弹片导向架",
+          "shape": "box",
+          "size": [
+            8,
+            66,
+            6
+          ],
+          "at": [
+            -97,
+            0,
+            28
+          ],
+          "role": "structure"
+        },
+        {
+          "name": "常闭止弹片",
+          "shape": "box",
+          "size": [
+            3,
+            46,
+            46
+          ],
+          "at": [
+            -96.5,
+            0,
+            0
+          ],
+          "role": "gate"
+        },
+        {
+          "name": "止弹驱动与弹簧占位",
+          "shape": "box",
+          "size": [
+            24,
+            18,
+            18
+          ],
+          "at": [
+            -97,
+            56,
+            28
+          ],
+          "role": "drive"
+        },
+        {
+          "name": "直导路占位",
+          "shape": "cylinder",
+          "radius": 25.5,
+          "height": 59,
+          "at": [
+            -65.5,
+            0,
+            0
+          ],
+          "role": "guide",
+          "axis": "x"
+        }
+      ],
+      "ball_centers_mm": [
+        [
+          -120,
+          0.0,
+          0.0
+        ],
+        [
+          -120,
+          39.944373684396446,
+          29.02128623625221
+        ],
+        [
+          -120,
+          24.686980596283878,
+          75.97871376374779
+        ],
+        [
+          -120,
+          -24.686980596283867,
+          75.9787137637478
+        ],
+        [
+          -120,
+          -39.94437368439645,
+          29.021286236252216
+        ]
+      ],
+      "feed_route_mm": [
+        [
+          -120,
+          0,
+          0
+        ],
+        [
+          -36,
+          0,
+          0
+        ],
+        [
+          -30,
+          0,
+          0
+        ]
+      ],
+      "mass_rows": [
+        {
+          "name": "发射核心与测速",
+          "kg": 1.2,
+          "center_mm": [
+            18,
+            0,
+            5
+          ]
+        },
+        {
+          "name": "LBC3、现有外壳及局部附件",
+          "kg": 0.25,
+          "center_mm": [
+            68,
+            0,
+            80
+          ]
+        },
+        {
+          "name": "相机及局部固定件",
+          "kg": 0.06,
+          "center_mm": [
+            110,
+            0,
+            117
+          ]
+        },
+        {
+          "name": "骨架、视觉桥架与支脚",
+          "kg": 0.18,
+          "center_mm": [
+            -38,
+            0,
+            -7
+          ]
+        },
+        {
+          "name": "底部被动定位框与锁销",
+          "kg": 0.125,
+          "center_mm": [
+            -15,
+            0,
+            -53
+          ]
+        },
+        {
+          "name": "供电通信、保护电路与线束",
+          "kg": 0.08,
+          "center_mm": [
+            15,
+            0,
+            20
+          ]
+        },
+        {
+          "name": "未细化零件预留",
+          "kg": 0.12,
+          "center_mm": [
+            -15,
+            0,
+            10
+          ]
+        },
+        {
+          "name": "轴向五格盘与前后限位板",
+          "kg": 0.12,
+          "center_mm": [
+            -120,
+            0,
+            42
+          ]
+        },
+        {
+          "name": "分度驱动与断电定位",
+          "kg": 0.055,
+          "center_mm": [
+            -166,
+            0,
+            42
+          ]
+        },
+        {
+          "name": "二级伸缩推送总成（含驱动预算）",
+          "kg": 0.195,
+          "center_mm": [
+            -205,
+            14,
+            0
+          ]
+        },
+        {
+          "name": "短直导路与常闭止弹件",
+          "kg": 0.05,
+          "center_mm": [
+            -64,
+            8,
+            0
+          ]
+        },
+        {
+          "name": "后伸骨架增量",
+          "kg": 0.025,
+          "center_mm": [
+            -194,
+            0,
+            -27
+          ]
+        },
+        {
+          "name": "专用抓取部位",
+          "kg": 0.055,
+          "center_mm": [
+            -12,
+            0,
+            64
+          ]
+        },
+        {
+          "name": "弹丸1",
+          "kg": 0.0445,
+          "center_mm": [
+            -120,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "弹丸2",
+          "kg": 0.0445,
+          "center_mm": [
+            -120,
+            39.944373684396446,
+            29.02128623625221
+          ]
+        },
+        {
+          "name": "弹丸3",
+          "kg": 0.0445,
+          "center_mm": [
+            -120,
+            24.686980596283878,
+            75.97871376374779
+          ]
+        },
+        {
+          "name": "弹丸4",
+          "kg": 0.0445,
+          "center_mm": [
+            -120,
+            -24.686980596283867,
+            75.9787137637478
+          ]
+        },
+        {
+          "name": "弹丸5",
+          "kg": 0.0445,
+          "center_mm": [
+            -120,
+            -39.94437368439645,
+            29.021286236252216
+          ]
+        }
+      ],
+      "metrics": {
+        "bounds_mm": [
+          [
+            -245.0,
+            -78.958,
+            -70.0
+          ],
+          [
+            147.724,
+            78.958,
+            131.0
+          ]
+        ],
+        "size_mm": [
+          392.724,
+          157.916,
+          201.0
+        ],
+        "bounding_volume_l": 12.465498039983999,
+        "module_mass_kg": 2.7375,
+        "gripper_plus_module_kg": 2.9775,
+        "cg_mm": [
+          -23.02465753424658,
+          1.14337899543379,
+          17.34246575342466
+        ],
+        "horizontal_wrist_gravity_nm": 0.2976537810573386,
+        "any_tilt_wrist_gravity_bound_nm": 4.0032605378113955,
+        "pocket_center_spacing_mm": 49.37396119256774,
+        "pocket_web_mm": 3.373961192567741,
+        "ball_surface_gap_at_max_size_mm": 6.373961192567741,
+        "static_level_support_margin_mm": 60.85662100456621,
+        "fixed_pose_under_400_mm": true,
+        "table_outer_fit_fixed_pose": true,
+        "foot_centers_mm": [
+          [
+            -231,
+            -62,
+            -70
+          ],
+          [
+            -231,
+            62,
+            -70
+          ],
+          [
+            94,
+            -62,
+            -70
+          ],
+          [
+            94,
+            62,
+            -70
+          ]
+        ]
+      }
+    }
+  ],
+  "sources": {
+    "mechanical/hero_head/magazine_study/assets/reference_meshes.json": "3573fa091f5738eab860faed3b929407a2e1a187e162c55e6ead9d574715bf18",
+    "config_sha256": "3e1443fc60a703a0539b748b5defcd97d82cad7a7ed5dd6265879e530bf7b1fe"
+  },
+  "checks": {
+    "pocket_geometry": true,
+    "fixed_pose_under_400": true,
+    "level_cg_inside_feet": true,
+    "source_meshes_in_bounds": true,
+    "full_assembly_collision": false,
+    "arm_ik": false,
+    "feed_contact_simulation": false,
+    "locking_strength": false
+  },
+  "scope": "Reference mesh + concept layout. Bounding volume is an AABB, not material volume. Masses are replaceable budgets. Flat static CG support only; no dynamic tabletop stability claim."
+}
