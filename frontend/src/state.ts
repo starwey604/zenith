@@ -1,5 +1,5 @@
-export type Mode = 'assembly' | 'feed' | 'dock' | 'vision';
-export type View = 'iso' | 'side' | 'front' | 'top';
+export type Mode = 'assembly' | 'loading' | 'feed' | 'dock' | 'vision';
+export type View = 'iso' | 'side' | 'front' | 'top' | 'rear';
 export type Layer = 'launcher' | 'vision' | 'magazine' | 'drive' | 'dock' | 'support';
 export const phases = [
   { title: '垂直落头', text: '头部底座向下落座。车侧弹路套缩回，不横挡下降通道；夹爪由侧耳承载。' },
@@ -30,36 +30,91 @@ export class Simulation {
   playing = false;
   continuous = false;
   time = 0;
-  private baseFired = 0;
+  slots: boolean[] = Array(12).fill(true);
+  loading = false;
+  hatchOpen = false;
+  handling: 'insert' | 'remove' | 'index' | null = null;
+  handlingTime = 0;
+  private step = 0;
+  private shotCounted = false;
+  seeking = false;
+  private mod(n: number) { return ((n % this.capacity) + this.capacity) % this.capacity; }
   get running() { return this.time > 0; }
-  get remaining() { return this.capacity - this.fired; }
-  get ready() { return this.phase === 4 && this.remaining > 0 && this.explode === 0; }
-  get pose() { return cyclePose(this.time); }
-  get indexTurns() { return this.running ? this.baseFired + this.pose.index : this.fired; }
-  get activeSlot() { return this.running ? this.baseFired : this.fired; }
-  get feedBallVisible() { return this.running && !this.pose.ballOut; }
+  get busy() { return this.running || this.handling !== null; }
+  get remaining() { return this.slots.slice(0, this.capacity).filter(Boolean).length; }
+  get ready() { return this.phase === 4 && this.remaining > 0 && this.explode === 0 && !this.loading && !this.hatchOpen; }
+  get pose() { return this.seeking ? { segment: 5, push: 0, gate: 0, exit: 0, index: clamp(this.time / .85), ballOut: true } : cyclePose(this.time); }
+  get handlingProgress() { return clamp(this.handlingTime / .85); }
+  get indexTurns() { return this.step + (this.handling === 'index' ? this.handlingProgress : this.running ? this.pose.index : 0); }
+  get activeSlot() { return this.mod(this.step); }
+  get loadingSlot() { return this.mod(this.step + this.capacity / 2); }
+  get feedBallVisible() { return this.running && !this.seeking && !this.pose.ballOut; }
   setPhase(phase: number) {
+    if (this.loading) return;
     this.cancelCycle(); this.phase = Math.max(0, Math.min(4, Math.round(phase)));
     this.explode = 0; this.pitch = 0;
   }
-  setCapacity(n: 10 | 12) { this.cancelCycle(); this.capacity = n; this.fired = 0; }
-  refill() { this.cancelCycle(); this.fired = 0; }
-  private cancelCycle() { this.time = 0; this.playing = false; this.continuous = false; }
-  setExplode(value: number) { this.cancelCycle(); this.explode = clamp(value); }
+  setCapacity(n: 10 | 12) {
+    this.cancelCycle(); this.capacity = n; this.resetInventory(!this.loading);
+  }
+  // Kept for callers that explicitly request a fully loaded simulation fixture.
+  refill() { this.cancelCycle(); this.resetInventory(true); }
+  private resetInventory(full: boolean) {
+    this.slots = Array(this.capacity).fill(full); this.fired = 0; this.step = 0;
+    this.hatchOpen = false; this.handling = null; this.handlingTime = 0;
+  }
+  emptyExample() { if (!this.loading || this.busy) return false; this.resetInventory(false); return true; }
+  setLoading(enabled: boolean) {
+    if (this.handling || (!enabled && this.hatchOpen)) return false;
+    this.cancelCycle(); this.loading = enabled;
+    if (enabled) { this.pitch = 0; this.explode = 0; }
+    return true;
+  }
+  toggleHatch() {
+    if (!this.loading || this.busy) return false;
+    this.hatchOpen = !this.hatchOpen; return true;
+  }
+  handle(action: 'insert' | 'remove' | 'index') {
+    if (!this.loading || this.busy) return false;
+    if (action !== 'index' && !this.hatchOpen) return false;
+    if (action === 'insert' && this.slots[this.loadingSlot]) return false;
+    if (action === 'remove' && !this.slots[this.loadingSlot]) return false;
+    this.handling = action; this.handlingTime = 0; return true;
+  }
+  private cancelCycle() {
+    // Finish the indexed position only when the ball has already left.
+    if (this.running && this.shotCounted) this.step++;
+    this.time = 0; this.playing = false; this.continuous = false; this.seeking = false;
+  }
+  setExplode(value: number) { if (this.loading) return; this.cancelCycle(); this.explode = clamp(value); }
   start(continuous = false) {
-    if (!this.ready || this.running) return false;
-    this.baseFired = this.fired; this.time = .00001; this.playing = true; this.continuous = continuous; return true;
+    if (!this.ready || this.busy) return false;
+    this.seeking = !this.slots[this.activeSlot]; this.shotCounted = false;
+    this.time = .00001; this.playing = true; this.continuous = continuous; return true;
   }
   pause() { this.playing = false; }
   resume() { if (this.running) this.playing = true; }
   tick(dt: number) {
+    if (this.handling) {
+      this.handlingTime = Math.min(.85, this.handlingTime + Math.max(0, dt));
+      if (this.handlingTime >= .85) {
+        if (this.handling === 'index') this.step++;
+        else this.slots[this.loadingSlot] = this.handling === 'insert';
+        this.handling = null; this.handlingTime = 0;
+      }
+      return;
+    }
     if (!this.playing || !this.running) return;
-    this.time = Math.min(cycleDuration, this.time + Math.max(0, dt));
-    if (this.pose.ballOut) this.fired = this.baseFired + 1;
-    if (this.time >= cycleDuration) {
-      const again = this.continuous && this.remaining > 0;
-      this.time = 0; this.playing = false; this.continuous = false;
-      if (again) this.start(true);
+    const duration = this.seeking ? .85 : cycleDuration;
+    this.time = Math.min(duration, this.time + Math.max(0, dt));
+    if (!this.seeking && this.pose.ballOut && !this.shotCounted) {
+      this.slots[this.activeSlot] = false; this.fired++; this.shotCounted = true;
+    }
+    if (this.time >= duration) {
+      const again = (this.seeking || this.continuous) && this.remaining > 0;
+      const continuous = this.continuous;
+      this.step++; this.time = 0; this.playing = false; this.continuous = false; this.seeking = false;
+      if (again) this.start(continuous);
     }
   }
 }

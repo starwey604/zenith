@@ -2,9 +2,11 @@ import { readFile, stat, readdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
-const index = await readFile(resolve(root, 'index.html'), 'utf8');
-for (const path of [...index.matchAll(/(?:src|href)="\/(assets\/[^"?#]+)"/g)].map(m => m[1])) {
-  await stat(resolve(root, path));
+for (const entry of ['index.html', 'gripper.html']) {
+  const index = await readFile(resolve(root, entry), 'utf8');
+  for (const path of [...index.matchAll(/(?:src|href)="\/(assets\/[^"?#]+)"/g)].map(m => m[1])) {
+    await stat(resolve(root, path));
+  }
 }
 const manifest = JSON.parse(await readFile(resolve(root, 'models/manifest.json'), 'utf8'));
 for (const model of manifest.models) {

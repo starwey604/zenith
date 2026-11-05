@@ -49,6 +49,11 @@ export class WorkbenchScene {
   wheels: T.Group[] = [];
   rotor = new T.Group();
   magazine = new T.Group();
+  loadingHatch = new T.Group();
+  loadingBall = new T.Mesh();
+  loadingGuide = new T.Group();
+  retentionPlates: T.Mesh[] = [];
+  retentionXray = false;
   drive = new T.Group();
   dock = new T.Group();
   vision = new T.Group();
@@ -239,9 +244,10 @@ export class WorkbenchScene {
   private rebuildMagazine(capacity: number) {
     // Dispose only the dynamic subassembly, not CAD assets shared elsewhere.
     for (const child of [...this.magazine.children]) {
-      child.traverse(o => { if (o instanceof T.Mesh) { o.geometry.dispose(); const ms = Array.isArray(o.material) ? o.material : [o.material]; ms.forEach(m => { this.originals.delete(m); m.dispose(); }); } });
+      child.traverse(o => { if (o instanceof T.Line) { o.geometry.dispose(); (o.material as T.Material).dispose(); } if (o instanceof T.Mesh) { o.geometry.dispose(); const ms = Array.isArray(o.material) ? o.material : [o.material]; ms.forEach(m => { this.originals.delete(m); if (m instanceof T.MeshBasicMaterial) m.map?.dispose(); m.dispose(); }); } });
       this.magazine.remove(child);
     }
+    this.retentionPlates = [];
     const { radius, diameter } = packing(capacity); const outer = diameter / 2;
     this.rotor = new T.Group(); this.rotor.position.set(-145, 0, radius); this.magazine.add(this.rotor);
     const holes = Array.from({ length: capacity }, (_, i) => ({ x: radius * Math.cos(i * 2 * Math.PI / capacity), y: radius * Math.sin(i * 2 * Math.PI / capacity), r: 23 }));
@@ -252,11 +258,29 @@ export class WorkbenchScene {
       const b = new T.Mesh(new T.SphereGeometry(21.25, 24, 16), mat('#eab448'));
       b.position.set(25, holes[i].y, -holes[i].x); this.rotor.add(b); this.ballMeshes.push(b);
     }
-    // Fixed front/back retention plates. Only the lowest station has a pass-through.
+    // Fixed covers: forward firing aperture, rear pushrod hole and upper service port.
     for (const [x, aperture] of [[-93, 23.5], [-149, 8.5]]) {
-      const cover = new T.Mesh(plateShape(outer + 3, [{ x: radius, y: 0, r: aperture }], 3), mat('#9eb6c3', .14));
-      cover.position.set(x, 0, radius); this.magazine.add(cover);
+      const openings = [{ x: radius, y: 0, r: aperture }];
+      if (x === -149) openings.push({ x: -radius, y: 0, r: layout.loadingPortDiameter / 2 });
+      const cover = new T.Mesh(plateShape(outer + 3, openings, 3), mat(x === -149 ? '#487e9d' : '#365e7a'));
+      cover.name = x === -149 ? 'fixed-rear-retainer' : 'fixed-front-retainer';
+      cover.position.set(x, 0, radius); this.magazine.add(cover); edges(cover, .65);
+      this.retentionPlates.push(cover);
+      this.surfaceLabel(cover, x === -149 ? '固定后挡板' : '固定前挡板', [x === -149 ? -.2 : 3.2, 0, 38], x === -149, 120);
     }
+    // Manual top-rear port: hinge opens away from the axial hand/ball approach.
+    tube(this.magazine, 26, layout.loadingPortDiameter / 2, 5, [-151, 0, 2 * radius], C.gold);
+    this.loadingHatch = new T.Group(); this.loadingHatch.name = 'loading-hatch';
+    this.loadingHatch.position.set(-156, 0, 2 * radius + layout.loadingHingeZOffset);
+    this.magazine.add(this.loadingHatch);
+    box(this.loadingHatch, [3, 54, 54], [0, 0, -27], C.gold);
+    this.surfaceLabel(this.loadingHatch, '装填盖', [-1.7, 0, -27], true, 40);
+    box(this.loadingHatch, [8, 20, 5], [-5, 0, -48], C.gold); // captive latch / handle intent
+    cylinder(this.magazine, 3, 60, [-156, 0, 2 * radius + 27], C.steel, 'Y');
+    this.loadingBall = new T.Mesh(new T.SphereGeometry(21.25, 32, 20), mat('#eab448'));
+    this.magazine.add(this.loadingBall);
+    this.loadingGuide = new T.Group(); this.magazine.add(this.loadingGuide);
+    this.loadingGuide.add(new T.ArrowHelper(new T.Vector3(1, 0, 0), new T.Vector3(-260, 0, 2 * radius), 95, C.gold, 10, 5));
     // Rear axle support: keep frame behind the fixed back plate, not in the moving pockets.
     box(this.magazine, [10, 190, 12], [-159, 0, radius], C.frame);
     cylinder(this.magazine, 6, 16, [-151, 0, radius], C.steel, 'X');
@@ -268,6 +292,17 @@ export class WorkbenchScene {
       }
     });
     this.cap = capacity; this.buildDimensions();
+  }
+  // Surface names are viewer annotations, not fabrication markings.
+  private surfaceLabel(parent: T.Object3D, text: string, pos: number[], rear: boolean, width: number) {
+    const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 128;
+    const ctx = canvas.getContext('2d')!;
+    ctx.font = '600 96px sans-serif'; ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(text, 256, 64);
+    const texture = new T.CanvasTexture(canvas); texture.colorSpace = T.SRGBColorSpace;
+    const mesh = new T.Mesh(new T.PlaneGeometry(width, width * 128 / 512), new T.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false }));
+    mesh.rotation.set(Math.PI / 2, 0, rear ? -Math.PI / 2 : Math.PI / 2, 'ZXY');
+    mesh.position.set(...pos as [number, number, number]); parent.add(mesh);
   }
   private label(text: string) {
     const c = document.createElement('canvas'); c.width = 512; c.height = 80;
@@ -284,12 +319,12 @@ export class WorkbenchScene {
     const label = this.label(`弹盘 Ø${diameter.toFixed(1)} mm`); label.position.set(-158, 0, radius + 34); this.annotations.add(label);
     const axis = this.label('X 炮口方向'); axis.position.set(202, 0, -20); this.annotations.add(axis);
   }
-  setMode(mode: Mode) { this.mode = mode; this.setView(mode === 'feed' ? 'side' : 'iso'); this.updateMaterials(); }
+  setMode(mode: Mode) { this.mode = mode; this.setView(mode === 'loading' ? 'rear' : mode === 'feed' ? 'side' : 'iso'); this.updateMaterials(); }
   setView(view: View) {
-    const focus = this.mode === 'vision' ? new T.Vector3(49, 0, 87) : this.mode === 'dock' ? new T.Vector3(0, 0, 25) : new T.Vector3(-72, 0, 28);
-    let d = this.mode === 'vision' ? 350 : this.mode === 'dock' ? 820 : 880;
+    const focus = this.mode === 'loading' ? new T.Vector3(-120, 0, packing(this.simulation.capacity).radius + 20) : this.mode === 'vision' ? new T.Vector3(49, 0, 87) : this.mode === 'dock' ? new T.Vector3(0, 0, 25) : new T.Vector3(-72, 0, 28);
+    let d = this.mode === 'loading' ? 660 : this.mode === 'vision' ? 350 : this.mode === 'dock' ? 820 : 880;
     if (this.width / this.height < 1.2) d *= 1.2;
-    const offsets = { iso: new T.Vector3(.94, -1.35, .85), side: new T.Vector3(0, -1.7, .12), front: new T.Vector3(1.75, 0, .12), top: new T.Vector3(0, -.001, 1.75) };
+    const offsets = { rear: new T.Vector3(-1.6, -.65, .65), iso: new T.Vector3(.94, -1.35, .85), side: new T.Vector3(0, -1.7, .12), front: new T.Vector3(1.75, 0, .12), top: new T.Vector3(0, -.001, 1.75) };
     this.camera.position.copy(focus).add(offsets[view].clone().multiplyScalar(d / 1.7)); this.controls.target.copy(focus); this.controls.update();
   }
   setLayer(layer: Layer, visible: boolean) {
@@ -303,6 +338,7 @@ export class WorkbenchScene {
     for (const r of this.registry) if (r.layer === layer) r.object.traverse(o => { if (o instanceof T.Mesh && o.material instanceof T.MeshStandardMaterial) o.material.emissive.set('#122d3c'); });
   }
   setXray(value: boolean) { this.xray = value; this.updateMaterials(); }
+  setRetentionXray(value: boolean) { this.retentionXray = value; this.updateMaterials(); }
   setLid(value: boolean) { this.lid = value; }
   private updateMaterials() {
     this.scene.traverse(o => {
@@ -311,7 +347,9 @@ export class WorkbenchScene {
       const original = this.originals.get(m); if (!original) return;
       let p = original.opacity;
       // Structural cutaway, not geometric sectioning: keep feed balls and path opaque.
-      if (this.xray && o !== this.movingBall && !this.ballMeshes.includes(o)) p = Math.min(p, .22);
+      if (this.retentionXray && this.retentionPlates.includes(o)) p = .18;
+      if (this.xray && o !== this.loadingBall && o !== this.movingBall && !this.ballMeshes.includes(o)) p = Math.min(p, .22);
+      if (m.transparent !== (p < 1)) m.needsUpdate = true;
       m.opacity = p; m.transparent = p < 1; m.depthWrite = p >= 1;
     });
   }
@@ -355,7 +393,12 @@ export class WorkbenchScene {
     this.sleeve.position.x = s.phase >= 3 ? layout.sleeveTravel : 0;
     const pose = s.pose;
     this.rotor.rotation.x = -s.indexTurns * Math.PI * 2 / s.capacity;
-    for (let i = 0; i < this.ballMeshes.length; i++) this.ballMeshes[i].visible = i >= s.fired && !(s.running && i === s.activeSlot);
+    for (let i = 0; i < this.ballMeshes.length; i++) this.ballMeshes[i].visible = s.slots[i] && !(s.running && !s.seeking && i === s.activeSlot) && !(s.handling === 'remove' && i === s.loadingSlot);
+    this.loadingHatch.rotation.y = s.hatchOpen ? layout.loadingHatchAngle * Math.PI / 180 : 0;
+    this.loadingBall.visible = s.handling === 'insert' || s.handling === 'remove';
+    const progress = s.handling === 'remove' ? 1 - s.handlingProgress : s.handlingProgress;
+    this.loadingBall.position.set(layout.loadingApproachX + (layout.magazineX - layout.loadingApproachX) * progress, 0, 2 * packing(s.capacity).radius);
+    this.loadingGuide.visible = this.mode === 'loading' && s.hatchOpen && !s.handling;
     this.movingBall.visible = s.feedBallVisible;
     const tip = layout.pusherRest + (layout.pusherEnd - layout.pusherRest) * pose.push;
     const ballX = Math.max(layout.magazineX, tip + 21.25);

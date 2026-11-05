@@ -29,8 +29,8 @@ await writeFile(resolve(root, 'public/models/manifest.json'), JSON.stringify({
   models, notes: ['SM11 original cable route omitted; C620 flexible wires omitted.', 'M3508 displayed without gearbox; wheel/shaft adaptation remains to be designed.', 'Vision V2 contains actual CAD structures and dimensional references.'],
 }, null, 2) + '\n');
 await writeFile(resolve(root, 'public/downloads/design-parameters.json'), JSON.stringify({
-  revision: 'layout-v0.1', units: 'mm', coordinateFrame: 'X forward, Y left, Z up', layout,
-  storage: [10, 12].map(capacity => ({ capacity, ...packing(capacity) })),
+  revision: 'layout-v0.2', units: 'mm', coordinateFrame: 'X forward, Y left, Z up', layout,
+  storage: [10, 12].map(capacity => ({ capacity, ...packing(capacity), loadingPort: [-149, 0, 2 * packing(capacity).radius] })),
   pusherStroke: layout.pusherEnd - layout.pusherRest, pitchRange: [-15, 45],
   semantics: { payload: 'No ammunition or magazine on detachable head', camera: 'Camera and LBC3 above SM11 on common rigid frame', motor: 'Jiao Long wheel geometry + M3508 body reference; new hub/mount adaptation unresolved', actuatorModels: 'Layout placeholders, not selected hardware', mass: 'Not measured; no derived uniform-density mass', animation: 'Kinematic illustration, not contact or force simulation', chassis: 'No actual chassis or arm geometry; no stowage/reachability conclusion' },
 }, null, 2) + '\n');
