@@ -1,4 +1,4 @@
 import { defineConfig } from 'vite';
 export default defineConfig({
-  build: { rollupOptions: { input: { workbench: 'index.html', gripper: 'gripper.html' } } },
+  build: { rollupOptions: { input: { workbench: 'index.html', gripper: 'gripper.html', dock: 'dock.html' } } },
 });

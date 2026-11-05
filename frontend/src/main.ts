@@ -26,7 +26,7 @@ const names: { mode: Mode; label: string; icon: keyof typeof icons }[] = [
   { mode: 'assembly', label: '总装', icon: 'cube' }, { mode: 'loading', label: '装弹', icon: 'download' }, { mode: 'feed', label: '供弹', icon: 'feed' }, { mode: 'dock', label: '对接', icon: 'dock' }, { mode: 'vision', label: '视觉组件', icon: 'camera' },
 ];
 $('#app').innerHTML = `
-<header class="app-header"><a class="brand" href="./" aria-label="Zenith结构工作台首页"><span class="brand-mark">Z</span><strong>Zenith</strong><span class="brand-divider"></span><span>重装结构工作台</span></a><div class="header-actions"><a href="gripper.html" class="text-button">双用途夹爪</a><span class="version">2027 · 方案 v0.2</span><button id="share" class="text-button">${icon('share')}<span>分享视图</span></button><button id="capture" class="text-button">${icon('camera')}<span>保存图片</span></button></div></header>
+<header class="app-header"><a class="brand" href="./" aria-label="Zenith结构工作台首页"><span class="brand-mark">Z</span><strong>Zenith</strong><span class="brand-divider"></span><span>重装结构工作台</span></a><div class="header-actions workbench-actions"><a href="gripper.html" class="text-button">双用途夹爪</a><a href="dock.html" class="text-button">底座与线束</a><span class="version">2027 · 方案 v0.2</span><button id="share" class="text-button">${icon('share')}<span>分享视图</span></button><button id="capture" class="text-button">${icon('camera')}<span>保存图片</span></button></div></header>
 <main>
 <div class="workspace-heading"><div><h1 id="mode-title"></h1><p id="mode-subtitle"></p></div><nav class="mode-tabs" aria-label="工作区">${names.map(n => `<button data-mode="${n.mode}" aria-pressed="false">${icon(n.icon)}${n.label}</button>`).join('')}</nav></div>
 <div class="workspace">
@@ -56,7 +56,7 @@ $('#app').innerHTML = `
       <div class="loading-footer"><button id="empty-example" class="quiet-button">重置为空仓示例</button><button id="finish-loading">结束装填，查看供弹</button></div>
       <details class="loading-rules"><summary>装填规则与容量边界</summary><p>联盟赛 V1.0.0 表3-2、表3-3（第17–18页）：三分钟准备阶段可预装42 mm弹丸，初始允许发弹量为0。第36页的补给是兑换发弹额度，不会增加仓内实弹。场内弹丸须遵守第54页R7的来源要求。</p><p>10/12格是打样与十发考核配置，未据此确认整局容量。这里逐格人工装填、退弹；“重置为空仓示例”仅重置演示。退出装填后的供弹动画不表示已获得裁判系统发弹权限。</p></details>
     </div>
-    <div id="dock-controls" hidden><div class="dock-steps">${phases.map((n, i) => `<button data-phase="${i}" aria-pressed="false"><span>${i + 1}</span>${n.title}</button>`).join('')}</div><p id="phase-description"></p></div>
+    <div id="dock-controls" hidden><div class="dock-steps">${phases.map((n, i) => `<button data-phase="${i}" aria-pressed="false"><span>${i + 1}</span>${n.title}</button>`).join('')}</div><p id="phase-description"></p><a href="dock.html" class="download-link">查看底座导向、触点与焊线空间</a></div>
     <div id="vision-controls" hidden><p>共底架固定电脑与相机，护框独立拆卸。用上方“上盖”查看内部，或拖动“分解”观察零件关系。</p><a class="download-link" href="downloads/camera-lbc3-v2.step" download>${icon('download')}视觉组件 STEP</a></div>
     <p class="motion-note" id="motion-note">动作节奏为示意；推力、球体接触和连续可靠性等待实物台架验证。</p>
   </section>

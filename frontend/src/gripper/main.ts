@@ -10,7 +10,7 @@ const rawStep = Number(params.get('step') ?? '2');
 let progress = Number.isFinite(rawStep) ? Math.max(0, Math.min(4, rawStep)) : 2;
 let playing = false;
 $('#app').innerHTML = `
-<header class="app-header"><a class="brand" href="/"><span class="brand-mark">Z</span><strong>Zenith</strong><span class="brand-divider"></span><span>结构工作台</span></a><nav class="header-actions"><a href="/">头部总装</a><span aria-current="page">双用途夹爪</span></nav></header>
+<header class="app-header"><a class="brand" href="/"><span class="brand-mark">Z</span><strong>Zenith</strong><span class="brand-divider"></span><span>结构工作台</span></a><nav class="header-actions"><a href="/">头部总装</a><span aria-current="page">双用途夹爪</span><a href="/dock.html">底座与线束</a></nav></header>
 <main class="gripper-page">
   <div class="g-heading"><div><h1>一副夹爪，两种承载方式</h1><p>软垫夹矿，承力槽扣头。先把抓取、承重和退出看清楚。</p></div><span class="g-revision">结构意向 v0.1 · 尺寸单位 mm</span></div>
   <div class="g-candidates" role="group" aria-label="夹爪候选">${Object.entries(candidates).map(([id,c]) => `<button data-candidate="${id}" aria-pressed="${candidate === id}"><span class="g-candidate-icon">${id === 'parallel' ? '⇥ ⇤' : '↘ ↙'}</span><span><strong>${c.title}</strong><small>${c.subtitle}</small></span><span class="g-choice">${id === 'parallel' ? 'A' : 'B'}</span></button>`).join('')}</div>
