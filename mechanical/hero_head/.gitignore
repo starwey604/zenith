@@ -3,3 +3,10 @@ cad/*.FCStd1
 cad/*.FCBak
 reports/import.log
 reports/reference_inventory.json
+
+# Reproducible local task reports; keep inputs and browser mesh data tracked.
+pick_place_study/browser-checks.json
+pick_place_study/feed_review.json
+pick_place_study/manifest.json
+vehicle_feed/assessment_notes.json
+reports/source_products.csv

@@ -3,3 +3,9 @@ mechanical/**/*.FCStd filter=lfs diff=lfs merge=lfs -text
 mechanical/**/*.stl filter=lfs diff=lfs merge=lfs -text
 mechanical/hero_head/magazine_study/assets/reference_meshes.json filter=lfs diff=lfs merge=lfs -text
 mechanical/hero_head/reports/*.csv text eol=lf
+# FreeCAD downloads moved with the frontend; CI fetches this subset only.
+frontend/public/downloads/*.FCStd filter=lfs diff=lfs merge=lfs -text
+# Preserve factory CAD bytes and avoid treating STEP geometry as prose diffs.
+*.[sS][tT][eE][pP] binary
+*.[sS][tT][pP] binary
+mechanical/hero_head/**/*.csv text eol=lf

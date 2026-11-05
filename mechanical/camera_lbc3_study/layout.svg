@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1150" height="870" viewBox="0 0 1150 870">
+<rect width="1150" height="870" fill="#f6f9fc"/><g font-family="Noto Sans CJK SC, sans-serif" fill="#20384b"><text x="40" y="45" font-size="27">相机与 LBC3：共底架，分壳维护</text><text x="40" y="76" font-size="15">布局研究 · mm · 青色为现有机箱，金色为新相机，灰蓝为共用承力结构</text>
+<text x="40" y="125" font-size="21">俯视：机箱转90°，FPC出口朝相机</text>
+<g transform="translate(70 150)">
+<rect x="0" y="0" width="521" height="426" rx="12" fill="none" stroke="#778fa2" stroke-width="4"/>
+<rect x="16" y="16" width="324" height="394" rx="12" fill="#b3d4ce" stroke="#619b98" stroke-width="3"/>
+<circle cx="173" cy="278" r="35" fill="white" stroke="#619b98" stroke-width="3"/>
+<text x="40" y="75" font-size="20">现有 LBC3 机箱</text><text x="40" y="105" font-size="17">81 前后 × 98.5 左右</text>
+<text x="40" y="135" font-size="15">顶部风扇及盖板独立拆装</text>
+<rect x="336" y="156" width="12" height="110" fill="#619b98"/>
+<path d="M348 210 C368 180 390 180 403 214 S425 230 420 248" fill="none" stroke="#bd862c" stroke-width="10"/>
+<rect x="420" y="149" width="7" height="128" fill="#dba65a" stroke="#a77c35" stroke-width="2"/>
+<rect x="427" y="179" width="82" height="68" fill="#e7c58f" stroke="#a77c35" stroke-width="2"/>
+<text x="358" y="80" font-size="16">20 mm排线区</text><path d="M365 100 L378 180" stroke="#748b9c"/>
+<text x="375" y="340" font-size="17">相机朝前 →</text>
+<path d="M42 416 H470 M42 10 H470" stroke="#536e82" stroke-width="10"/>
+</g>
+<text x="660" y="125" font-size="21">侧视：相机座不接在上盖</text>
+<g transform="translate(655 160)">
+<rect x="5" y="165" width="430" height="10" fill="#536e82"/>
+<rect x="18" y="65" width="250" height="100" rx="6" fill="#b3d4ce" stroke="#619b98" stroke-width="3"/>
+<rect x="328" y="53" width="5" height="99" fill="#dba65a" stroke="#a77c35" stroke-width="2"/>
+<rect x="333" y="78" width="64" height="52" fill="#e7c58f" stroke="#a77c35" stroke-width="2"/>
+<path d="M310 165 L310 45 L335 45 M310 165 L275 165 L310 105" fill="none" stroke="#536e82" stroke-width="8"/>
+<path d="M398 105 H445" stroke="#a77c35" stroke-dasharray="5 5"/>
+<text x="10" y="30" font-size="16">盖板保持开盖空间</text><text x="290" y="210" font-size="16">短立架＋侧肋</text>
+<text x="10" y="250" font-size="16">光轴局部高度22；整体再装到测速上方</text>
+<text x="10" y="282" font-size="16">相机与电脑共同对准发射核心基准</text>
+</g>
+<text x="660" y="530" font-size="21">相机安装面（来自PDF）</text>
+<rect x="690" y="555" width="160" height="160" fill="#f0dab8" stroke="#a77c35" stroke-width="2"/>
+<circle cx="770" cy="635" r="42.5" fill="white" stroke="#a77c35" stroke-width="2"/>
+<g fill="white" stroke="#536e82" stroke-width="2"><circle cx="700" cy="565" r="5"/><circle cx="840" cy="565" r="5"/><circle cx="700" cy="705" r="5"/><circle cx="840" cy="705" r="5"/></g>
+<text x="875" y="583" font-size="16">PCB 32 × 32</text><text x="875" y="615" font-size="16">孔距 28 × 28</text><text x="875" y="647" font-size="16">4 × Ø2孔</text><text x="875" y="679" font-size="16">镜头 Ø17</text>
+<text x="40" y="640" font-size="21">初步空间预算：130.3 × 106.5 × 44</text>
+<text x="40" y="676" font-size="16">包含机箱、20 mm排线区、相机与支架留量；不含外部插头和整头安装座。</text>
+<text x="40" y="720" font-size="17">先做：刚性共底架＋四角相机座＋可拆护框</text>
+<text x="40" y="752" font-size="17">后做：按真实排线、镜头视场及热测试收敛外壳</text>
+<text x="40" y="814" font-size="15">功能与尺寸示意，非加工图；侧视经过缩放以便阅读。FPC弯折形状不代表已验证的弯曲半径。</text>
+</g></svg>

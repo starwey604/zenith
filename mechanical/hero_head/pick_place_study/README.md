@@ -59,6 +59,6 @@ python3 mechanical/hero_head/pick_place_study/feed_geometry_check.py
 python3 -m unittest discover -s mechanical/hero_head/pick_place_study/tests -v
 ```
 
-[axial_feed.py](axial_feed.py)与网页[src/axial-feed-motion.js](../magazine_study/src/axial-feed-motion.js)保存同一动作函数。4项单元检查覆盖末弹接管位、两级搭接及退净、互锁、接触目标连续性。浏览器检查真实网格包络、Python/JS质量／重心、101帧一致、末弹+45°、落座锁紧后退爪、导出、窄屏及直接打开HTML。见[browser-checks.json](browser-checks.json)。这些检查不验证卡弹概率或供弹可靠性。
+[axial_feed.py](axial_feed.py)与网页[src/axial-feed-motion.js](../magazine_study/src/axial-feed-motion.js)保存同一动作函数。4项单元检查覆盖末弹接管位、两级搭接及退净、互锁、接触目标连续性。浏览器检查真实网格包络、Python/JS质量／重心、101帧一致、末弹+45°、落座锁紧后退爪、导出、窄屏及直接打开HTML。运行检查脚本会生成本地`browser-checks.json`，不纳入版本。这些检查不验证卡弹概率或供弹可靠性。
 
 网页构建与启动见[网页说明](../magazine_study/README.md)。首个实物目标是单格直推台架，测−15°、0°、+45°末弹从静止入轮，再做五格分度互锁与连续循环。

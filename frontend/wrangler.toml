@@ -1,0 +1,11 @@
+# 与 starwey604/rm_course 一样，使用纯 Workers 静态资源，不使用 Pages。
+name = "zenith"
+compatibility_date = "2026-10-23"
+
+[assets]
+directory = "./dist"
+html_handling = "auto-trailing-slash"
+not_found_handling = "none"
+
+# zenith.silkenkite.ink 由用户在 Worker 的 Custom Domains 中绑定。
+# 不在 routes 中管理域名，避免 CI 覆盖控制台配置或要求 DNS 修改权限。

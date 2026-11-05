@@ -1,10 +1,17 @@
-# 2027 重装头部：轴向五格主动直推
+# 2027 重装头部与车载供弹
 
-当前主线：**专用侧耳夹爪＋六轴臂搬运＋头下定位锁紧＋车侧承载与俯仰**。供弹采用 YZ 盘面五个独立格位，最低格正对入口，推头沿炮口 X 方向把球送入摩擦轮接管区。头部保留居中的 LBC3 与相机，无图传、无电池。
+**2026-11-05方向更新：**完整形态考核需要自行装配后连续发射10发。当前优先探索[车载储弹、装头后接通弹路](vehicle_feed/index.html)，首选车侧弹仓与头部共用俯仰托架。设计依据和预算见[车载供弹说明](vehicle_feed/README.md)。下文五格自带仓保留为此前的直推原理与建模基线，不再作为完整考核配置。
+
+**当前三维工程：**[重装结构工作台](../../frontend/README.md)，接入交龙轮组、M3508、C620、SM11和相机/LBC3 V2；车侧未选型机构用占位显示。
+
+# 前期基线：轴向五格主动直推
+
+前期主线：**专用侧耳夹爪＋六轴臂搬运＋头下定位锁紧＋车侧承载与俯仰**。供弹采用 YZ 盘面五个独立格位，最低格正对入口，推头沿炮口 X 方向把球送入摩擦轮接管区。头部保留居中的 LBC3 与相机，无图传、无电池。
 
 - [三维布局、供弹与取放演示](magazine_study/pick-place.html#axial5)
 - [参数、尺寸、质量口径与复现](pick_place_study/README.md)
 - [方案演变与本次清理说明](DESIGN_HISTORY.md)
+- [首版打样：外部模型、图纸与标准件需求](PROTOTYPE_INPUTS.md)
 - [通用六轴运动学工具](../../scripts/arm_design_study/README.md)
 
 当前约 393×158×201 mm；五发头部质量预算 2.7375 kg，含 240 g夹爪约 2.9775 kg。几何占位和质量预算还未闭合成可制造设计；末弹直推、伸缩传动、保持件及底部锁紧是下一步细化重点。
@@ -21,7 +28,7 @@
 
 ## 交龙参考及 FreeCAD 基础
 
-原文件 `~/文档/HERO.STEP`，184,775,157 字节；头信息为 SolidWorks 2020、2021-08-27 导出、AP214。来源及 SHA-256 见 [source_manifest.json](reports/source_manifest.json)，中文产品名见 [source_products.csv](reports/source_products.csv)。原 STEP 未修改。原作者发布入口：[交龙 HERO 开源帖](https://bbs.robomaster.com/article/8480?source=4.)。后续仍需核对原说明、二维图与具体发布许可，不能将参考设计声明为本项目原创。
+原文件 `~/文档/HERO.STEP`，184,775,157 字节；头信息为 SolidWorks 2020、2021-08-27 导出、AP214。来源及 SHA-256 见 [source_manifest.json](reports/source_manifest.json)，已提取核心的中文零件名保存在 [launcher_reference.json](reports/launcher_reference.json) 与FCStd的Label中；整车名称扫描CSV按需由`inspect_source.py`重建，不纳入版本。原 STEP 未修改。原作者发布入口：[交龙 HERO 开源帖](https://bbs.robomaster.com/article/8480?source=4.)。后续仍需核对原说明、二维图与具体发布许可，不能将参考设计声明为本项目原创。
 
 - [launcher_reference.FCStd](cad/launcher_reference.FCStd)：63 个原版零件实体的发射核心参考，不是完整头部或参数化重绘。坐标变换和选择范围见 [launcher_reference.json](reports/launcher_reference.json)。当前网页只显示其中实际保留的轮组、轮座和测速子集，入口局部仍需重画。
 - [wheel_ring_parametric.FCStd](cad/wheel_ring_parametric.FCStd)：Spreadsheet → 完全约束 Sketch → PartDesign Pad 的环形试件。外径60、内径46.002、厚18 mm；恢复原参数后双向布尔差体积为0，改为外径62 mm的体积检查通过。结果见 [parametric_pilot.json](reports/parametric_pilot.json)。内径是源几何值，不是加工公差。

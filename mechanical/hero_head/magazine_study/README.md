@@ -30,6 +30,6 @@ npm run check
 - `src/axial-feed-motion.js`：与Python计算一致的推送动作。
 - `assets/reference_meshes.json`：当前使用的原发射核心和LBC3机箱网格；来源在JSON内。
 - `assets/THREE-LICENSE.txt`：Three.js许可证。
-- `pick-place-checks.mjs`：现有浏览器回归检查，结果写到`../pick_place_study/browser-checks.json`；截图只写到`/tmp/`。
+- `pick-place-checks.mjs`：现有浏览器回归检查，结果写到已忽略的本地`../pick_place_study/browser-checks.json`；截图只写到`/tmp/`。
 
 界面沿用雾蓝观察区、白色说明区、供弹蓝／承力金／电子青／夹爪紫。动画是动作意向，任务目标未解IK；接触、锁紧和可靠性不由页面证明。

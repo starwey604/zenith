@@ -1,0 +1,100 @@
+{
+  "parameters": {
+    "m3_clear": 3.4,
+    "camera_screw_clear": 1.8,
+    "adapter_board_z": 0.85
+  },
+  "new_parts": {
+    "NEW_AdapterRetainer": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 196.2713951544693,
+      "bounds_mm": [
+        -26.79999999999999,
+        -3.749999999999993,
+        15.9,
+        -23.59999999999999,
+        9.250000000000014,
+        21.0
+      ]
+    },
+    "NEW_CommonFrame": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 18417.1487003205,
+      "bounds_mm": [
+        -92.0,
+        -53.25,
+        -3.0,
+        36.0,
+        53.25,
+        0.0
+      ]
+    },
+    "NEW_CaseBaseWithEars": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 37488.280462930874,
+      "bounds_mm": [
+        -90.0,
+        -49.250000000000014,
+        0.0,
+        10.0,
+        49.25,
+        18.5
+      ]
+    },
+    "NEW_CameraCarrier": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 3404.9168195159177,
+      "bounds_mm": [
+        8.0,
+        -25.0,
+        0.0,
+        26.0,
+        25.0,
+        42.0
+      ]
+    },
+    "NEW_RemovableGuard": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 6866.6065571107065,
+      "bounds_mm": [
+        26.0,
+        -25.0,
+        0.0,
+        45.3,
+        25.0,
+        43.0
+      ]
+    }
+  },
+  "old_support_adapter_intersection_mm3": 4.352604276017404,
+  "new_support_adapter_intersection_mm3": 0.0,
+  "adapter_reference_collisions": [],
+  "collisions": [],
+  "assumed_service_keepout_collisions": [],
+  "assembly_bounds_mm": [
+    -92.0,
+    -53.25,
+    -3.0,
+    45.3,
+    53.25,
+    43.0
+  ],
+  "assembly_size_mm": [
+    137.3,
+    106.5,
+    46.0
+  ],
+  "limitations": [
+    "camera rear body and keep-outs need physical verification",
+    "adapter bottom Z=0.85 assumed mating datum; actual B2B engagement must be confirmed",
+    "no FPC routing or clamp is frozen",
+    "fastener heads, nuts and washer installation clearance not fully modeled",
+    "case base and carrier prototypes need fit and structural/thermal tests",
+    "script-driven rebuild, not recovered original parametric history"
+  ]
+}
