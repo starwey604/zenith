@@ -11,3 +11,14 @@ test('区分候选电源器件和已选CAN保护器',()=>{
  assert.match(parts.CAN.title,/TMUX7462F/);assert.match(parts.CAN.text,/S1/);assert.match(parts.CAN.text,/DR 置高/);assert.match(parts.CAN.next,/VFP\/VFN/);assert.match(parts.Q2.text,/不串/);
  assert.equal(isPart('CAN'),true);assert.equal(isPart('constructor'),false);assert.equal(isPart('<script>'),false);
 });
+
+import { mountingDiagram, mountingSchemes, isMounting } from '../src/protection/mounting.ts';
+test('安装方案区分一体板和邮票口，均保留保护后输出',()=>{
+ assert.equal(isMounting('integrated'),true);assert.equal(isMounting('constructor'),false);
+ assert.match(mountingSchemes.integrated.detail,/输入端不再焊/);
+ assert.doesNotMatch(mountingDiagram('integrated'),/data-layer="daughter"/);
+ assert.match(mountingDiagram('castellated'),/data-layer="daughter"/);
+ for(const mode of ['integrated','castellated'] as const){
+  assert.match(mountingDiagram(mode),/data-layer="support"/);assert.match(mountingDiagram(mode),/data-layer="output"/);
+ }
+});

@@ -32,3 +32,30 @@ test('四芯布局、器件说明、SVG导出与移动端',async({page})=>{
  await page.getByRole('link',{name:'头侧保护板',exact:true}).click();await expect(page.locator('#protection-svg')).toBeVisible();
  expect(errors).toEqual([]);
 });
+
+test('安装剖面、方案切换、尺寸、导出与手机横向浏览',async({page})=>{
+ await page.goto('/protection.html?part=CAN#mounting');
+ await expect(page.locator('[data-mount="integrated"]')).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('#mounting-svg [data-layer="daughter"]')).toHaveCount(0);
+ await expect(page.locator('.p-dimensions')).toContainText('Ø0.8');
+ await expect(page.locator('.p-dimensions')).toContainText('6 × 6');
+ await page.locator('#mounting').screenshot({path:'/tmp/zenith-mount-integrated.png'});
+ await page.locator('[data-mount="castellated"]').click();
+ await expect(page.locator('#mounting-svg [data-layer="daughter"]')).toHaveCount(1);
+ await expect(page.locator('#mount-detail')).toContainText('返焊');
+ await expect(page).toHaveURL(/mount=castellated#mounting/);
+ await page.reload();await expect(page.locator('[data-mount="castellated"]')).toHaveAttribute('aria-pressed','true');
+ await page.locator('#mounting').screenshot({path:'/tmp/zenith-mount-castellated.png'});
+ const download=page.waitForEvent('download');await page.locator('#download-mounting').click();const file=await download;
+ expect(file.suggestedFilename()).toBe('zenith-protection-mounting-castellated.svg');
+ const svg=await readFile((await file.path())!,'utf8');expect(svg).toContain('data-layer="daughter"');expect(svg).toContain('<style>');
+ const exported=await page.context().newPage();await exported.goto(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`);
+ await expect(exported.locator('parsererror')).toHaveCount(0);await exported.screenshot({path:'/tmp/zenith-mount-export.png'});await exported.close();
+ await page.setViewportSize({width:390,height:844});await page.locator('#mounting').scrollIntoViewIfNeeded();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+ await page.locator('.p-mount-scroll').evaluate(el=>el.scrollLeft=el.scrollWidth);
+ expect(await page.locator('.p-mount-scroll').evaluate(el=>el.scrollLeft)).toBeGreaterThan(0);
+ await page.locator('.p-dimensions').screenshot({path:'/tmp/zenith-mount-dimensions-mobile.png'});
+ await page.getByRole('link',{name:'在底座三维中看安装位置'}).click();
+ await expect(page).toHaveURL(/dock.html.*contact=R3/);await expect(page.locator('#wire-section')).toContainText('无输入焊线');
+});

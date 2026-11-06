@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { contacts, layout, defaults, dockPose, wireBudget, type Mode, type Alignment, type Harness } from './model';
+import { contacts, layout, refereeMount, defaults, dockPose, wireBudget, type Mode, type Alignment, type Harness } from './model';
 const colors={base:'#5687a5',head:'#8fa4b1',guide:'#b6c9d5',gold:'#d5a049',datum:'#3d8c7e',lock:'#526c7f',purple:'#9b7cae'};
 function material(color:string,opacity=1){return new T.MeshStandardMaterial({color,roughness:.55,metalness:.18,transparent:opacity<1,opacity,depthWrite:opacity===1});}
 function mesh(g:T.Object3D,geom:T.BufferGeometry,p:number[],color:string,opacity=1){const m=new T.Mesh(geom,material(color,opacity));m.position.set(...p as [number,number,number]);g.add(m);return m;}
@@ -27,7 +27,8 @@ export class DockScene {
     const grid=new T.GridHelper(800,32,0xc6d4de,0xdde6ec);grid.rotation.x=Math.PI/2;grid.position.z=-75;this.scene.add(grid,this.selection);this.floor=grid;
     this.mechanics();this.connector(this.carBox,false);this.connector(this.headBox,true);this.makeWires();
     this.mark('喇叭口粗导向',[-90,-30,63],this.fixed,['mechanical']);this.mark('三点承压',[55,-42,20],this.fixed,['mechanical']);this.mark('圆销 / 菱形销',[0,0,40],this.fixed,['mechanical']);this.mark('独立触点盒',[0,103,31],this.carBox,['mechanical']);
-    this.mark('头侧焊尾与线夹',[-35,105,82],this.head,['harness']);this.mark('车侧检修空间',[-35,135,-35],this.carWires,['harness']);
+    this.mark('裁判一体保护板',[21,91,53],this.headBox,['harness']);
+    this.mark('头侧动力 / 控制焊尾与线夹',[-35,105,82],this.head,['harness']);this.mark('车侧检修空间',[-35,135,-35],this.carWires,['harness']);
     this.mark('接触面 · 电流等级待选型',[0,100,30],this.carBox,['contacts']);
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();this.update();this.view('iso');
     this.renderer.domElement.addEventListener('pointerdown',e=>this.down=[e.clientX,e.clientY]);
@@ -54,15 +55,26 @@ export class DockScene {
     this.fixed.add(this.sleeve);const tube=annulus(this.sleeve,27,22,22,[-108,0,55],colors.base);tube.rotation.y=Math.PI/2;
   }
   private connector(g:T.Group,head:boolean){
-    if(head){box(g,[42,42,11],[-33,100,32.5],'#536f80');box(g,[62,42,11],[23,100,32.5],'#536f80');box(g,[108,42,6],[0,100,41],'#536f80');}
+    if(head){
+      box(g,[42,42,11],[-33,100,32.5],'#536f80');box(g,[42,42,6],[-33,100,41],'#536f80');
+      // Open REF pocket: no solid cover over the component side of the carrier.
+      box(g,[62,20,17],[23,111,35.5],'#536f80');
+      for(const x of[-5,49])box(g,[4,20,11],[x,91,32.5],'#536f80');
+      for(const x of[-1,43])box(g,[4,18,3],[x,91,29.7],'#c8d5dc');
+      const board=box(g,[refereeMount.pcbWidth,refereeMount.pcbDepth,refereeMount.pcbThickness],[21,91,refereeMount.pcbZ],'#39877c');board.name='referee-protection-pcb';
+      box(g,[12,8,3],[9,91,34.3],'#263e42').name='referee-power-protection';
+      box(g,[10,8,3],[29,91,34.3],'#263e42').name='TMUX7462F';
+      box(g,[16,6,5],[21,80,35.3],'#dce4ea').name='referee-protected-output';
+      for(const c of contacts.filter(c=>c.circuit==='REF'))cylinder(g,.8,4,[c.x,c.y,29.2],colors.gold);
+    }
     else box(g,[108,42,16],[0,100,16],'#345870');
     // Keying pocket and insulated power/signal wall. Grey C0 is reserve volume, not a wired contact.
     if(!head){box(g,[4,42,12],[-10,100,26],colors.head);box(g,[14,14,8],[-56,82,18],colors.lock);cylinder(g,3,12,[-58,82,26],colors.gold);}
     else annulus(g,6,3.5,12,[-58,82,26],colors.head);
     outline(g,[14,24,18],[64,100,head?35:17],'#977eaa');
     for(const c of contacts){const power=c.circuit==='FIRE'||c.circuit==='AUX';const z=head?26:28;let pad:T.Mesh;
-      if(head)pad=box(g,[power?10:8,power?10:8,1],[c.x,c.y,z+.5],colors.gold);
-      else {cylinder(g,power?3.6:2.3,7,[c.x,c.y,22],'#8098aa');pad=cylinder(g,power?3:1.8,3,[c.x,c.y,z-1.5],colors.gold);pad.userData.freeZ=z;this.pins.push(pad);}
+      if(head)pad=box(g,[power?10:c.circuit==='REF'?refereeMount.padSize:8,power?10:c.circuit==='REF'?refereeMount.padSize:8,1],[c.x,c.y,z+.5],colors.gold);
+      else {cylinder(g,power?3.6:2.3,7,[c.x,c.y,22],'#8098aa');pad=cylinder(g,power?3:c.circuit==='REF'?refereeMount.tipDiameter/2:1.8,3,[c.x,c.y,z-1.5],colors.gold);pad.userData.freeZ=z;this.pins.push(pad);}
       pad.userData.contactId=c.id;
     }
     for(const x of[-48,48])for(const y of[83,117]){cylinder(g,2.7,5,[x,y,head?43:11],colors.head);}
@@ -74,6 +86,14 @@ export class DockScene {
       const g=head?this.headWires:this.carWires,sign=head?1:-1,dir=head?-1:1,origin=head?layout.headTailZ:layout.vehicleTailZ;
       const od=(c.circuit==='FIRE'||c.circuit==='AUX')?this.harness.powerOD:this.harness.signalOD,b=wireBudget(this.harness,od);
       const group=new T.Group();g.add(group);group.userData.contactId=c.id;
+      if(head&&c.circuit==='REF'){
+        group.userData.connection='protected-output';
+        const x=16.5+(Number(c.id.slice(1))-1)*3;
+        tube(group,[new T.Vector3(x,77,35.3),new T.Vector3(x,69,35.3),new T.Vector3(x,60,40),new T.Vector3(x,42,40)],od/2,c.color);
+        group.traverse(o=>o.userData.contactId=c.id);
+        continue;
+      }
+      group.userData.connection='contact-tail';
       cylinder(group,od*.38,this.harness.solder,[c.x,c.y,origin+sign*this.harness.solder/2],'#bd9b69');
       const shrink=cylinder(group,od/2+.7,b.straight,[c.x,c.y,origin+sign*b.straight/2],'#65717b');(shrink.material as T.MeshStandardMaterial).transparent=true;(shrink.material as T.MeshStandardMaterial).opacity=.6;
       const pts=[new T.Vector3(c.x,c.y,origin+sign*this.harness.solder),new T.Vector3(c.x,c.y,origin+sign*b.straight)];
@@ -100,7 +120,7 @@ export class DockScene {
   view(view:'iso'|'top'|'side'='iso'){
     let target:T.Vector3,offset:T.Vector3;
     if(this.mode==='contacts'){target=new T.Vector3(0,100,26);offset=new T.Vector3(0,this.headView?.1:-.1,this.headView?-230:230);}
-    else if(this.mode==='harness'){target=new T.Vector3(0,105,50);offset=view==='side'?new T.Vector3(420,0,0):view==='top'?new T.Vector3(0,-.1,470):new T.Vector3(300,360,220);}
+    else if(this.mode==='harness'){target=new T.Vector3(0,105,50);offset=view==='side'?new T.Vector3(420,0,0):view==='top'?new T.Vector3(0,-.1,470):new T.Vector3(300,-360,220);}
     else{target=new T.Vector3(0,20,65);offset=view==='top'?new T.Vector3(0,-.1,500):view==='side'?new T.Vector3(500,0,20):new T.Vector3(300,330,240);}
     this.controls.target.copy(target);this.camera.position.copy(target).add(offset);this.controls.update();
   }

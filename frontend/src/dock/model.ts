@@ -55,3 +55,11 @@ export function wireBudget(h:Harness,od=h.powerOD) {
 export function contactDiagram(c:Pick<Contact,'x'|'y'>,headView:boolean) {
   return {x:160+(headView?-c.x:c.x)*2.2,y:96-(c.y-100)*2.2};
 }
+
+// Prototype geometry only: contact rating and PCB outline remain subject to part selection.
+export const refereeMount = {
+  scheme: 'integrated', padSize: 6, pitch: 12, tipDiameter: 2,
+  pcbThickness: 1.6, pcbWidth: 48, pcbDepth: 18, pcbZ: 32,
+  daughterThickness: 1, halfHoleDiameter: 0.8, halfHolePadDiameter: 1.6, halfHolePitch: 2.54,
+  carrierLandWidth: 1.6, carrierLandLength: 2.4,
+} as const;

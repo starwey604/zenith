@@ -22,6 +22,12 @@ test('底座导向、装配顺序、镜像触点与焊线空间',async({page})=>
   await page.locator('[data-mode="harness"]').click();await page.locator('[data-contact="F1"]').click();
   await expect(page.locator('#wire-depth')).toHaveText('41.0 mm');await expect(page.locator('#wire-total')).toHaveText('116.0 mm');
   await page.screenshot({path:'/tmp/zenith-dock-harness.png',fullPage:true});
+  await page.locator('[data-contact="R3"]').click();
+  await expect(page.locator('#wire-section')).toContainText('下图仅计算车侧');
+  expect(await page.evaluate(()=>window.__dock.scene!.headBox.getObjectByName('referee-protection-pcb')?.visible)).toBe(true);
+  expect(await page.evaluate(()=>window.__dock.scene!.headWires.children.filter(g=>g.userData.connection==='protected-output').length)).toBe(4);
+  expect(await page.evaluate(()=>window.__dock.scene!.carWires.children.filter(g=>g.userData.connection==='contact-tail').length)).toBe(10);
+  await page.locator('.d-stage').screenshot({path:'/tmp/zenith-dock-integrated-ref.png'});
   await page.locator('#powerOD').fill('6');await expect(page.locator('#wire-depth')).toHaveText('50.0 mm');
   await page.locator('#isolate').check();await page.locator('#show-envelope').uncheck();
   expect(await page.evaluate(()=>window.__dock.scene!.keepouts.visible)).toBe(false);

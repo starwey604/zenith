@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { contacts, capture, dockPose, defaults, wireBudget, contactDiagram } from '../src/dock/model.ts';
+import { contacts, refereeMount, capture, dockPose, defaults, wireBudget, contactDiagram } from '../src/dock/model.ts';
 test('10项功能分区与裁判四芯映射保持独立',()=>{
   assert.equal(contacts.length,10);assert.equal(new Set(contacts.map(c=>c.id)).size,10);
   assert.deepEqual(contacts.filter(c=>c.circuit==='REF').map(c=>[c.id,c.name,c.official?.split(' · ')[0]]),[['R1','REF_GND','1'],['R2','REF_CAN_L','2'],['R3','REF_12V','3'],['R4','REF_CAN_H','4']]);
@@ -28,4 +28,12 @@ test('焊尾、热缩、中心线弯曲与净空分别累计',()=>{
 });
 test('头车接触面镜像不更改功能编号',()=>{
   for(const c of contacts){const a=contactDiagram(c,false),b=contactDiagram(c,true);assert.equal(a.x+b.x,320);assert.equal(a.y,b.y);}
+});
+
+test('裁判接触面尺寸和既有触点位置一致，半孔尺寸独立',()=>{
+ const ref=contacts.filter(c=>c.circuit==='REF');
+ assert.equal(refereeMount.padSize,6);
+ for(let i=1;i<ref.length;i++)assert.equal(ref[i].x-ref[i-1].x,refereeMount.pitch);
+ assert.ok(refereeMount.halfHolePitch>refereeMount.halfHolePadDiameter);
+ assert.ok(refereeMount.halfHolePadDiameter>refereeMount.halfHoleDiameter);
 });

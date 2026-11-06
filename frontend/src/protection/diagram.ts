@@ -4,13 +4,13 @@ function chip(id:Part,x:number,y:number,w:number,h:number,title:string,sub:strin
  return `<g data-part="${id}" role="button" tabindex="0" aria-label="查看 ${id} ${title}" aria-pressed="${id===selected}" class="chip ${id===selected?'selected':''}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="7"/>${text(x+16,y+27,id,'ref')}${text(x+16,y+57,title,'chip-title')}${text(x+16,y+83,sub,'sub')}</g>`;
 }
 export function boardDiagram(selected:Part){return `<svg xmlns="http://www.w3.org/2000/svg" id="protection-svg" viewBox="0 0 1200 700" role="img" aria-labelledby="board-title board-desc">
-<title id="board-title">头侧裁判四芯保护板布局意向</title><desc id="board-desc">左侧四线输入，右侧四线输出到 SM11。正常电源经 Q1 和 U1 向右供电，GND 向左回流；CAN L 与 H 分别经 U2 TMUX7462F 的 S1/D1 和 S2/D2 双向通信，S 端接外部触点，D 端接测速。布局与路径为功能示意，芯片和封装未全部定型。</desc>
+<title id="board-title">头侧裁判四芯保护板布局意向</title><desc id="board-desc">左侧触点通过板内连接输入，无输入短线；右侧四线输出到 SM11。正常电源经 Q1 和 U1 向右供电，GND 向左回流；CAN L 与 H 分别经 U2 TMUX7462F 的 S1/D1 和 S2/D2 双向通信，S 端接外部触点，D 端接测速。布局与路径为功能示意，芯片和封装未全部定型。</desc>
 <defs>${[['power','#bd4b45'],['return','#876345'],['can','#39877c']].map(([id,c])=>`<marker id="arrow-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="${c}"/></marker>`).join('')}</defs>
 <rect class="canvas" width="1200" height="700"/>
 <rect class="pcb" x="210" y="50" width="780" height="585" rx="18"/>
 ${[[230,90],[970,90],[230,615],[970,615]].map(([x,y])=>`<circle class="mount" cx="${x}" cy="${y}" r="7"/>`).join('')}
 ${text(260,105,'头侧独立保护板 · 元件面','board-name')}${text(260,130,'器件排布意向 / 板框与孔位待定','sub')}
-${text(20,85,'四线 INPUT','heading')}${text(20,112,'来自头侧裁判触点','sub')}
+${text(20,85,'触点 INPUT','heading')}${text(20,112,'R1–R4 · 板内连接','sub')}
 ${text(1020,85,'四线 OUTPUT','heading')}${text(1020,112,'接大测速 SM11','sub')}
 ${text(260,180,'电源区','zone')}${text(260,410,'裁判 CAN 区','zone')}
 <path class="divider" d="M250 380H950"/>
