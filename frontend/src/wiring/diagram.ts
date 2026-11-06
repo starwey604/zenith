@@ -9,7 +9,7 @@ function lane(id:Circuit,body:string,selection:Selection,offset=0){const r=route
 export function diagram(selection:Selection,focus:boolean){
  const crop=focus&&selection!=='all'?routes[selection]:null;
  return `<svg xmlns="http://www.w3.org/2000/svg" id="wiring-svg" viewBox="0 ${crop?crop.y-4:0} 1280 ${crop?crop.height+8:940}" role="img" aria-labelledby="wiring-title wiring-description">
- <title id="wiring-title">底盘与可拆头的接线图</title><desc id="wiring-description">Mini PC 电源经 A1/A2 直连 LBC3 顶板；Ammo-Booster 经 F1/F2、自有 CAN 经 C1/C2 一起进入同一块动力分电＋CAN分线板，输出两路电调电源及三路CAN，分别连接两块C620和LBC3收发器。</desc>
+ <title id="wiring-title">底盘与可拆头的接线图</title><desc id="wiring-description">Mini PC 电源经 A1/A2 直连 LBC3 顶板；Ammo-Booster 经 F1/F2、自有 CAN 经 C1/C2 一起进入同一块动力分电＋CAN分线板，输出两路电调电源及三路CAN，分别连接两块C620和LBC3。</desc>
  <rect class="canvas-bg" x="0" y="0" width="1280" height="940"/>
  ${label(26,31,'底盘 / 车侧托架','column-title')}${label(350,31,'盲插触点','column-title')}${label(520,31,'可拆发射头','column-title')}
  ${label(26,54,'供弹驱动留在车上','column-sub')}${label(350,54,'功能编号沿用底座图','column-sub')}${label(520,54,'电脑、测速、两块电调随头拆装','column-sub')}
@@ -35,8 +35,7 @@ export function diagram(selection:Selection,focus:boolean){
  ${path('M765 270H810V254H840',undefined,'signal')}
  ${path('M765 345H840',undefined,'signal')}
  ${node(30,309,230,'车侧自有控制 CAN','与裁判 CAN 分开')}${port(338,'C1 / C2','CAN_H / CAN_L')}
- ${node(840,316,160,'CAN 收发器','H/L ↔ TX/RX')}
- ${path('M1000 345H1100',[1008,331,'TX/RX'],'signal')}${node(1100,316,150,'LBC3','仅接 CAN')}
+ ${node(840,316,160,'LBC3','顶板 CAN 接口')}
  </g>
  ${label(520,400,'一块板：两路电调电源＋三路 CAN；LBC3 供电仍走下方 Mini PC','wire-label')}`,selection)}
  ${lane('AUX',`

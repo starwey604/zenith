@@ -24,6 +24,8 @@ test('整头接线、支路聚焦、下载与触点联动',async({page})=>{
  await exported.screenshot({path:'/tmp/zenith-wiring-export.png'});await exported.close();
  await page.locator('[data-circuit="REF"]').click();await expect(page.locator('#route-detail')).toContainText('R2/R4');
  await page.locator('[data-circuit="CTRL"]').click();await expect(page.locator('#route-detail')).toContainText('短支线');
+ await expect(page.locator('[data-route="CTRL"] .device-title')).toHaveText(['车侧自有控制 CAN','LBC3']);
+ await expect(page.locator('[data-route="CTRL"]')).not.toContainText('TX/RX');
  await expect(page.locator('[data-shared-board="power-can"]')).toHaveCount(1);
  await expect(page.locator('[data-shared-board="power-can"]')).toContainText('三路 CAN');
  await expect(page.locator('#route-detail')).toContainText('LBC3只从此板接CAN');

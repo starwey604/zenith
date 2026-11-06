@@ -9,7 +9,7 @@ test('接线与底座共享触点：Mini PC直达顶板，电源与CAN同板分�
  assert.match(contacts.find(c=>c.id==='A1')!.head,/LBC3 顶板 24 V 输入/);
  assert.match(contacts.find(c=>c.id==='F1')!.head,/动力分电＋CAN 分线板/);
  assert.equal(routeContacts('REF').length,4);assert.equal(routeContacts('PRESENT').length,2);
- assert.match(routes.CTRL.wires,/TX\/RX/);assert.match(routes.CTRL.assembly,/同一块物理板/);assert.match(contacts.find(c=>c.id==='C1')!.head,/三路 CAN_H/);assert.match(routes.FIRE.assembly,/车载/);
+ assert.match(routes.CTRL.wires,/收发器已集成在顶板上/);assert.match(routes.CTRL.assembly,/同一块物理板/);assert.match(contacts.find(c=>c.id==='C1')!.head,/三路 CAN_H/);assert.match(routes.FIRE.assembly,/车载/);
 });
 test('导出保留12项，静态机械表与前端名称一致',()=>{
  const csv=exportCsv();assert.equal(csv.split('\r\n').length,13);assert.match(csv,/MINIPC_24V/);assert.doesNotMatch(csv,/AUX\+/);

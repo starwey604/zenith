@@ -28,7 +28,7 @@ function render(){
  $<HTMLInputElement>('#focus-route').disabled=selection==='all';$<HTMLInputElement>('#focus-route').checked=focused;
  $('#diagram').innerHTML=diagram(selection,focused);
  document.querySelectorAll<HTMLElement>('[data-row-circuit]').forEach(row=>row.classList.toggle('selected',row.dataset.rowCircuit===selection));
- $('#route-detail').innerHTML=selection==='all'?`<div><h2>一块分配板，电源与 CAN 一起接入</h2><p>F1/F2和C1/C2进入同一块板；两路电源供C620，三路CAN分别到LBC3收发器、左C620、右C620。A1/A2仍单独供电脑顶板。</p></div><div><h3>先选支路，再对照触点</h3><p>上方按支路高亮，下方直接跳到对应触点。CAM1、相机和电机线都留在头内，不再占用底座触点。</p></div>`:(()=>{const r=routes[selection];return `<div><h2>${r.title}</h2><p class="w-path">${r.path}</p><div class="w-contact-links">${routeContacts(selection).map(c=>`<a href="/dock.html?mode=contacts&contact=${c.id}">${c.id} · ${c.name}</a>`).join('')}</div></div><div><h3>这束线怎么接</h3><p>${r.wires}</p><p>${r.assembly}</p></div>`;})();
+ $('#route-detail').innerHTML=selection==='all'?`<div><h2>一块分配板，电源与 CAN 一起接入</h2><p>F1/F2和C1/C2进入同一块板；两路电源供C620，三路CAN分别到LBC3、左C620、右C620。A1/A2仍单独供电脑顶板。</p></div><div><h3>先选支路，再对照触点</h3><p>上方按支路高亮，下方直接跳到对应触点。CAM1、相机和电机线都留在头内，不再占用底座触点。</p></div>`:(()=>{const r=routes[selection];return `<div><h2>${r.title}</h2><p class="w-path">${r.path}</p><div class="w-contact-links">${routeContacts(selection).map(c=>`<a href="/dock.html?mode=contacts&contact=${c.id}">${c.id} · ${c.name}</a>`).join('')}</div></div><div><h3>这束线怎么接</h3><p>${r.wires}</p><p>${r.assembly}</p></div>`;})();
  history.replaceState(null,'',`${location.pathname}?${new URLSearchParams({circuit:selection,focus:focused?'1':'0'})}`);
 }
 document.querySelectorAll<HTMLButtonElement>('[data-circuit]').forEach(b=>b.onclick=()=>{selection=b.dataset.circuit as Selection;render();});
