@@ -25,3 +25,6 @@ button[aria-pressed=true]:hover{background:var(--blue);color:white;border-color:
 .retention-key{display:flex;flex-wrap:wrap;gap:6px 18px;padding-bottom:13px;margin-bottom:14px;border-bottom:1px solid var(--line);font-size:13px;color:#526f82}.retention-key strong{flex-basis:100%;font-weight:600;color:#294b61}.retention-key span,.retention-key label{display:flex;align-items:center;gap:7px}.retention-key i{width:11px;height:11px;border-radius:2px;flex-shrink:0}.fixed-key{background:#487e9d}.rotor-key{background:#c9b98e}.hatch-key{background:#df9b44}.retention-key label{flex-basis:100%;cursor:pointer;color:var(--blue)}.retention-key input{accent-color:var(--blue)}
 
 @media(max-width:740px){.app-header:has(.workbench-actions){height:auto;min-height:62px;flex-wrap:wrap;gap:8px;padding-top:10px;padding-bottom:10px}.workbench-actions{flex-wrap:wrap;gap:8px}.workbench-actions a{font-size:12px}}
+
+/* Shared page navigation wraps without hiding destinations. */
+@media(max-width:900px){.app-header{height:auto;min-height:62px;flex-wrap:wrap;gap:10px;padding-top:10px;padding-bottom:10px}.header-actions{flex-wrap:wrap;gap:8px 14px}.header-actions a,.header-actions [aria-current]{font-size:12px}}

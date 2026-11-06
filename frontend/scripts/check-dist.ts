@@ -2,7 +2,7 @@ import { readFile, stat, readdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
-for (const entry of ['index.html', 'gripper.html', 'dock.html']) {
+for (const entry of ['index.html', 'gripper.html', 'dock.html', 'wiring.html']) {
   const index = await readFile(resolve(root, entry), 'utf8');
   for (const path of [...index.matchAll(/(?:src|href)="\/(assets\/[^"?#]+)"/g)].map(m => m[1])) {
     await stat(resolve(root, path));

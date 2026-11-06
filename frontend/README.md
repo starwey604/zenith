@@ -24,7 +24,19 @@
 
 默认4 mm功率线外径、8 mm端子/焊尾、12 mm热缩直段、中心线R=16 mm、间隙3 mm：每侧焊尾后深度41 mm，侧向弯线预留21 mm；按当前头/车焊尾基准面合计闭合总高116 mm。这个预算不含保护板、安装耳、防反插凸台、检修工具与服务环，不是已选线材或连接器规格。
 
-尺寸、12项功能和计算在 `src/dock/model.ts`。按钮可下载当前接口参数JSON和触点CSV。构建入口包含`index.html`、`gripper.html`、`dock.html`；总装页继续展示总体对接关系，新底座尚未替换旧总装几何。独立检查：`npx playwright test tests/dock.spec.ts`。
+尺寸、12项功能和计算在 `src/dock/model.ts`。按钮可下载当前接口参数JSON和触点CSV。构建入口包含`index.html`、`gripper.html`、`dock.html`、`wiring.html`；总装页继续展示总体对接关系，新底座尚未替换旧总装几何。独立检查：`npx playwright test tests/dock.spec.ts`。
+
+## 底盘—头部接线页
+
+打开 `/wiring.html`，从车侧电源/控制源沿线查看触点和头内设备。可按发射电源、Mini PC、裁判四芯、自有CAN、在位检测高亮，勾选“仅看所选支路”单独展开。地址保留支路与展开状态；点击触点编号进入底座页对应触点。支持下载带样式的SVG及触点CSV，手机端图纸和表格可横向滚动。
+
+- Mini PC接口24 V经A1/A2直达LBC3顶板；顶板承担电脑支路保护与降压，不额外画保护模块。
+- Ammo-Booster经F1/F2、自有CAN经C1/C2接入同一块动力分电＋CAN分线板；板上输出两路电调电源及三路CAN，分别到左C620、右C620和LBC3收发器。C620再接M3508三相和传感器线；不另画削波/泄放模块。车载供弹执行器留在同一受控电源支路。
+- 裁判四芯保留车侧故障保护与头侧误接保护；CTRL_CAN与裁判CAN独立，三路分线口属于同一条自有总线。LBC3只从分电板接CAN，供电仍单独走Mini PC。CAM1与MIPI不跨触点。
+
+图中线条表示线束而非单芯；芯数、回流和官方四芯颜色在支路说明及表格中。线径、线长和连接器未定。电调瞬态处理与顶板耐受按实际硬件确认；两路供电分开不代表电气隔离。
+
+触点与底座共用 `src/dock/model.ts`，A1/A2位置不变，功能名更新为MINIPC_24V/MINIPC_RETURN；AUX内部键保留以兼容原有几何/导出。`src/wiring/model.ts`组织支路说明，`diagram.ts`绘制SVG。接线页不加载Three.js与CAD。检查：`npx playwright test tests/wiring.spec.ts tests/dock.spec.ts`。
 
 ## 本地运行
 
@@ -113,7 +125,7 @@ exec(compile(open(p).read(), p, 'exec'), {'__file__': p})
 
 ## 推送main后部署到Cloudflare Worker
 
-参考[`rm_course`的部署工作流](https://github.com/starwey604/rm_course/blob/main/.github/workflows/deploy.yml)与[Wrangler配置](https://github.com/starwey604/rm_course/blob/main/wrangler.toml)，采用同样的纯Workers静态资源路径，保留本工程的npm锁文件。配置位于`frontend/wrangler.toml`，Worker名为`zenith`，资源目录为`dist/`。
+参考[`rm_course`的部署工作流](https://github.com/starwey604/rm_course/blob/main/.github/workflows/deploy.yml)与[Wrangler配置](https://github.com/starwey604/rm_course/blob/main/wrangler.toml)，沿用Workers静态资源路径和本工程npm锁文件。配置位于`frontend/wrangler.toml`，Worker名为`zenith`，资源目录为`dist/`。新增的`worker/index.ts`仅将`/api/comments`及子路径通过`COMMENTS_SERVICE`绑定转发到独立评论Worker；其他路径保留原静态资源行为，域名绑定不变。
 
 ### 设置GitHub Secrets
 
@@ -145,3 +157,9 @@ git lfs pull --include='frontend/public/downloads/*.FCStd' --exclude=''
 ```
 
 Wrangler固定为4.156.0，兼容日期为2026-10-23，均与参考仓库一致。`npm run deploy`会真的发布，手动使用前先完成`npm run build && npm run check:dist`并通过Wrangler的正常认证流程；`npm run deploy:check`只做本地打包。
+
+## 方案讨论与匿名评论
+
+总装、夹爪、底座、整头接线页末尾已接入 Twikoo 评论组件。按需加载，提交时可附带当前部件、版本和公开参数；取消勾选则不附带。真实服务通过构建变量 `VITE_TWIKOO_ENV_ID` 配置，未配置时禁用评论并明确提示，不假装保存成功。
+
+Workers + D1沿用现有Cloudflare账号，不需要注册Twikoo、MongoDB或邮件服务。独立后端为`zenith-comments`，D1实际名称为`zenith`；初始密码由所有者通过Wrangler secret配置，评论提交后直接公开，无需审核。前端构建变量已设为`/api/comments`，正式入口随前端发布生效。初始化、接入及运维见[`src/comments/README.md`](src/comments/README.md)与[`services/comments/README.md`](../services/comments/README.md)。GitHub Issue同步和GPT增量导出接口仍是后续工作。

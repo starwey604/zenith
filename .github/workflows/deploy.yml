@@ -58,13 +58,19 @@ jobs:
         run: npm test
 
       - name: Build and verify output
+        env:
+          # Public endpoint only; admin/API credentials must never enter the Vite bundle.
+          VITE_TWIKOO_ENV_ID: ${{ vars.VITE_TWIKOO_ENV_ID }}
         run: npm run build && npm run check:dist
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
       - name: Check browser interactions
-        run: npm run test:browser
+        run: |
+          npm run test:browser
+          npx vite build --config src/comments/vite.config.mjs
+          npx playwright test --config src/comments/playwright.config.mjs
 
       - name: Validate Wrangler package without publishing
         run: npm run deploy:check

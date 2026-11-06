@@ -1,0 +1,18 @@
+#wiring-svg{font-family:'Noto Sans CJK SC','PingFang SC','Microsoft YaHei',sans-serif;color:#203340;display:block;width:100%;height:auto}
+#wiring-svg .canvas-bg{fill:#fff}
+#wiring-svg text{fill:#38556a;font-size:14px}
+#wiring-svg .column-title{font-size:19px;fill:#214d66;font-weight:650}
+#wiring-svg .column-sub{font-size:13px;fill:#6b8190}
+#wiring-svg .boundary{fill:none;stroke:#adbeca;stroke-width:1;stroke-dasharray:5 6}
+#wiring-svg .lane-bg{fill:none;stroke:#e1e9ee;stroke-width:1}
+#wiring-svg .lane-title{fill:var(--wire);font-size:16px;font-weight:650}
+#wiring-svg .wire,#wiring-svg .signal{fill:none;stroke:var(--wire);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+#wiring-svg .signal{stroke-dasharray:7 4}
+#wiring-svg .junction{fill:var(--wire)}
+#wiring-svg .device rect{fill:#f5f8fa;stroke:#c0d0db;stroke-width:1.2}
+#wiring-svg .device-title{font-size:16px;font-weight:600;fill:#28495f}
+#wiring-svg .device-sub{font-size:13px;fill:#5c7484}
+#wiring-svg .connector rect{fill:#fff;stroke:var(--wire);stroke-width:2}
+#wiring-svg .port-id{fill:var(--wire);font-size:17px;font-weight:650}
+#wiring-svg .wire-label{font-size:13px;fill:#587183}
+#wiring-svg .lane.muted{opacity:.27}

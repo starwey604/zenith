@@ -1,0 +1,18 @@
+name = "zenith-comments"
+main = "src/worker.ts"
+account_id = "89bfce5e9736f9e15a4df61a7ab540a7"
+compatibility_date = "2026-10-23"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+# Actual name reported by Wrangler for the ID provided by the user.
+database_name = "zenith"
+database_id = "0bbc6296-4e75-4295-ae4d-70e248901ad2"
+
+[vars]
+ALLOWED_ORIGINS = "https://zenith.silkenkite.ink,http://localhost:5173,http://127.0.0.1:5173,http://192.168.8.3:5173,http://127.0.0.1:5184,http://127.0.0.1:5191"
+
+# INITIAL_ADMIN_PASSWORD is entered by the owner via `npm run admin:password`.
+# No password in this file. An uninitialized database stays closed without that secret.

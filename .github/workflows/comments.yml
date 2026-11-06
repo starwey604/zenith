@@ -1,0 +1,51 @@
+name: Build and deploy comments backend
+
+on:
+  push:
+    branches: [main]
+    paths: ['services/comments/**', '.github/workflows/comments.yml']
+  pull_request:
+    branches: [main]
+    paths: ['services/comments/**', '.github/workflows/comments.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: comments-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  comments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: services/comments
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+          cache: npm
+          cache-dependency-path: services/comments/package-lock.json
+      - name: Install pinned tools
+        run: npm ci && npm install --global pnpm@12.5.1
+      - name: Build pinned upstream and verify policy
+        run: npm run build && npm test && npm run check
+      - name: Exercise real local workerd and D1
+        run: npm run smoke
+      - name: Deploy comments Worker
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: services/comments
+          wranglerVersion: 4.156.0
+          command: deploy
