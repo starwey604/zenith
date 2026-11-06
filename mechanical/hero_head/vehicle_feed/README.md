@@ -2,7 +2,7 @@
 
 2026-11-05。保留六轴臂夹取侧耳、底部落座、车侧承载与俯仰；将五格仓、分度和推送驱动从可拆头移到车侧。当前比较入口：[构型示意页](index.html)。参数计算：`python mechanical/hero_head/vehicle_feed/calculate.py`，结果见[results.json](results.json)。
 
-接口电气与固定分工另见[触点和S145保护方案](ELECTRICAL_INTERFACE.md)，包括12项触点功能及6组短接/12组误接矩阵。
+接口电气与固定分工另见[触点和S145保护方案](ELECTRICAL_INTERFACE.md)，包括10项触点功能及6组短接/12组误接矩阵。
 
 ## 优先路线：车侧弹仓与头部共用俯仰托架
 

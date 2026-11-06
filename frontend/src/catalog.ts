@@ -23,7 +23,7 @@ export const catalog: PartInfo[] = [
   { id: 'dock', name: '头下定位与锁紧', short: '承压 / 定位 / 拉紧 / 触点', kind: '自制机构与接口占位', color: '#4989ab',
     description: '先竖直落座，再由车侧锁钩拉紧，最后沿轴线伸套接通弹路。机械承力、电触点、弹路分开。',
     notes: ['三点承压＋定位键，左右锁钩为独立拉紧意向；锁钩驱动暂未选型。', '伸套行程12 mm；下降时缩回，拆头前清空接缝、关门再退套。', '头下侧置可换触点盒；图中触片布局为功能分区，不是已选料号或定版腔位。', '总装仍保留旧侧耳夹取占位；最新夹爪与底座详见独立方案页，尚未回填总装CAD。'],
-    sources: ['vehicle_feed/README.md：两阶段接入', 'vehicle_feed/ELECTRICAL_INTERFACE.md：12项电气功能'] },
+    sources: ['vehicle_feed/README.md：两阶段接入', 'vehicle_feed/ELECTRICAL_INTERFACE.md：10项电气功能'] },
   { id: 'support', name: '车侧共俯仰托架', short: '仓 / 接头 / 头一起俯仰', kind: '车侧结构占位', color: '#5c91b1',
     description: '弹盘与可拆头共用车侧pitch托架，改变射角时弹路接缝不相对运动。头部没有独立pitch电机。',
     notes: ['可观察−15°～+45°；俯仰轴暂取X=−30、Z=−112 mm。', '底座、轴承座和yaw/pitch驱动尚无实物，图中仅画接口和承载路径。', '未接入实际底盘和六轴臂；当前不据此判断整车收纳或机械臂可达性。', '头上没有图传、电池、额外开发板或储弹盘。'],

@@ -60,7 +60,7 @@ export class DockScene {
     if(!head){box(g,[4,42,12],[-10,100,26],colors.head);box(g,[14,14,8],[-56,82,18],colors.lock);cylinder(g,3,12,[-58,82,26],colors.gold);}
     else annulus(g,6,3.5,12,[-58,82,26],colors.head);
     outline(g,[14,24,18],[64,100,head?35:17],'#977eaa');
-    for(const c of contacts){const power=c.circuit==='FIRE'||c.circuit==='AUX';const z=head?26:28-(c.circuit==='PRESENT'?.8:0);let pad:T.Mesh;
+    for(const c of contacts){const power=c.circuit==='FIRE'||c.circuit==='AUX';const z=head?26:28;let pad:T.Mesh;
       if(head)pad=box(g,[power?10:8,power?10:8,1],[c.x,c.y,z+.5],colors.gold);
       else {cylinder(g,power?3.6:2.3,7,[c.x,c.y,22],'#8098aa');pad=cylinder(g,power?3:1.8,3,[c.x,c.y,z-1.5],colors.gold);pad.userData.freeZ=z;this.pins.push(pad);}
       pad.userData.contactId=c.id;

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-test('底座导向、互锁、镜像触点与焊线空间',async({page})=>{
+test('底座导向、装配顺序、镜像触点与焊线空间',async({page})=>{
   test.setTimeout(120000);const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/dock.html');await page.waitForFunction(()=>!!window.__dock?.scene);
   await expect(page.locator('#d-error')).toBeHidden();await expect(page.locator('#capture-result')).toContainText('投影在入口内');
@@ -11,7 +11,7 @@ test('底座导向、互锁、镜像触点与焊线空间',async({page})=>{
   await page.locator('[data-stage="5"]').click();await expect(page.locator('#status-fire')).not.toHaveClass(/on/);
   await page.locator('#ammo').check();await expect(page.locator('#status-fire')).toHaveClass(/on/);
   await page.locator('[data-stage="2"]').click();await expect(page.locator('#status-fire')).not.toHaveClass(/on/);await expect(page.locator('#status-aux')).not.toHaveClass(/on/);
-  await page.locator('[data-mode="contacts"]').click();await page.locator('[data-pad="R2"]').click();
+  await page.locator('[data-mode="contacts"]').click();await expect(page.locator('[data-pad]')).toHaveCount(10);await expect(page.locator('#status-present')).toHaveCount(0);await expect(page.locator('[data-pad="D1"],[data-pad="D2"]')).toHaveCount(0);await page.locator('[data-pad="R2"]').click();
   await expect(page.locator('#selected-name')).toHaveText('REF_CAN_L');await expect(page.locator('#official-pin')).toContainText('2 · 橙 · CAN_L');
   const x=await page.locator('[data-pad="R2"]').evaluate(el=>el.getBoundingClientRect().x);
   const projected=await page.evaluate(()=>{const s=window.__dock.scene!;return s.camera.position.clone().set(15,91,26).project(s.camera).x;});

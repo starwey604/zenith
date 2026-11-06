@@ -1,10 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { contacts, capture, dockPose, defaults, wireBudget, contactDiagram } from '../src/dock/model.ts';
-test('12项功能分区与裁判四芯映射保持独立',()=>{
-  assert.equal(contacts.length,12);assert.equal(new Set(contacts.map(c=>c.id)).size,12);
+test('10项功能分区与裁判四芯映射保持独立',()=>{
+  assert.equal(contacts.length,10);assert.equal(new Set(contacts.map(c=>c.id)).size,10);
   assert.deepEqual(contacts.filter(c=>c.circuit==='REF').map(c=>[c.id,c.name,c.official?.split(' · ')[0]]),[['R1','REF_GND','1'],['R2','REF_CAN_L','2'],['R3','REF_12V','3'],['R4','REF_CAN_H','4']]);
   assert.equal(contacts.filter(c=>c.circuit==='CTRL').length,2);
+  assert.equal(contacts.some(c=>['D1','D2'].includes(c.id)),false);
+  assert.equal('present' in dockPose(5,{dx:0,dy:0,yaw:0},true),false);
 });
 test('偏航与平移共同消耗入口余量，入口外不强行落座',()=>{
   assert.equal(capture({dx:6,dy:4,yaw:2}).inside,true);
@@ -12,10 +14,10 @@ test('偏航与平移共同消耗入口余量，入口外不强行落座',()=>{
   const p=dockPose(5,a,true);assert.equal(p.p,0);assert.equal(p.fire,false);assert.equal(p.lift,70);
   assert.ok(capture({dx:0,dy:0,yaw:8}).yMargin<capture({dx:0,dy:0,yaw:0}).yMargin);
 });
-test('落座接触、锁紧、辅助上电、Ammo许可顺序',()=>{
+test('装配动画：落座、锁扣扣合、电脑上电、Ammo许可顺序',()=>{
   const a={dx:0,dy:0,yaw:0};
-  for(let t=0;t<5;t+=.05){const p=dockPose(t,a,true);assert.equal(p.fire,false);if(t<2){assert.equal(p.present,false);assert.equal(p.locked,false);}if(t<4)assert.equal(p.aux,false);assert.ok(p.compression>=0&&p.compression<=2);}
-  assert.equal(dockPose(2,a,true).present,true);assert.equal(dockPose(2,a,true).locked,false);
+  for(let t=0;t<5;t+=.05){const p=dockPose(t,a,true);assert.equal(p.fire,false);if(t<2){assert.equal(p.seated,false);assert.equal(p.locked,false);}if(t<4)assert.equal(p.aux,false);assert.ok(p.compression>=0&&p.compression<=2);}
+  assert.equal(dockPose(2,a,true).seated,true);assert.equal(dockPose(2,a,true).locked,false);
   assert.equal(dockPose(5,a,false).fire,false);assert.equal(dockPose(5,a,true).fire,true);
   assert.equal(dockPose(5,a,true).sleeve,12);
 });
