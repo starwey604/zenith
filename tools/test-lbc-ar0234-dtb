@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+"""Check the compiled LBC3 CAM0 FDT, including the preserved AMP configuration."""
+import argparse
+from pathlib import Path
+import struct
+import unittest
+
+
+def read_fdt(path):
+    # Same small FDT reader as the Aura camera topology tests; no dtc bindings.
+    blob = path.read_bytes()
+    header = struct.unpack('>10I', blob[:40])
+    if header[0] != 0xd00dfeed or header[1] > len(blob):
+        raise ValueError('invalid FDT header')
+    offset, strings = header[2:4]
+    nodes, stack = {}, []
+    while True:
+        token = struct.unpack_from('>I', blob, offset)[0]
+        offset += 4
+        if token == 1:
+            end = blob.index(0, offset)
+            stack.append(blob[offset:end].decode())
+            offset = (end + 4) & ~3
+            nodes['/' + '/'.join(filter(None, stack))] = {}
+        elif token == 2:
+            stack.pop()
+        elif token == 3:
+            size, name_offset = struct.unpack_from('>II', blob, offset)
+            offset += 8
+            start = strings + name_offset
+            name = blob[start:blob.index(0, start)].decode()
+            nodes['/' + '/'.join(filter(None, stack))][name] = blob[offset:offset + size]
+            offset = (offset + size + 3) & ~3
+        elif token == 4:
+            continue
+        elif token == 9:
+            return nodes
+        else:
+            raise ValueError(f'unknown FDT token {token}')
+
+
+def words(data):
+    return struct.unpack('>' + 'I' * (len(data) // 4), data)
+
+
+def string(data):
+    return data.rstrip(b'\0').decode()
+
+
+class CameraTreeTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.nodes = read_fdt(ARGS.dtb)
+        cls.symbols = {k: string(v) for k, v in cls.nodes['/__symbols__'].items()}
+        cls.handles = {words(p['phandle'])[0]: n for n, p in cls.nodes.items() if 'phandle' in p}
+        cls.bus = string(cls.nodes['/aliases']['i2c3'])
+        cls.sensor = cls.bus + '/camera@10'
+
+    def node(self, label):
+        return self.nodes[self.symbols[label]]
+
+    def remote(self, props, key):
+        return self.nodes[self.handles[words(props[key])[0]]]
+
+    def test_module_address_power_and_onboard_clock(self):
+        sensor = self.nodes[self.sensor]
+        self.assertEqual(sensor['compatible'], b'decxin,3478v1-1080p120\0decxin,3478v1-fastreadout\0decxin,3478v1\0onnn,ar0234cs\0')
+        self.assertEqual(string(sensor['status']), 'okay')
+        self.assertEqual(words(sensor['reg']), (0x10,))
+        self.assertEqual(words(sensor['rockchip,camera-module-index']), (0,))
+        self.assertEqual(words(self.nodes[self.bus]['clock-frequency']), (100000,))
+        self.assertEqual(string(self.nodes[self.bus]['status']), 'okay')
+        self.assertEqual(self.remote(self.nodes[self.bus], 'pinctrl-0'), self.node('i2c3m0_xfer'))
+        osc = self.remote(sensor, 'clocks')
+        self.assertEqual(osc['compatible'], b'fixed-clock\0')
+        self.assertEqual(words(osc['clock-frequency']), (24000000,))
+        supply = self.remote(sensor, 'vdd-supply')
+        self.assertEqual(words(supply['regulator-min-microvolt']), (3300000,))
+        self.assertEqual(words(supply['regulator-max-microvolt']), (3300000,))
+        self.assertIn('regulator-always-on', supply)
+        upstream = self.remote(supply, 'vin-supply')
+        self.assertEqual(words(upstream['regulator-min-microvolt']), (5000000,))
+        for key in ('reset-gpios', 'pwdn-gpios', 'avdd-supply', 'dovdd-supply', 'dvdd-supply'):
+            self.assertNotIn(key, sensor)
+
+    def test_four_lanes_continuous_clock_and_reciprocal_sensor_link(self):
+        endpoint = self.node('ar0234_cam0_out')
+        receiver = self.remote(endpoint, 'remote-endpoint')
+        self.assertEqual(receiver, self.node('dcphy0_in_ar0234'))
+        self.assertEqual(words(receiver['remote-endpoint']), words(endpoint['phandle']))
+        for node in (endpoint, receiver):
+            self.assertEqual(words(node['data-lanes']), (1, 2, 3, 4))
+            self.assertEqual(words(node['clock-lanes']), (0,))
+            self.assertNotIn('clock-noncontinuous', node)
+        self.assertEqual(struct.unpack('>Q', endpoint['link-frequencies']), (450000000,))
+
+    def test_cam0_pipeline_enabled_and_reciprocal(self):
+        for label in ('csi2_dcphy0', 'mipidcphy0', 'mipi0_csi2', 'mipi0_csi2_hw',
+                      'rkcif', 'rkcif_mmu', 'rkcif_mipi_lvds', 'rkcif_mipi_lvds_sditf',
+                      'rkisp', 'rkisp_mmu', 'rkisp_vir0', 'rkisp_vir0_sditf',
+                      'rkvpss', 'rkvpss_mmu', 'rkvpss_vir0'):
+            self.assertEqual(string(self.node(label).get('status', b'okay')), 'okay', label)
+        for a, b in (('csidcphy0_out', 'mipi0_csi2_input'),
+                     ('mipi0_csi2_output', 'cif_mipi_in0'),
+                     ('mipi_lvds_sditf', 'isp_vir0'), ('isp_sditf0', 'vpss0_in')):
+            self.assertEqual(self.remote(self.node(a), 'remote-endpoint'), self.node(b))
+            self.assertEqual(self.remote(self.node(b), 'remote-endpoint'), self.node(a))
+
+    def test_no_other_camera_or_lens_enabled(self):
+        self.assertEqual(string(self.node('dw9714_0')['status']), 'disabled')
+        # Every other CAM0 sensor stays disabled; RTC is deliberately retained.
+        for path, props in self.nodes.items():
+            if path.startswith(self.bus + '/') and path.count('/') == self.sensor.count('/'):
+                if path != self.sensor and 'rockchip,camera-module-index' in props:
+                    self.assertEqual(string(props['status']), 'disabled', path)
+        for index in range(1, 5):
+            for name in ('csi2_dphy', 'mipi{}_csi2', 'rkisp_vir', 'rkvpss_vir'):
+                label = name.format(index) if '{}' in name else name + str(index)
+                self.assertEqual(string(self.node(label)['status']), 'disabled', label)
+
+    def test_amp_memory_uart_and_headless_state(self):
+        for label, address, size in (('mcu_reserved', 0x60000000, 0x100000),
+                                     ('amp_shmem_reserved', 0x47900000, 0x400000),
+                                     ('rpmsg_reserved', 0x47d00000, 0x200000),
+                                     ('rpmsg_dma_reserved', 0x47f00000, 0x200000)):
+            node = self.node(label)
+            self.assertEqual(words(node['reg']), (0, address, 0, size))
+            self.assertIn('no-map', node)
+        for label in ('rockchip_amp', 'rpmsg', 'mailbox0', 'mailbox3'):
+            self.assertEqual(string(self.node(label)['status']), 'okay', label)
+        self.assertEqual(self.remote(self.node('rockchip_amp'), 'pinctrl-0'), self.node('uart5m0_xfer'))
+        for label in ('display_subsystem', 'vop', 'hdmi', 'dp0', 'es8388_sound', 'es8388'):
+            self.assertEqual(string(self.node(label)['status']), 'disabled', label)
+        for label in ('gmac0', 'sdhci', 'i2c3_hym8563', 'usbdp_phy_u3'):
+            self.assertEqual(string(self.node(label).get('status', b'okay')), 'okay', label)
+
+    def test_non_camera_configuration_against_baseline(self):
+        if not ARGS.baseline:
+            self.skipTest('no pre-port DTB supplied')
+        before = read_fdt(ARGS.baseline)
+        old_handles = {words(p['phandle'])[0]: n for n, p in before.items() if 'phandle' in p}
+        # Resolve phandles before comparing: adding a node can renumber them.
+        for label in ('mcu_reserved', 'amp_shmem_reserved', 'rpmsg_reserved',
+                      'rpmsg_dma_reserved', 'rockchip_amp', 'rpmsg', 'uart5m0_xfer',
+                      'gmac0', 'sdhci', 'i2c3_hym8563', 'display_subsystem',
+                      'vop', 'hdmi', 'dp0', 'usbdp_phy_u3'):
+            path = self.symbols[label]
+            for key, value in before[path].items():
+                if key in ('phandle', 'linux,phandle'):
+                    continue
+                actual = self.nodes[path][key]
+                if key in ('pinctrl-0', 'memory-region', 'phy-handle', 'interrupt-parent',
+                           'ports', 'operating-points-v2', 'rockchip,grf', 'rockchip,php_grf',
+                           'rockchip,ioc-grf', 'rockchip,pmu', 'rockchip,vo0_grf',
+                           'snps,axi-config', 'snps,mtl-rx-config', 'snps,mtl-tx-config'):
+                    self.assertEqual([old_handles[w] for w in words(value)],
+                                     [self.handles[w] for w in words(actual)], (path, key))
+                elif key == 'rockchip,pins':
+                    def pins(data, handles):
+                        cells = words(data)
+                        return [(cells[i:i + 3], handles[cells[i + 3]])
+                                for i in range(0, len(cells), 4)]
+                    self.assertEqual(pins(value, old_handles), pins(actual, self.handles), (path, key))
+                elif key == 'rockchip,csu':
+                    self.assertEqual(old_handles[words(value)[0]], self.handles[words(actual)[0]])
+                    self.assertEqual(words(value)[1:], words(actual)[1:], (path, key))
+                elif key in ('clocks', 'mboxes', 'phys', 'resets', 'power-domains',
+                             'assigned-clocks', 'assigned-clock-parents', 'iommus') or key.endswith(('-supply', '-gpio', '-gpios')):
+                    # Other resource references are covered by unchanged source;
+                    # compare them by provider paths, not unstable phandle values.
+                    cell_key = {'clocks': '#clock-cells', 'assigned-clocks': '#clock-cells',
+                                'assigned-clock-parents': '#clock-cells', 'mboxes': '#mbox-cells',
+                                'phys': '#phy-cells', 'resets': '#reset-cells',
+                                'power-domains': '#power-domain-cells', 'iommus': '#iommu-cells'}.get(key)
+                    if key.endswith(('-gpio', '-gpios')):
+                        cell_key = '#gpio-cells'
+                    def resolve(data, tree, handles):
+                        cells = list(words(data))
+                        result = []
+                        while cells:
+                            provider = handles[cells.pop(0)]
+                            count = words(tree[provider][cell_key])[0] if cell_key else 0
+                            result.append((provider, cells[:count]))
+                            del cells[:count]
+                        return result
+                    self.assertEqual(resolve(value, before, old_handles),
+                                     resolve(actual, self.nodes, self.handles), (path, key))
+                else:
+                    self.assertEqual(value, actual, (path, key))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('dtb', type=Path)
+    parser.add_argument('--baseline', type=Path)
+    ARGS = parser.parse_args()
+    unittest.main(argv=[__file__], verbosity=2)

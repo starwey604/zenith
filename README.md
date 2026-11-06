@@ -5,5 +5,6 @@
 - [方案演变](mechanical/hero_head/DESIGN_HISTORY.md)：保留路线选择依据，临时扫描和检查快照不纳入版本。
 - [板端程序与交叉编译](runtime/README.md)
 - [LubanCat SDK 补丁管理](sdk/README.md)
+- [LBC3 CAM0：AR0234 1080p / 120 fps](docs/lbc3-ar0234-cam0.md)
 
 目标站点：`https://zenith.silkenkite.ink`。首次部署后在Cloudflare给`zenith` Worker绑定自定义域名；GitHub Secrets和发布步骤见前端说明。
