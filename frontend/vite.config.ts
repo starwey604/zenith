@@ -5,5 +5,5 @@ export default defineConfig({
     target: 'https://zenith-comments.moonbite233.workers.dev', changeOrigin: true,
     rewrite: path => path.replace(/^\/api\/comments/, '') || '/',
   } } },
-  build: { rollupOptions: { input: { workbench: 'index.html', gripper: 'gripper.html', dock: 'dock.html', wiring: 'wiring.html' } } },
+  build: { rollupOptions: { input: { workbench: 'index.html', gripper: 'gripper.html', dock: 'dock.html', wiring: 'wiring.html', protection: 'protection.html' } } },
 });

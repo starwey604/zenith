@@ -65,7 +65,7 @@ attachPageComments(() => ({
 }));
 ```
 
-`topic/candidate`组成稳定讨论键，与域名、页面文件名、版本和滑块值无关。四页分别使用 `head/vehicle-feed`、`gripper/dual-purpose-comparison`、`dock/rear-guided`、`wiring/head-interface`。夹爪 A/B 共用比较讨论，所选构型写入参数；切换构型不会丢掉草稿或重新挂载。
+`topic/candidate`组成稳定讨论键，与域名、页面文件名、版本和滑块值无关。五页分别使用 `head/vehicle-feed`、`gripper/dual-purpose-comparison`、`dock/rear-guided`、`wiring/head-interface`、`protection/referee-head-board`。夹爪 A/B 共用比较讨论，所选构型写入参数；切换构型不会丢掉草稿或重新挂载。
 
 页面交互后更新可见快照；提交时再次读取最新参数，不使用首次加载时的旧值。参数只接受不超过 40 项的扁平公开值。页面链接从明确字段建立，不复制任意 `location.search`。链接仅恢复该页面已经支持的状态；完整提交参数仍保留在评论正文中，不声称页面已有每个参数的 URL 恢复能力。
 

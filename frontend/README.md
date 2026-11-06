@@ -24,7 +24,7 @@
 
 默认4 mm功率线外径、8 mm端子/焊尾、12 mm热缩直段、中心线R=16 mm、间隙3 mm：每侧焊尾后深度41 mm，侧向弯线预留21 mm；按当前头/车焊尾基准面合计闭合总高116 mm。这个预算不含保护板、安装耳、防反插凸台、检修工具与服务环，不是已选线材或连接器规格。
 
-尺寸、10项功能和计算在 `src/dock/model.ts`。按钮可下载当前接口参数JSON和触点CSV。构建入口包含`index.html`、`gripper.html`、`dock.html`、`wiring.html`；总装页继续展示总体对接关系，新底座尚未替换旧总装几何。独立检查：`npx playwright test tests/dock.spec.ts`。
+尺寸、10项功能和计算在 `src/dock/model.ts`。按钮可下载当前接口参数JSON和触点CSV。构建入口包含`index.html`、`gripper.html`、`dock.html`、`wiring.html`、`protection.html`；总装页继续展示总体对接关系，新底座尚未替换旧总装几何。独立检查：`npx playwright test tests/dock.spec.ts`。
 
 ## 底盘—头部接线页
 
@@ -37,6 +37,14 @@
 图中线条表示线束而非单芯；芯数、回流和官方四芯颜色在支路说明及表格中。线径、线长和连接器未定。电调瞬态处理与顶板耐受按实际硬件确认；两路供电分开不代表电气隔离。
 
 触点与底座共用 `src/dock/model.ts`，A1/A2位置不变，功能名更新为MINIPC_24V/MINIPC_RETURN；AUX内部键保留以兼容原有几何/导出。`src/wiring/model.ts`组织支路说明，`diagram.ts`绘制SVG。接线页不加载Three.js与CAD。检查：`npx playwright test tests/wiring.spec.ts tests/dock.spec.ts`。
+
+## 头侧裁判接口保护板
+
+打开 `/protection.html` 查看板级布局意向：左侧四线输入、右侧四线接 SM11，红色箭头表示正常供电方向，棕色表示 GND 回流，绿色双向箭头表示 CAN 通信。按功能分区展开触点，R1–R4 与底座页共用定义，实际接头腔位另定。
+
+点击 U1、Q1、Q2 或 CAN 区查看用途与选型状态，链接保留当前器件；可下载带样式的 SVG。U1 使用 TPS26630/31 候选路线，外置 MOS 待选；U2 已选 TMUX7462F，S1/D1 通过 CAN_L、S2/D2 通过 CAN_H，S 端接外部触点，D 端接 SM11，供电与故障阈值待定，板框、封装和完整连接在原理图确定后细化。此图供机械布置和电气讨论，不包含电路仿真结果；S145 测试尚未完成。
+
+页面沿用评论系统，讨论键为 `protection/referee-head-board`。实现位于 `src/protection/`，无需加载 Three.js。检查：`npx playwright test tests/protection.spec.ts`。
 
 ## 本地运行
 
