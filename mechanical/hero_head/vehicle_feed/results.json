@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-05",
+  "requirement": {
+    "source": "https://bbs.robomaster.com/wiki/20204847/1970940?source=7",
+    "target_distance_m": 3,
+    "target_rotation_rps_min_exclusive": 0.4,
+    "accuracy": "Report hit rate, not ten guaranteed hits",
+    "manual_intervention": false,
+    "cadence": "not specified on criteria page",
+    "minimum_test_shots": 10,
+    "planning_capacity": 12,
+    "installation_shot_inclusion": "unconfirmed"
+  },
+  "mass": {
+    "old_five_round_with_gripper_kg": 2.9775,
+    "old_budget_plus_five_balls_only_kg": 3.2,
+    "common_head_budget_kg": 2.015,
+    "ears_kg": 0.055,
+    "new_passive_feed_interface_assumed_kg": 0.12,
+    "transported_empty_head_budget_kg": 2.1900000000000004,
+    "with_gripper_kg": 2.4300000000000006,
+    "interface_sensitivity_head_kg": [
+      2.1500000000000004,
+      2.2500000000000004
+    ],
+    "notes": "Reuses old launcher/core/frame/electronics budgets; no weighed or assigned-material mass. All ammo, indexing and pusher drives stay vehicle-side. Vehicle feed and pitch hardware must be budgeted separately."
+  },
+  "circular_packing": [
+    {
+      "slots": 6,
+      "center_radius_mm": 49.00000000000001,
+      "rotor_outer_diameter_mm": 152.0,
+      "ammunition_kg": 0.267,
+      "approximate_combined_height_mm": 201
+    },
+    {
+      "slots": 10,
+      "center_radius_mm": 79.28366544874486,
+      "rotor_outer_diameter_mm": 212.5673308974897,
+      "ammunition_kg": 0.44499999999999995,
+      "approximate_combined_height_mm": 255.5673308974897
+    },
+    {
+      "slots": 12,
+      "center_radius_mm": 94.6607309763287,
+      "rotor_outer_diameter_mm": 243.3214619526574,
+      "ammunition_kg": 0.534,
+      "approximate_combined_height_mm": 286.3214619526574
+    },
+    {
+      "slots": 15,
+      "center_radius_mm": 117.83849144623122,
+      "rotor_outer_diameter_mm": 289.67698289246243,
+      "ammunition_kg": 0.6675,
+      "approximate_combined_height_mm": 332.67698289246243
+    }
+  ],
+  "ammo_pitch_loads": [
+    {
+      "slots": 10,
+      "ammo_only_max_pitch_gravity_nm": 0.5235860783167441,
+      "pitch_axis_xz_mm": [
+        -30,
+        0
+      ],
+      "pitch_range_deg": [
+        -15,
+        45
+      ]
+    },
+    {
+      "slots": 12,
+      "ammo_only_max_pitch_gravity_nm": 0.6840216013948336,
+      "pitch_axis_xz_mm": [
+        -30,
+        0
+      ],
+      "pitch_range_deg": [
+        -15,
+        45
+      ]
+    }
+  ],
+  "rear_sweep_example": {
+    "pitch_axis_height_mm": 380,
+    "chassis_deck_height_mm": 250,
+    "rear_corner_relative_axis_xz_mm": [
+      -215,
+      -14
+    ],
+    "pitch_deg": 45,
+    "corner_height_mm": 218.07254710828062,
+    "minimum_axis_height_for_10mm_deck_clearance": 421.9274528917194,
+    "scope": "One corner at one pose using old layout heights, not full collision validation."
+  },
+  "scope": "Pocket geometry and ammo-only quasistatic gravity. Does not include rotor/motor/pusher/head mass in pitch load, feed contact, firing dynamics, CAD collisions, IK, stowage or rule approval."
+}

@@ -1,0 +1,16 @@
+{
+  "source": "launcher_reference.FCStd / Ref_1205 (STEP Part__Feature1205)",
+  "diameter_mm": 60,
+  "bore_mm": 46.002,
+  "thickness_mm": 18,
+  "sketch_fully_constrained": true,
+  "shape_valid": true,
+  "solid_count": 1,
+  "reference_volume_mm3": 20976.95444540679,
+  "redraw_volume_mm3": 20976.9544454068,
+  "symmetric_difference_volume_mm3": 0.0,
+  "diameter_62_recompute_volume_mm3": 24426.423179048386,
+  "diameter_62_expected_volume_mm3": 24426.423179048386,
+  "restored_volume_mm3": 20976.9544454068,
+  "limitations": "Single simple annulus; complex gate/support parts and assembly joints not tested. Dimensions reproduce the supplied STEP, not manufacturing tolerances."
+}

@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Zenith · 评论组件独立验收</title></head>
+<body>
+  <main>
+    <header><h1>方案讨论组件</h1><p>独立验收页，不连接正式站点。填写测试服务地址后可验证匿名评论。</p></header>
+    <form id="setup"><label>Twikoo 测试服务地址<input name="endpoint" type="url" placeholder="https://你的评论服务地址" autocomplete="off"></label><button>使用此服务</button></form>
+    <div class="demo-context"><label>当前选中部件<select id="part"><option>R2 / REF_CAN_L</option><option>F1 / FIRE+</option></select></label><label>焊线净空 / mm<input id="clearance" type="number" min="1" max="100" value="41"></label></div>
+    <div id="discussion"></div>
+  </main><script type="module" src="./main.ts"></script>
+</body></html>

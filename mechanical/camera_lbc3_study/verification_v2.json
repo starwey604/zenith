@@ -1,0 +1,158 @@
+{
+  "lid_lift_1_to_50mm_collisions": [],
+  "tool_access_collisions": [],
+  "tool_check_scope": "4mm shaft for selected M3 positions, 3mm shaft for M1.6; no full handles/fastener models; remove guard for camera access",
+  "cable": {
+    "minimum_centerline_radius_mm": 5,
+    "assumed_width_mm": 12,
+    "assumed_thickness_mm": 0.3,
+    "free_span_length_mm": 46.061944901923454,
+    "connector_insertions_included": false,
+    "camera_side_exit": "from bottom edge, verify with real part",
+    "camera_y_offset_mm": 2.7630000000000052,
+    "collisions": [],
+    "bending_rating_verified": false
+  },
+  "parameters": {
+    "m3_clear": 3.4,
+    "camera_screw_clear": 1.8,
+    "adapter_board_z": 0.85,
+    "camera_shift_x": 2.0,
+    "camera_raise_z": 8.0,
+    "cable_radius": 5.0,
+    "cable_width": 12.0,
+    "cable_thickness": 0.3
+  },
+  "new_parts": {
+    "NEW_AdapterRetainer": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 196.2713951544693,
+      "bounds_mm": [
+        -26.79999999999999,
+        -3.749999999999993,
+        15.9,
+        -23.59999999999999,
+        9.250000000000014,
+        21.0
+      ]
+    },
+    "NEW_ExitSaddle": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 831.7963770652506,
+      "bounds_mm": [
+        0.0,
+        -17.236999999999995,
+        0.0,
+        9.0,
+        22.763000000000005,
+        15.1
+      ]
+    },
+    "NEW_ExitJaw": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 181.82123980236892,
+      "bounds_mm": [
+        0.0,
+        -9.236999999999995,
+        15.9,
+        4.0,
+        14.763000000000005,
+        17.9
+      ]
+    },
+    "NEW_CameraCableJaw": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 118.18380587153996,
+      "bounds_mm": [
+        20.5,
+        -9.236999999999995,
+        9.0,
+        21.8,
+        14.763000000000005,
+        13.0
+      ]
+    },
+    "NEW_CommonFrame": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 19097.67348370725,
+      "bounds_mm": [
+        -92.0,
+        -53.25,
+        -3.0,
+        38.0,
+        53.25,
+        0.0
+      ]
+    },
+    "NEW_CaseBaseWithEars": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 37488.280462930874,
+      "bounds_mm": [
+        -90.0,
+        -49.250000000000014,
+        0.0,
+        10.0,
+        49.25,
+        18.5
+      ]
+    },
+    "NEW_CameraCarrier": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 4150.759297914879,
+      "bounds_mm": [
+        10.0,
+        -22.236999999999995,
+        0.0,
+        28.0,
+        27.763000000000005,
+        50.0
+      ]
+    },
+    "NEW_RemovableGuard": {
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 8689.524783386752,
+      "bounds_mm": [
+        28.0,
+        -27.236999999999995,
+        0.0,
+        47.300000000000004,
+        32.763000000000005,
+        51.0
+      ]
+    }
+  },
+  "old_support_adapter_intersection_mm3": 4.352604276017404,
+  "new_support_adapter_intersection_mm3": 0.0,
+  "adapter_reference_collisions": [],
+  "collisions": [],
+  "assumed_service_keepout_collisions": [],
+  "assembly_bounds_mm": [
+    -92.0,
+    -53.25,
+    -3.0,
+    47.300000000000004,
+    53.25,
+    51.0
+  ],
+  "assembly_size_mm": [
+    139.3,
+    106.5,
+    54.0
+  ],
+  "limitations": [
+    "camera rear body and keep-outs need physical verification",
+    "adapter bottom Z=0.85 assumed mating datum; actual B2B engagement must be confirmed",
+    "cable route and clamps modeled with provisional connector datum, thickness, radius and soft pad assumptions",
+    "fastener heads, nuts and washer installation clearance not fully modeled",
+    "case base and carrier prototypes need fit and structural/thermal tests",
+    "script-driven rebuild, not recovered original parametric history"
+  ]
+}

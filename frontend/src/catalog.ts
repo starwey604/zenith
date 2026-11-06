@@ -1,0 +1,38 @@
+import type { Layer } from './state';
+export interface PartInfo { id: Layer; name: string; short: string; kind: string; color: string; description: string; notes: string[]; sources: string[]; downloads?: { label: string; path: string }[]; }
+export const catalog: PartInfo[] = [
+  { id: 'launcher', name: '发射核心', short: '轮组 / M3508 / SM11', kind: '导入参考＋改制意向', color: '#546f81',
+    description: '交龙同款双摩擦轮，配M3508；前方保留SM11测速模块。短直导路把弹丸送入两轮接管区。',
+    notes: ['轮外径60 mm，轴距98 mm；实际挤压与球变形需实测。', '当前显示M3508去减速箱本体参考，轮芯适配、轴端和新安装座待设计。旧3510未混入总装。', 'SM11使用已收到的2020版模型，瞄准器保留；原固定线缆姿态未沿用。'],
+    sources: ['交龙 launcher_reference.FCStd：Ref_1204～1207', 'M3508_motor_body_only_derived.step', 'RoboMaster_大测速模块_SM11_2020.STEP'],
+    downloads: [{ label: '交龙核心 FCStd', path: 'jiao-long-launcher-reference.FCStd' }, { label: 'M3508官方原件', path: 'm3508-official.stp' }, { label: 'SM11 STEP', path: 'sm11-2020.step' }] },
+  { id: 'vision', name: '相机与LBC3', short: '共底架 / 两端线夹', kind: 'V2结构＋尺寸参考', color: '#398c85',
+    description: '相机在测速上方，与电脑固定在共同刚性底架。开电脑盖不拆相机定位螺钉。',
+    notes: ['独立组件包络139.3 × 106.5 × 54 mm。', '实际CAM1转接板已接入；排线暂按宽12、厚0.3、中心线R5 mm。', '相机图为DECXIN-3478V1；背面接头、线材半径及软垫夹持等待试装。', '这次总装中的桥架为新画的安装意向，不等于V2组件的几何检查已覆盖整头。'],
+    sources: ['camera_lbc3_study/cad/camera_lbc3_v2.FCStd', 'references/camera.pdf', 'mechanical/steps/CamAdaptor.step'],
+    downloads: [{ label: '视觉组件 FCStd', path: 'camera-lbc3-v2.FCStd' }, { label: '视觉组件 STEP', path: 'camera-lbc3-v2.step' }] },
+  { id: 'magazine', name: '车侧有序弹盘', short: '10 / 12格轴向储弹', kind: '自制机构意向', color: '#df9b44',
+    description: '每格约束一球，最低格直接对准发射入口。弹盘留在车侧，与头共用俯仰托架。',
+    notes: ['格位孔46 mm，球体按42.5 mm；名义相邻腹板3 mm。', '10格外径约212.6 mm；12格约243.3 mm。盘厚50 mm为本轮布局参数。', '蓝色是两整片固定挡板，米色是中间的转盘；挡板不跟着分度。只有装填口、前下方出球口和后下方推杆孔开通。', '后上方新增Ø47 mm装填口与上翻盖，球沿X方向送进最高格；前挡板封住该格另一端。', '装填时禁止推送和发射；球到位、手退出后可保持开盖单格点动。翻盖锁扣、断电定位和实球保持件待细化。', '装填与退弹共用一个口；不依赖拆下整块挡板或让球穿过摩擦轮。', '装头和移动时保弹，射击不依赖球列挤压或重力下落。'],
+    sources: ['vehicle_feed/calculate.py：单层盘排布', '本工程 layout.ts：孔位与动作尺寸'] },
+  { id: 'drive', name: '推送与电气', short: '主动直推 / 2 × C620', kind: 'C620参考＋驱动占位', color: '#987ab1',
+    description: '车侧推头沿炮口方向穿过最低格，把单球送至轮组。两块C620留在头部并随头拆装。',
+    notes: ['推送器、分度、止弹执行器当前无库存型号，紫色外形均为占位。', '当前推头几何行程约127.8 mm，含接近球的空行程；不沿用旧五格伸缩机构。', 'C620使用用户提供STEP的本体和固定接头；软线以新总装路径示意，弯曲及插拔空间待确认。', '分度必须在推头退净、闸门关闭后进行；动画节奏不作为实机射速。'],
+    sources: ['mechanical/steps/RM/C620无刷电机调速器.STEP', '本工程 state.ts：单球动作状态'],
+    downloads: [{ label: 'C620 STEP', path: 'c620.step' }] },
+  { id: 'dock', name: '头下定位与锁紧', short: '承压 / 定位 / 拉紧 / 触点', kind: '自制机构与接口占位', color: '#4989ab',
+    description: '先竖直落座，再由车侧锁钩拉紧，最后沿轴线伸套接通弹路。机械承力、电触点、弹路分开。',
+    notes: ['三点承压＋定位键，左右锁钩为独立拉紧意向；锁钩驱动暂未选型。', '伸套行程12 mm；下降时缩回，拆头前清空接缝、关门再退套。', '头下侧置可换触点盒；图中触片布局为功能分区，不是已选料号或定版腔位。', '总装仍保留旧侧耳夹取占位；最新夹爪与底座详见独立方案页，尚未回填总装CAD。'],
+    sources: ['vehicle_feed/README.md：两阶段接入', 'vehicle_feed/ELECTRICAL_INTERFACE.md：10项电气功能'] },
+  { id: 'support', name: '车侧共俯仰托架', short: '仓 / 接头 / 头一起俯仰', kind: '车侧结构占位', color: '#5c91b1',
+    description: '弹盘与可拆头共用车侧pitch托架，改变射角时弹路接缝不相对运动。头部没有独立pitch电机。',
+    notes: ['可观察−15°～+45°；俯仰轴暂取X=−30、Z=−112 mm。', '底座、轴承座和yaw/pitch驱动尚无实物，图中仅画接口和承载路径。', '未接入实际底盘和六轴臂；当前不据此判断整车收纳或机械臂可达性。', '头上没有图传、电池、额外开发板或储弹盘。'],
+    sources: ['vehicle_feed/README.md：车侧共俯仰路线', '本工程 layout.ts：托架占位'] },
+];
+export const modeText = {
+  assembly: { title: '车载弹盘，可拆发射头', subtitle: '仓与头共俯仰，机械臂只搬运发射头。', hint: '点击模型查看零件依据，拖动旋转、滚轮缩放。' },
+  loading: { title: '盖子开一次，逐格装满', subtitle: '赛前从弹盘后上方逐格装填；不用拆头，也不经过摩擦轮。', hint: '蓝色整片是固定挡板，金色小盖只封装填口。勾选“透视挡板”看内部。' },
+  feed: { title: '从格位直接推入轮组', subtitle: '单球全程有约束；推头退净后再分度。', hint: '前挡板透明显示，观察最低格与发射入口的轴向关系。' },
+  dock: { title: '先承载，再接通弹路', subtitle: '定位承力、锁紧、电触点与供弹接缝分别处理。', hint: '选择下方步骤，观察下降、锁钩和伸套的位置。' },
+  vision: { title: '共底架，开盖不动光轴', subtitle: '相机在测速上方；实际CAM1板与两端线夹已接入。', hint: '切换上盖或分解观察；分解时隐藏排线。' },
+};

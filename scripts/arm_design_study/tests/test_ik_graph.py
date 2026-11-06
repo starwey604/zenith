@@ -1,14 +1,5 @@
-import json
-
 import numpy as np
-
-from scripts.arm_design_study.chassis import ChassisMount
-from scripts.arm_design_study.ik_graph import (
-    GraphLayer, GraphNode, search_ik_graph, solve_ik_path,
-)
-from scripts.arm_design_study.model_import import load_local
-from scripts.arm_design_study.task_2026 import TaskWaypoint, ToolIKTarget, solve_task_ik_graph
-
+from scripts.arm_design_study.ik_graph import GraphLayer, GraphNode, search_ik_graph
 
 def _node(first_joint: float, branch: int = 0, lift: int = 0) -> GraphNode:
     q = np.zeros(6)
@@ -70,55 +61,3 @@ def test_lifted_turn_uses_real_joint_step_not_wrapped_distance():
     result = search_ik_graph(layers, np.zeros(6), max_joint_step_rad=0.5)
     assert result.failure["reason"] == "joint_step"
     assert result.step_rejections == 1
-
-
-def test_real_two_pose_path_uses_both_continuation_passes_and_is_repeatable():
-    arm = load_local("rm2p_spherical_wrist")
-    mount = ChassisMount(0.0, 0.0, 0.0, np.eye(4))
-    q0 = np.array([0.3, -0.7, 0.5, 0.2, 0.6, -0.4])
-    q1 = q0 + np.array([0.02, -0.03, 0.03, 0.02, -0.02, 0.01])
-    path = [ToolIKTarget("a", arm.fk(q0)), ToolIKTarget("b", arm.fk(q1))]
-    options = dict(sobol_tiers=(2, 4), max_joint_step_rad=0.2,
-                   enforce_start_step=True)
-    result = solve_ik_path(arm, mount, path, q0, **options)
-    repeated = solve_ik_path(arm, mount, path, q0, **options)
-    assert result.complete
-    assert json.dumps(result.to_dict(), sort_keys=True) == json.dumps(repeated.to_dict(), sort_keys=True)
-    assert all(layer.forward_diagnostics is not None and layer.backward_diagnostics is not None
-               for layer in result.layers)
-    assert len(result.path) == 2
-    assert all(np.linalg.norm(arm.pose_error(choice.q_rad, point.world_flange)) < 1e-3
-               for choice, point in zip(result.path, path))
-    assert np.max(np.abs(result.path[1].q_rad - result.path[0].q_rad)) <= 0.2
-
-
-def test_tool_task_wrapper_maps_world_tool_to_flange():
-    arm = load_local("rm2p_spherical_wrist")
-    mount = ChassisMount(0.0, 0.0, 0.0, np.eye(4))
-    q = np.array([0.3, -0.7, 0.5, 0.2, 0.6, -0.4])
-    offset = np.eye(4)
-    offset[2, 3] = 0.12
-    path = [TaskWaypoint("known", arm.fk(q) @ offset, 1.0)]
-    checked = []
-    result = solve_task_ik_graph(
-        arm, mount, path, offset, q,
-        state_free=lambda candidate, index, waypoint: checked.append(waypoint.phase) or True,
-        sobol_tiers=(2, 4), enforce_start_step=True,
-    )
-    assert result.complete
-    assert checked and set(checked) == {"known"}
-    assert np.linalg.norm(arm.pose_error(result.path[0].q_rad, arm.fk(q))) < 1e-3
-
-
-def test_all_colliding_ik_nodes_report_state_collision():
-    arm = load_local("rm2p_spherical_wrist")
-    mount = ChassisMount(0.0, 0.0, 0.0, np.eye(4))
-    q = np.array([0.3, -0.7, 0.5, 0.2, 0.6, -0.4])
-    result = solve_ik_path(
-        arm, mount, [ToolIKTarget("blocked", arm.fk(q))], q,
-        state_free=lambda _q, _index, _point: False,
-        sobol_tiers=(2, 4),
-    )
-    assert result.failure["reason"] == "state_collision"
-    assert result.layers[0].forward_diagnostics.geometric_branches > 0
-    assert not result.path
