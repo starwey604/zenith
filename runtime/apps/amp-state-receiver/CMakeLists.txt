@@ -1,0 +1,5 @@
+add_executable(amp-state-receiver main.cpp ../../platforms/lbc3/amp_uio.cpp)
+target_include_directories(amp-state-receiver PRIVATE ../../platforms/lbc3)
+target_link_libraries(amp-state-receiver PRIVATE amp_shm Threads::Threads)
+target_compile_options(amp-state-receiver PRIVATE -Wall -Wextra -Werror)
+install(TARGETS amp-state-receiver RUNTIME DESTINATION bin)

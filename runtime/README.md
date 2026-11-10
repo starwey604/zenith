@@ -1,14 +1,21 @@
 # Zenith 板端运行程序
 
-这里管理 Linux 板端程序、交叉编译配置和第三方依赖配方。首轮只有
-`zenith-control` 最小程序：输出版本和平台，检查 C++20 线程、单调时钟与
-Linux 系统信息。它还没有控制循环、设备访问或启动服务。
+这里管理 Linux 板端程序、交叉编译配置和第三方依赖配方。
+`zenith-control` 输出版本和平台，检查 C++20 线程、单调时钟与 Linux 系统信息。
+`amp-shm-bench` 用模拟数据测试 RK3576 M0 到 Linux 的四槽快照和 SPSC FIFO；
+默认使用原 128 字节、500/250 Hz 测试入口，支持本机 `--simulate`。
+
+`amp-state-receiver` 是新的 128 字节、1000/500 Hz 生命周期接收入口，使用带会话检查的 RPShm 接收端；
+旧 `amp-shm-bench` 条件和入口不变。用法见 [受保护接收端](AMP_RECEIVER.md)。
 
 ## 构建
 
 宿主机需要 Linux x86_64、CMake ≥ 3.22、Ninja、GNU tar、sha256sum，以及
 Clang/LLVM/LLD 22.1.8、libc++、libc++abi。SDK 重定位脚本还需要 `file`、`grep`、`sed`、
 `readlink`。当前开发机已具备这些工具，交叉编译器可直接运行。
+
+共享内存核心使用兄弟仓库 `../rpshm`，不再保留第二份传输实现；其他位置可在 CMake 中设置 `RPSHM_SOURCE_DIR`。
+Linux、M0 与内核的接入见 [RPShm 接入文档](../../rpshm/docs/integration.md)。
 
 从 zenith 根目录运行：
 

@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+"""Summarize a private tracefs capture; preserve raw records for audit."""
+import argparse
+import collections
+import json
+import math
+import re
+from pathlib import Path
+
+LINE = re.compile(r"\[(\d+)\].*?\s(\d+\.\d+):\s+(\w+):\s*(.*)")
+SWITCH = re.compile(r"prev_comm=(.*?) prev_pid=(\d+).*?next_comm=(.*?) next_pid=(\d+)")
+
+
+def summary(values):
+    values = sorted(values)
+    if not values:
+        return {"n": 0, "sum_ns": 0}
+    return {"n": len(values), "sum_ns": sum(values), "min_ns": values[0],
+            "p50_ns": values[math.ceil(len(values) * .5) - 1],
+            "p99_ns": values[math.ceil(len(values) * .99) - 1], "max_ns": values[-1]}
+
+
+def parse_trace(lines):
+    stacks = collections.defaultdict(list)
+    scheduled = {}
+    durations = collections.defaultdict(list)
+    by_cpu = collections.defaultdict(lambda: collections.defaultdict(list))
+    unmatched = collections.Counter()
+    events = collections.Counter()
+    irq_names = {}
+    print_resolution_ns = 0
+    first = last = None
+    for line in lines:
+        match = LINE.search(line)
+        if not match:
+            continue
+        cpu, timestamp, event, data = match.groups()
+        cpu = str(int(cpu))
+        def add_interval(key, duration):
+            durations[key].append(duration)
+            by_cpu[cpu][key].append(duration)
+        seconds, fraction = timestamp.split('.')
+        print_resolution_ns = max(print_resolution_ns, 10 ** max(0, 9 - len(fraction)))
+        time = int(seconds) * 10**9 + int(fraction.ljust(9, '0'))
+        first = time if first is None else min(first, time)
+        last = time if last is None else max(last, time)
+        events[event] += 1
+        if event in ('irq_handler_entry', 'irq_handler_exit', 'softirq_entry', 'softirq_exit'):
+            hard = event.startswith('irq_handler')
+            kind = 'hardirq_interval' if hard else 'softirq_interval'
+            number = re.search(r'\b(?:irq|vec)=(\d+)', data).group(1)
+            if hard and 'name=' in data:
+                irq_names[number] = data.split('name=', 1)[1]
+            stack = stacks[cpu, kind]
+            if event.endswith('_entry'):
+                stack.append((number, time))
+            elif stack and stack[-1][0] == number:
+                _, start = stack.pop()
+                add_interval(f'{kind}/{number}', time - start)
+            else:
+                unmatched[f'{kind}_exit'] += 1
+        elif event == 'sched_switch':
+            match = SWITCH.search(data)
+            if not match:
+                raise ValueError(f'Unrecognized sched_switch: {data}')
+            prev, prev_pid, next_name, next_pid = match.groups()
+            def wanted(name):
+                return name.startswith(('irq/', 'ksoftirqd/'))
+            if wanted(prev):
+                start = scheduled.pop((cpu, prev_pid), None)
+                if start is None:
+                    unmatched['thread_switch_out'] += 1
+                else:
+                    add_interval(f'thread_scheduled/{prev}/{prev_pid}', time - start)
+            if wanted(next_name):
+                scheduled[cpu, next_pid] = time
+    unmatched['open_irq_intervals'] = sum(len(s) for s in stacks.values())
+    unmatched['open_thread_intervals'] = len(scheduled)
+    return {'event_span_s': (last - first) / 1e9 if first is not None else 0,
+            'timestamp_print_resolution_ns': print_resolution_ns,
+            'events': dict(events), 'irq_names': irq_names,
+            'boundary_or_unmatched_events': dict(unmatched),
+            'by_cpu': {cpu: {k: summary(v) for k, v in sorted(groups.items())}
+                       for cpu, groups in sorted(by_cpu.items())},
+            'intervals': {k: summary(v) for k, v in sorted(durations.items())}}
+
+
+def proc_delta(before, after):
+    def counts(text):
+        result = {}
+        for line in text.splitlines():
+            fields = line.split()
+            if fields and (fields[0] in ('cpu', 'intr', 'ctxt', 'softirq') or re.fullmatch(r'cpu\d+', fields[0])):
+                result[fields[0]] = list(map(int, fields[1:]))
+        return result
+    a, b = counts(before), counts(after)
+    return {k: [y - x for x, y in zip(a[k], b[k])] for k in a.keys() & b.keys()}
+
+
+def report(path):
+    mode = path / 'capture-mode.txt'
+    plain = mode.exists() and mode.read_text().strip() == 'plain'
+    if plain:
+        result = {'capture_mode': 'plain', 'valid_complete_capture': True}
+    else:
+        result = parse_trace((path / 'trace.txt').read_text().splitlines())
+        stats = (path / 'buffer-stats.txt').read_text()
+        lost = sum(int(n) for n in re.findall(r'^(?:overrun|commit overrun|dropped events):\s*(\d+)', stats, re.M))
+        result['capture_mode'] = 'trace'
+        result['trace_lost_events'] = lost
+        result['valid_complete_capture'] = lost == 0
+    result['benchmark'] = json.loads((path / 'bench.json').read_text())
+    result['benchmark_exit_status'] = int((path / 'exit-status.txt').read_text())
+    result['correctness_passed'] = (result['benchmark_exit_status'] == 0 and
+                                    result['benchmark']['correctness_errors'] == 0)
+    result['proc_stat_delta'] = proc_delta((path / 'stat.before').read_text(), (path / 'stat.after').read_text())
+    result['units'] = {'cpu': 'USER_HZ ticks in /proc/stat field order',
+                       'intervals': 'nanoseconds; IRQ intervals include nested execution; thread intervals are scheduled residency'}
+    return result
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('capture', type=Path)
+    args = parser.parse_args()
+    result = report(args.capture)
+    print(json.dumps(result, indent=2))
+    raise SystemExit(0 if result['valid_complete_capture'] and result['correctness_passed'] else 1)
