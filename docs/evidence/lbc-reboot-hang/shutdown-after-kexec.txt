@@ -1,0 +1,56 @@
+Stopping sshd: killall: sshd: no process killed
+OK
+Stopping dropbear sshd: OK
+Stopping chrony: OK
+Stopping dhcpcd...
+no /sbin/dhcpcd found; none killed
+killall: rkaiq_3A_server: no process killed
+Stopping network: rk_gmac-dwmac 2a220000.ethernet eth0: Link is Down
+rk_gmac-dwmac 2a220000.ethernet eth0: FPE workqueue stop
+OK
+Stopping klogd: OK
+Stopping syslogd: OK
+Seeding 256 bits and crediting
+Saving 256 bits of creditable seed for next boot
+log-guardian: Stopping log-guardian (444)...
+EXT4-fs (mmcblk0p2): unmounting filesystem.
+umount: /run: target is busy.
+EXT4-fs (mmcblk0p4): re-mounted. Quota mode: disabled.
+
+The system is going down NOW!
+
+Sent SIGTERM to all processes
+Terminated
+
+Sent SIGKILL to all processes
+
+Requesting system reboot
+xhci-hcd xhci-hcd.5.auto: remove, state 4
+usb usb4: USB disconnect, device number 1
+xhci-hcd xhci-hcd.5.auto: USB bus 4 deregistered
+xhci-hcd xhci-hcd.5.auto: remove, state 4
+usb usb3: USB disconnect, device number 1
+xhci-hcd xhci-hcd.5.auto: USB bus 3 deregistered
+mpp_rkvenc2 27a10000.rkvenc-core: shutdown device
+mpp_rkvenc2 27a10000.rkvenc-core: shutdown success
+mpp_rkvenc2 27a00000.rkvenc-core: shutdown device
+mpp_rkvenc2 27a00000.rkvenc-core: shutdown success
+mpp_rkvdec2 27b00100.rkvdec: shutdown device
+mpp_rkvdec2 27b00100.rkvdec: shutdown success
+mpp_jpgenc 27910800.jpege: shutdown device
+mpp_jpgenc 27910800.jpege: shutdown success
+mpp_jpgdec 27910000.jpegd: shutdown device
+mpp_jpgdec 27910000.jpegd: shutdown success
+mpp-iep2 27960000.iep: shutdown device
+mpp-iep2 27960000.iep: shutdown success
+rga2 27930000.rga: shutdown success
+rga2 27920000.rga: shutdown success
+rkisp_hw 27c00000.isp: rkisp_hw_shutdown
+xhci-hcd xhci-hcd.0.auto: remove, state 4
+usb usb2: USB disconnect, device number 1
+xhci-hcd xhci-hcd.0.auto: USB bus 2 deregistered
+xhci-hcd xhci-hcd.0.auto: remove, state 1
+usb usb1: USB disconnect, device number 1
+usb 1-1: USB disconnect, device number 2
+usb 1-1.5: USB disconnect, device number 3
+xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered

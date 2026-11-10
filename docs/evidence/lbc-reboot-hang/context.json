@@ -1,0 +1,162 @@
+{
+  "rpshm_commit": "f965f3c",
+  "failure_source": "rpshm/docs/size-curve-results.json",
+  "linux_only_64": {
+    "linux_only_restart": "PASS",
+    "before": {
+      "boot": 5,
+      "counter": 5,
+      "request": 546,
+      "ack": 546,
+      "state": 2,
+      "seq": 1004
+    },
+    "after": {
+      "boot": 5,
+      "counter": 5,
+      "request": 546,
+      "ack": 546,
+      "state": 2,
+      "seq": 28070
+    },
+    "reconnected": {
+      "first_boot": 5,
+      "boot": 5,
+      "session": 554,
+      "checked": true,
+      "reads": 2500,
+      "fifo": 5018,
+      "drops": 0,
+      "final_seq": 5018,
+      "timer_missed": 0,
+      "recoveries": 0,
+      "discarded": 0,
+      "errors": 0,
+      "cpu_ns": 135320875,
+      "elapsed_ns": 5000005431,
+      "publish_mean_ns": 3396.946,
+      "read": {
+        "n": 0,
+        "mean_ns": 0.0,
+        "p99_upper_ns": null,
+        "max_ns": 0
+      },
+      "check": {
+        "n": 0,
+        "mean_ns": 0.0,
+        "p99_upper_ns": null,
+        "max_ns": 0
+      },
+      "age": {
+        "n": 2500,
+        "mean_ns": 268924.919,
+        "p99_upper_ns": 270000,
+        "max_ns": 373333
+      },
+      "research_flags": 18,
+      "part": 0,
+      "local_tail": true,
+      "fused": false,
+      "record_bytes": 64,
+      "checked_read": {
+        "n": 2500,
+        "mean_ns": 812.51,
+        "p99_upper_ns": 980,
+        "max_ns": 2000
+      },
+      "fifo_pop": {
+        "n": 5018,
+        "mean_ns": 478.687,
+        "p99_upper_ns": 640,
+        "max_ns": 725
+      },
+      "copy_errors": 0,
+      "m0_probe": {
+        "n": 0,
+        "sum_ticks": 0,
+        "min_ticks": 0,
+        "max_ticks": 0,
+        "quantum_ticks": 8,
+        "bins": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fifo_publish_mean_ns": 3050.41,
+      "m0_body_mean_ns": 15831.722
+    },
+    "final": {
+      "boot": 5,
+      "counter": 5,
+      "request": 557,
+      "ack": 557,
+      "state": 1,
+      "seq": 5018
+    }
+  },
+  "final_normal_reboot": {
+    "status": "recovered_by_power_cycle",
+    "observation": "Normal reboot after successful Linux-only kexec stopped after USB teardown messages; network and serial debugger were unresponsive. Shutdown stall cause remains unresolved.",
+    "recovery": "User power-cycled board; SSH restored, CPU4 Cortex-A72 confirmed. Cold host lifecycle explicitly provisioned before compatibility smoke.",
+    "linux_boot_id": "b318397f-bd79-4442-9004-d146cd5c2aa0",
+    "cpu4_midr": "0x00000000411fd080",
+    "final_peer": {
+      "boot": 1,
+      "counter": 1,
+      "request": 0,
+      "ack": 0,
+      "state": 1,
+      "seq": 1009
+    },
+    "final_legacy": {
+      "magic": 1095979057,
+      "version": 1,
+      "state": 3,
+      "ack": 513,
+      "command": 513,
+      "session": 258,
+      "published": 1009
+    },
+    "evidence": "out/size-curve/final-state.txt"
+  },
+  "later_success_source": "rpshm/docs/standalone-results.json",
+  "standalone_restoration": {
+    "firmware": "previous amp-size-curve.img restored",
+    "cpu4": "Cortex-A72",
+    "transport": "stopped",
+    "network": "SSH reachable",
+    "method": "sync storage then SysRq b with watchdog guard; disarmed after boot",
+    "normal_reboot_issue": "Unresolved; bypassing device shutdown is not a root-cause fix",
+    "final_state": "Linux LubanCat 6.1.99-rt36-rk3576-amp1 #23 SMP PREEMPT_RT Mon Nov  9 16:28:01 CST 2026 aarch64 GNU/Linux\n51db67c6-54df-426b-aa2a-2c1f4a81c4f5\n0x00000000411fd080\n{\"boot\":2,\"counter\":2,\"request\":13,\"ack\":0,\"state\":1,\"seq\":1009}\n"
+  }
+}
