@@ -1,0 +1,49 @@
+# 首版全量镜像刷入后由 UF 默认复位触发的第一次启动。
+# 以下为串口 kmsg 和 Rockchip 调试器输出节选，按观测内容分组。
+# 来源：out/lbc-reboot-debug/release-93c1409fe/first-flash-debug.txt
+
+kmsg
+<6>Booting Linux on physical CPU 0x0000000000 [0x410fd034]
+<5>Linux version 6.1.99-rt36-rk3576-amp1 (root@ww-min) (Ubuntu clang version 15.0.7, Ubuntu LLD 15.0.7) #103 SMP PREEMPT_RT Tue Nov 10 22:30:49 CST 2026
+<5>random: crng init done
+<3>rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 4-...D } 21478 jiffies s: 37 root: 0x10/.
+<3>rcu: blocking rcu_node structures (internal RCU debug):
+<6>Task dump for CPU 4:
+<6>task:swapper/0       state:R  running task     stack:0     pid:1     ppid:0      flags:0x0000000a
+<6>Call trace:
+<6> __switch_to+0xf4/0x12c
+<6> rt_spin_unlock+0x14/0x7c
+<6> clk_gate_endisable+0x104/0x118
+<6> clk_gate_disable+0x10/0x18
+<6> rt_spin_unlock+0x14/0x7c
+<6> 0x9898b95dbd67b400
+<6> clk_disable+0x1c/0x24
+
+# pcsr 快照：停滞 CPU 的 PC
+CPU4 online:1
+	PC: <0xffffffc008c34900> rt_spin_unlock+0x54/0x7c
+
+# sysrq w：等待 expedited RCU 的 MMC 工作线程
+task:kworker/6:1     state:D stack:0     pid:104   ppid:2      flags:0x00000008
+Workqueue: events_freezable mmc_rescan
+Call trace:
+ __switch_to+0xf4/0x12c
+ __schedule+0x410/0x688
+ schedule+0x6c/0xb4
+ synchronize_rcu_expedited+0x530/0x7b8
+ lru_cache_disable+0x20/0x50
+ __alloc_contig_migrate_range+0x24/0x128
+ alloc_contig_range+0x10c/0x348
+ cma_alloc+0x154/0x690
+ dma_alloc_contiguous+0x58/0x8c
+ __dma_direct_alloc_pages+0xd0/0x2a8
+ dma_direct_alloc+0x15c/0x348
+ dmam_alloc_attrs+0xf4/0x148
+ cqhci_enable+0x134/0x290
+ mmc_init_card+0x5d0/0x668
+ mmc_attach_mmc+0xac/0x164
+ mmc_rescan+0x218/0x274
+ process_one_work+0x1dc/0x484
+ worker_thread+0x258/0x4b0
+ kthread+0x108/0x14c
+ ret_from_fork+0x10/0x20

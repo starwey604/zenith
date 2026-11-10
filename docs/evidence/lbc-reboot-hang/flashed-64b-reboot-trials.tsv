@@ -1,0 +1,6 @@
+case	target_uptime_s	actual_uptime_s	result	last_marker
+1	28	28.01	PASS	[   30.660254] reboot: Restarting system
+2	35	35.02	PASS	[   37.667055] reboot: Restarting system
+3	22	22.07	PASS	[   24.708173] reboot: Restarting system
+4	28	28.08	PASS	[   30.727089] reboot: Restarting system
+5	45	45.01	PASS	[   47.648042] reboot: Restarting system
