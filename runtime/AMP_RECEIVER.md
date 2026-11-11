@@ -12,7 +12,7 @@
 ./tools/runtime-build native
 ./tools/runtime-build lbc3
 # 板端，确认没有其他 UIO 消费者：
-amp-state-receiver --cpu 4 --seconds 5
+amp-state-receiver --cpu 4 --seconds 5 --stale-ms 20
 ```
 
 生命周期区须先按现有平台流程显式供应；例如冷启动后 host 区为全 1 时，先用匹配的原恢复工具核对第一代 QUIET/未确认状态再初始化。程序不会在请求耗尽或超时后自动清零。普通应用崩溃重启不重复供应。
@@ -31,8 +31,8 @@ amp-state-receiver --cpu 4 --seconds 5
 
 1. begin/poll 到 CONNECTED。
 2. 通过 `rpshm_receiver_latest/pop` 取样。
-3. 仅 `RPSHM_RECEIVE_OK` 的输出可以继续做业务校验和交付。
-4. `RESTART` 时丢弃临时输出，在总期限内重新连接；无需手工重绑 FIFO。
+3. 仅 `RPSHM_RECEIVE_OK` 的输出可以继续做业务校验。LATEST 校验通过后交给本地进度观察器，只有 CURRENT 且序号前进才作为新更新交付；首个样本只建立基线。
+4. `RESTART` 时丢弃临时输出，在总期限内重新连接并重建进度基线；无需手工重绑 FIFO。同一 boot 下重新 START 也必须重新等待序号前进。
 5. 退出时 stop/poll 到 STOPPED；超时则报告失败，不伪装成 M0 已停止。
 
 所有接收端操作由一个 I/O 所有者串行执行。业务线程使用本地数据副本，不直接操作端点。带本地交付与线程退出的例子在兄弟仓库 `rpshm/examples/amp/owner.cpp`，公共 API 说明在 `rpshm/docs/receiver.md`。
@@ -40,6 +40,10 @@ amp-state-receiver --cpu 4 --seconds 5
 ## 输出与验收范围
 
 输出包括最新读取数、已消费 FIFO 数、内容错误、重连和丢弃次数、错过期限、读取加 boot 检查耗时，以及进程 CPU 时间。正常运行固定 2 ms 读取周期；错过期限时跳过过期周期而非实时追赶。
+
+`samples` 保持原义，包含重复的完整快照；`delivered` 只统计经过进度判断的新更新。另列 `waiting`、`repeats`、`stale_samples`、`stale_transitions` 和 `resumptions`。默认 `--stale-ms 20` 是示例期限，可配置，并非电机安全期限。超过期限只停止交付为新更新，不自动复位或重连 M0。业务接入时还须撤销过期的本地缓存可用性并执行自己的安全策略；线程示例已演示这种缓存失效。
+
+进度判断只使用本地 `(boot, run)`、序号与单调时间，不新增共享心跳。它测量“多久未观察到更新”，不等于“传感器采样到消费的年龄”；FIFO 排出旧积压也不代表生产者仍活跃，因此本程序只用 LATEST 更新进度观察器。本地连接诊断改用 `rpshm_receiver_get_status`，不直接读取接收端内部字段。公共契约见兄弟仓库 `rpshm/docs/progress.md`。
 
 这是状态接收程序，不是原 benchmark 的字段兼容替代品。退出时停止发布但不为统计额外排空残留 FIFO，因此输出的 FIFO 数仅表示运行期间实际消费量，不宣称等于最终发布量。跨会话未消费 FIFO 按原恢复契约丢弃。
 
@@ -54,3 +58,9 @@ RPShm 的同一接收层另通过八处崩溃注入、三次复制中途 M0 复�
 最终已恢复原固件和 CPU 编号，旧 `amp-shm-bench` 500/250 Hz 入口完成 500 次读取、1009 条发布/消费，零错误、丢弃和漏周期。完整条件、统计口径和原始结果见兄弟仓库 `rpshm/docs/receiver-results.md` 与 `receiver-results.json`；本机采集在 `rpshm/out/receiver/board/`。
 
 提交整理时从 Git 暂存区单独导出源码，以现有 native preset 构建并显式启用 `RPSHM_BUILD_TESTS`，16 项 CTest 全部通过。此快照包含原共享内存基准及必要适配，不依赖尚未提交的 CAN 实验或几何研究文件。
+
+## 本地进度观察验收
+
+后续进度迭代中，本程序正常运行 2 秒：1000 次有效读取、999 次新更新、1 次基线等待。M0 独立复位的 4 秒窗口：1981 次有效读取、1971 次新更新、2 次基线等待、8 次重复，重连和旧复制丢弃各 1 次，数据错误为零；重启前的序号不会继承到新会话。
+
+独立 64 字节专用固件另验证了同会话停发约 400 ms、20 ms 超时与恢复，并完成观察器关/开配对回归。结果和证据见 `rpshm/docs/progress-results.md`；它不是本程序 128 字节记录的性能数字。
