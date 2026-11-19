@@ -1,0 +1,5 @@
+add_executable(imu-pose-bench main.cpp ../../platforms/lbc3/amp_uio.cpp)
+target_include_directories(imu-pose-bench PRIVATE ../../platforms/lbc3)
+target_link_libraries(imu-pose-bench PRIVATE amp_shm Threads::Threads)
+target_compile_options(imu-pose-bench PRIVATE -Wall -Wextra -Werror)
+install(TARGETS imu-pose-bench RUNTIME DESTINATION bin)

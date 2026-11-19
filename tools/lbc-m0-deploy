@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# Build for this LBC3. Stage, back up, and verify only the AMP partition.
+set -euo pipefail
+root=$(cd "$(dirname "$0")/.." && pwd)
+sdk=${LBC_SDK:-"$root/../lbc_sdk"}; sdk=$(cd "$sdk" && pwd)
+bsp="$sdk/rtos/bsp/rockchip/rk3576-mcu"
+out="$root/out/runtime/m0-debug"
+case "${1:-}" in
+    --build-only|'') ;;
+    *) echo "Usage: $0 [--build-only]  (default: deploy to LBC3 and reboot)" >&2; exit 2;;
+esac
+mkdir -p "$out"
+podman start aura-sdk >/dev/null
+podman exec --user 1000:1000 -e HOME=/home/ww -e ZENITH_ROOT="$root" -w "$bsp" aura-sdk bash -lc 'RTT_EXEC_PATH=/usr/bin scons -j2'
+cp "$bsp/rtthread.bin" "$out/rtt.bin"
+cp "$sdk/output/amp.its" "$out/amp.its"
+(cd "$out"; "$sdk/rtos/bsp/rockchip/tools/mkimage" -f amp.its -E -p 0xe00 amp.img)
+[[ $(fdtget -t x "$out/amp.img" /images/mcu load) == 60000000 &&
+   $(fdtget "$out/amp.img" /images/mcu description) == bus_mcu &&
+   $(stat -c %s "$out/rtt.bin") -le 1048576 ]]
+llvm="$root/out/runtime/amp-shm/toolchain22/usr"
+if [[ -x $llvm/bin/clang ]]; then
+    export PATH="$llvm/bin:$PATH" LD_LIBRARY_PATH="$llvm/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+fi
+build="$root/out/runtime/lbc3/build-llvm"
+if [[ ! -f $build/CMakeCache.txt ]]; then "$root/tools/runtime-build" lbc3; fi
+cmake --build "$build" --target m0ctl imu-pose-bench -j2
+cp "$build/apps/m0ctl/m0ctl" "$out/m0ctl"
+cp "$build/apps/imu-pose-bench/imu-pose-bench" "$out/imu-pose-bench"
+[[ ${1:-} != --build-only ]] || exit 0
+
+board=${LBC_BOARD:-root@192.168.77.2}
+ssh_board() { ssh -o BatchMode=yes -o ConnectTimeout=4 -o LogLevel=ERROR "$board" "$@"; }
+id=$(date +%Y%m%d-%H%M%S)-$$
+dest=/root/m0-debug/$id
+part=/dev/disk/by-partlabel/amp
+boot=$(ssh_board 'cat /proc/sys/kernel/random/boot_id')
+ssh_board "set -e; umask 077; test \"\$(readlink -f $part)\" = /dev/mmcblk0p3; test \"\$(cat /sys/class/block/mmcblk0p3/size)\" = 16384; mkdir -p /root/m0-debug; mkdir '$dest'"
+ssh_board "cat > '$dest/amp.img'" <"$out/amp.img"
+ssh_board "cat > '$dest/m0ctl' && chmod 755 '$dest/m0ctl'" <"$out/m0ctl"
+ssh_board "cat > '$dest/imu-pose-bench'" <"$out/imu-pose-bench"
+# Compare the staged bytes before writing, not just the copied length.
+ssh_board "cmp - '$dest/amp.img'" <"$out/amp.img"
+ssh_board "set -e; '$dest/m0ctl' check-idle; umask 077; dd if=$part of='$dest/amp-before.img' bs=1M; sync"
+mkdir "$out/$id"
+ssh_board "cat '$dest/amp-before.img'" > "$out/$id/amp-before.img"
+[[ $(stat -c %s "$out/$id/amp-before.img") == 8388608 ]]
+ssh_board "cmp - '$dest/amp-before.img'" <"$out/$id/amp-before.img"
+echo "AMP backup: $out/$id/amp-before.img (board: $dest/amp-before.img)"
+ssh_board "cd '$dest' && sh -se" <<'BOARD'
+part=/dev/disk/by-partlabel/amp
+./m0ctl check-idle
+size=$(wc -c < amp.img)
+test "$size" -gt 0 && test "$size" -le 8388608 || exit 1
+if dd if=amp.img of="$part" bs=1M && sync && cmp -n "$size" amp.img "$part"; then
+    install -m 755 m0ctl /usr/bin/m0ctl.new
+    mv /usr/bin/m0ctl.new /usr/bin/m0ctl
+    install -m 755 imu-pose-bench /root/imu-pose-bench.new
+    mv /root/imu-pose-bench.new /root/imu-pose-bench
+    sync
+else
+    echo "AMP write failed; restoring backup before reboot" >&2
+    dd if=amp-before.img of="$part" bs=1M && sync && cmp -n 8388608 amp-before.img "$part"
+    exit 1
+fi
+BOARD
+# Return from SSH before init tears down the network.
+ssh_board 'nohup sh -c "sleep 1; reboot" </dev/null >/dev/null 2>&1 &'
+for ((i=0; i<60; ++i)); do
+    sleep 2
+    next=$(ssh_board 'cat /proc/sys/kernel/random/boot_id' 2>/dev/null) || continue
+    if [[ -n $next && $next != "$boot" ]]; then
+        ssh_board 'm0ctl run version'
+        exit 0
+    fi
+done
+echo "No new Linux boot observed over SSH. AMP backup: $dest/amp-before.img" >&2
+exit 1

@@ -1,0 +1,199 @@
+#!/usr/bin/env python3
+"""Live LubanCat IMU pose. SSH controls the board; data can use SSH or IPv4 UDP."""
+import argparse
+import math
+import sys
+import time
+
+from PySide6.QtCore import QPointF, QRectF, Qt, QProcess, QTimer
+from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPolygonF
+from PySide6.QtNetwork import QHostAddress, QUdpSocket
+from PySide6.QtWidgets import QApplication, QWidget, QPushButton
+
+AXES = ([1,0,0], [0,1,0], [0,0,1])
+INK, MUTED = "#203733", "#586f69"
+COLORS = ("#cb523e", "#248366", "#366cc3")
+def dot(a,b): return sum(x*y for x,y in zip(a,b))
+def cross(a,b): return (a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0])
+def unit(v):
+    n=math.sqrt(dot(v,v))
+    return tuple(x/n for x in v)
+def rotate(q,v):
+    w,*a=q
+    t=cross(a,v); u=cross(a,t)
+    return tuple(v[i]+2*(w*t[i]+u[i]) for i in range(3))
+def angles(q):
+    w,x,y,z=q
+    return tuple(math.degrees(a) for a in (
+        math.atan2(2*(w*x+y*z),1-2*(x*x+y*y)),
+        math.asin(max(-1,min(1,2*(w*y-z*x)))),
+        math.atan2(2*(w*z+x*y),1-2*(y*y+z*z))))
+CAM=unit((-4,-6,3.8)); RIGHT=unit(cross((0,0,1),CAM)); UP=cross(CAM,RIGHT)
+
+class Viewer(QWidget):
+    def __init__(self,host,udp):
+        super().__init__()
+        self.host,self.udp=host,udp
+        self.setWindowTitle("IMU 姿态 · LubanCat 3")
+        self.resize(870,700);self.setMinimumSize(620,520)
+        self.button=QPushButton("断开",self);self.button.setCursor(Qt.PointingHandCursor)
+        self.button.setStyleSheet("QPushButton {color:#28433c;background:#fff;border:1px solid #bac8bf;"
+                                  "border-radius:7px;padding:5px 16px;} QPushButton:hover {background:#e8efea;}")
+        self.button.clicked.connect(self.toggle)
+        self.proc=None; self.sock=None; self.q=(1.,0.,0.,0.)
+        self.state="未连接"; self.last=0.;self.session=None;self.seq=None
+        self.rx=self.odr=0.; self.error=""; self.buffer=b"";self.seen=0
+        self.anim=QTimer(self);self.anim.timeout.connect(self.update);self.anim.start(16)
+        self.ping=QTimer(self);self.ping.timeout.connect(self.heartbeat);self.ping.start(400)
+        QTimer.singleShot(0,self.connect_board)
+    def resizeEvent(self,e):
+        self.button.setGeometry(self.width()-110,24,82,32)
+    def toggle(self):
+        if self.proc:self.disconnect_board()
+        else:self.connect_board()
+    def connect_board(self):
+        self.last=0.;self.seq=self.session=None;self.seen=0;self.rx=self.odr=0.;self.error=""
+        self.buffer=b"";self.state="连接中";self.q=(1.,0.,0.,0.);self.button.setText("断开")
+        self.rate_t=time.monotonic();self.rate_seq=None
+        port=0
+        if self.udp:
+            self.sock=QUdpSocket(self)
+            if not self.sock.bind(QHostAddress.SpecialAddress.AnyIPv4,0):
+                self.state="UDP 绑定失败";self.button.setText("重连");return
+            port=self.sock.localPort();self.sock.readyRead.connect(self.datagrams)
+        p=QProcess(self);self.proc=p
+        p.readyReadStandardOutput.connect(self.lines)
+        p.readyReadStandardError.connect(self.stderr)
+        p.finished.connect(self.finished)
+        p.errorOccurred.connect(self.proc_error)
+        p.start("ssh",["-T","-o","BatchMode=yes","-o","ConnectTimeout=4","-o","LogLevel=ERROR",
+                       "-o","ServerAliveInterval=2","-o","ServerAliveCountMax=2","--",self.host,
+                       f"exec /root/imu-pose-bench live 800 {'udp' if self.udp else 'ssh'} {port}"])
+    def heartbeat(self):
+        if self.proc and self.proc.state()==QProcess.Running:self.proc.write(b".")
+    def lines(self):
+        p=self.proc
+        if not p:return
+        self.buffer+=bytes(p.readAllStandardOutput())
+        *lines,self.buffer=self.buffer.split(b"\n")
+        for line in lines:
+            if line.startswith(b"START "):
+                try:self.session=int(line.split()[1])
+                except (IndexError,ValueError):continue
+                self.state="校准中 · 请静置约 1 秒"
+            elif not self.udp:self.packet(line)
+    def datagrams(self):
+        while self.sock and self.sock.hasPendingDatagrams():
+            d=self.sock.receiveDatagram()
+            self.packet(bytes(d.data()))
+    def packet(self,line):
+        fields=line.split()
+        if len(fields)!=8 or fields[0]!=b'Q':return
+        try:
+            session,seq,tick=map(int,fields[1:4]); q=tuple(map(float,fields[4:]))
+        except ValueError:return
+        if session!=self.session or not .99<dot(q,q)<1.01:return
+        if self.seq is not None and not 0<((seq-self.seq)&0xffffffff)<0x80000000:return
+        now=time.monotonic()
+        self.q=unit(q);self.seq=seq;self.last=now;self.seen+=1;self.state="实时"
+        if self.rate_seq is None:
+            self.rate_seq,self.rate_tick,self.rate_t,self.seen=seq,tick,now,0
+        elif now-self.rate_t>=1 and tick>self.rate_tick:
+            self.rx=self.seen/(now-self.rate_t)
+            self.odr=((seq-self.rate_seq)&0xffffffff)*24000000/(tick-self.rate_tick)
+            self.rate_t,self.rate_tick,self.rate_seq,self.seen=now,tick,seq,0
+    def stderr(self):
+        if self.proc:
+            msg=bytes(self.proc.readAllStandardError()).decode(errors="replace").strip()
+            if msg:self.error=msg.splitlines()[-1]
+    def proc_error(self,err):
+        if self.proc and err==QProcess.FailedToStart:
+            self.error=self.proc.errorString();self.finished()
+    def finished(self,*_):
+        if not self.proc:return
+        self.stderr()
+        self.state="已断开";self.button.setText("重连")
+        self.proc.deleteLater();self.proc=None
+        if self.sock:self.sock.close();self.sock.deleteLater();self.sock=None
+        self.update()
+    def disconnect_board(self):
+        p=self.proc
+        if p:
+            p.closeWriteChannel()
+            if not p.waitForFinished(1800):
+                p.terminate();p.waitForFinished(500)
+        self.state="已断开";self.button.setText("重连")
+    def closeEvent(self,e):
+        self.ping.stop();self.disconnect_board();e.accept()
+    def paintEvent(self,e):
+        p=QPainter(self);p.setRenderHint(QPainter.Antialiasing)
+        W,H=self.width(),self.height()
+        def text(x,y,s,size,color=INK,bold=False,mono=False):
+            f=QFont("DejaVu Sans Mono" if mono else "sans-serif");f.setPixelSize(size);f.setBold(bold)
+            p.setFont(f);p.setPen(QColor(color));p.drawText(QPointF(x,y),s)
+        def pen(c,w=1):p.setPen(QPen(QColor(c),w,Qt.SolidLine,Qt.RoundCap,Qt.RoundJoin))
+        p.fillRect(self.rect(),QColor("#f5f7f2"))
+        text(28,34,"姿态监视器",23,bold=True)
+        text(29,58,"LubanCat 3   /   ICM-45686",13,MUTED)
+        stale=self.proc and self.last and time.monotonic()-self.last>.5
+        status="数据中断" if stale else self.state
+        col="#168360" if status=="实时" else "#a87427" if self.proc else MUTED
+        f=QFont("sans-serif");f.setPixelSize(13);p.setFont(f)
+        tw=p.fontMetrics().horizontalAdvance(status)
+        x=W-136-tw;p.setBrush(QColor(col));p.setPen(Qt.NoPen);p.drawEllipse(QPointF(x-12,40),4,4)
+        text(x,45,status,13,col)
+        top,bottom=83,H-113
+        p.save();p.setClipRect(QRectF(17,top,W-34,bottom-top))
+        cx,cy=W*.5,top+(bottom-top)*.55
+        k=min((bottom-top)*.208,(W-76)*.188)
+        def proj(v):return QPointF(cx+k*dot(v,RIGHT),cy-k*dot(v,UP))
+        def line(a,b,c,w=1):pen(c,w);p.drawLine(proj(a),proj(b))
+        for i in range(-6,7):
+            g=i*.57;t="#ccd8cc" if i==0 else "#dfe7db"
+            line((g,-3.42,-1.12),(g,3.42,-1.12),t)
+            line((-3.42,g,-1.12),(3.42,g,-1.12),t)
+        q=self.q;visible=bool(self.last)
+        if visible:
+            for j,ax in enumerate(AXES):
+                for sign in (-1,1):
+                    n=rotate(q,[v*sign for v in ax])
+                    if dot(n,CAM)<=0:continue
+                    face=[]
+                    for a,b in ((-1,-1),(1,-1),(1,1),(-1,1)):
+                        v=[0,0,0];v[j]=.84*sign;v[(j+1)%3]=.84*a;v[(j+2)%3]=.84*b
+                        face.append(proj(rotate(q,v)))
+                    pen("#536b64",1.5);p.setBrush(QColor(("#c1cfc1","#a5bdb1","#e4ebe0")[j]))
+                    p.drawPolygon(QPolygonF(face))
+            # Positive body axes; solid arrows are always visible over the cube.
+            o=proj((0,0,0))
+            for name,ax,c in zip("XYZ",AXES,COLORS):
+                end=proj(rotate(q,[v*1.95 for v in ax])); dx=end.x()-o.x();dy=end.y()-o.y();length=math.hypot(dx,dy)
+                if length<3:continue
+                ux,uy=dx/length,dy/length
+                pen(c,2.8);p.drawLine(o,end)
+                p.setPen(Qt.NoPen);p.setBrush(QColor(c))
+                p.drawPolygon(QPolygonF([end,QPointF(end.x()-9*ux-4*uy,end.y()-9*uy+4*ux),
+                                           QPointF(end.x()-9*ux+4*uy,end.y()-9*uy-4*ux)]))
+                text(end.x()+12*ux-6,end.y()+12*uy+5,name,17,c,True,True)
+            p.setBrush(QColor("#29473e"));p.setPen(Qt.NoPen);p.drawEllipse(o,3.5,3.5)
+        else:text(cx-72,cy,"等待实机姿态…",18,MUTED)
+        p.restore()
+        text(29,top+18,"传感器坐标系",13,MUTED)
+        rate=(f"IMU {self.odr:.0f} Hz    /    RX {self.rx:.0f} Hz" if self.rx and status=="实时"
+              else "IMU 800 Hz    /    RX 250 Hz  配置")
+        text(29,bottom-8,self.error[:75] if self.error and not self.proc else rate,13,MUTED)
+        pen("#cbd5ca");p.drawLine(QPointF(28,bottom+3),QPointF(W-28,bottom+3))
+        for i,(title,a) in enumerate(zip(("横滚  /  ROLL","俯仰  /  PITCH","相对航向  /  YAW"),angles(q))):
+            x=29+i*(W-52)/3;text(x,bottom+30,title,12,MUTED)
+            text(x,bottom+66,f"{a:+.1f}°" if visible else "—",29,INK,True,True)
+        text(29,H-13,("UDP" if self.udp else "SSH")+"   ·   "+self.host+"   ·   航向以启动时为零",12,MUTED)
+        p.end()
+
+def main():
+    ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--host",default="root@192.168.77.2")
+    ap.add_argument("--udp",action="store_true",help="use UDP for data and SSH for start/stop")
+    args=ap.parse_args()
+    app=QApplication(sys.argv[:1]);win=Viewer(args.host,args.udp);win.show()
+    sys.exit(app.exec())
+if __name__=="__main__":main()

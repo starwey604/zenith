@@ -1,0 +1,5 @@
+add_executable(m0ctl main.cpp ../../platforms/lbc3/amp_uio.cpp)
+target_include_directories(m0ctl PRIVATE ../../platforms/lbc3)
+target_link_libraries(m0ctl PRIVATE amp_shm Threads::Threads)
+target_compile_options(m0ctl PRIVATE -Wall -Wextra -Werror)
+install(TARGETS m0ctl RUNTIME DESTINATION bin)

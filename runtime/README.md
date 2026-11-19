@@ -8,6 +8,10 @@
 `amp-state-receiver` 是新的 128 字节、1000/500 Hz 生命周期接收入口，使用带会话检查的 RPShm 接收端；
 旧 `amp-shm-bench` 条件和入口不变。用法见 [受保护接收端](AMP_RECEIVER.md)。
 
+`imu-pose-bench` 用真实 ICM-45686 六轴数据，在 M0 解算姿态，并从 Linux 测量首次读到四元数的延迟。见 [姿态与延迟实测](IMU_POSE.md)。
+
+通过 SSH 运行 M0 的 MSH 测试、查看日志和更新测试固件，见 [M0 调试](M0_DEBUG.md)。
+
 ## 构建
 
 宿主机需要 Linux x86_64、CMake ≥ 3.22、Ninja、GNU tar、sha256sum，以及
